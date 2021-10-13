@@ -1,0 +1,26 @@
+{
+  "name": "fitness-coaching-app-backend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fitness-coaching-app/fitness-coaching-app-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fitness-coaching-app/fitness-coaching-app-backend/issues"
+  },
+  "homepage": "https://github.com/fitness-coaching-app/fitness-coaching-app-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
