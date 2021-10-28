@@ -1,8 +1,8 @@
-import {config} from 'dotenv';
 import express from 'express';
 import router from './routes';
+import * as mongoUtil from './utils/mongoUtil';
 
-config();
+mongoUtil.connect().then();
 
 const app = express()
 
