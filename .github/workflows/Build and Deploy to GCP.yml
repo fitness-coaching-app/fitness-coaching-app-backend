@@ -4,7 +4,7 @@
 name: Build and Deploy to GCP
 
 on:
-  pull_request:
+  push:
     branches: [ develop ]
 
 jobs:
