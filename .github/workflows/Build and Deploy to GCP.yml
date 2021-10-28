@@ -32,14 +32,11 @@ jobs:
       with:
         path: ./build
         
-
     - name: Cache Build File
       uses: actions/cache@v2.1.6
       with:
-        # A list of files, directories, and wildcard patterns to cache and restore
         path: ./build
-        # An explicit key for restoring and saving the cache
-        key: ${{ runner.os }}-fca-build-${{ steps.run_tests.outputs.hash }}
+        key: ${{ runner.os }}-fca-build-${{ steps.folder-hash.outputs.hash }}
   
   deploy:
     runs-on: ubuntu-latest
@@ -49,7 +46,7 @@ jobs:
       uses: actions/cache@v2.1.6
       with:
         path: ./build
-        key: fca-build-file
+        key: ${{ runner.os }}-fca-build-${{ steps.folder-hash.outputs.hash }}
     - name: Cloud Functions Deploy
       uses: google-github-actions/deploy-cloud-functions@v0.1.2
       with:
