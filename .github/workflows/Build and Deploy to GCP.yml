@@ -46,6 +46,4 @@ jobs:
         entry_point: api
         # Runtime to use for the function.
         runtime: nodejs14
-        # Specifies which action should trigger the function.
-        event_trigger_type: http
   
