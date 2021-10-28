@@ -6,16 +6,8 @@ config();
 
 const app = express()
 
-app.get('/test', (req, res) => {
-    res.status(200).send("Fitness Coaching App")
-});
-
-app.get('/google', (req, res) => {
-    res.status(200).send("Google")
-});
-
 app.get('/', (req, res) => {
-    res.status(200).send('Hello World')
+    res.status(200).send('Fitness Coaching Application API')
 });
 
 export const api = app;
