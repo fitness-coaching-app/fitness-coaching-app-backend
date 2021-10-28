@@ -37,6 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps: 
+    - uses: actions/checkout@v2
     - run: ls -l
     - name: Cloud Functions Deploy
       uses: google-github-actions/deploy-cloud-functions@v0.1.2
