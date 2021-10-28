@@ -26,13 +26,20 @@ jobs:
     - run: npm run build
     - name: Copy package.json to build/src folder
       run: cp package.json ./build/src
+    - name: Folder Hash
+      uses: theowenyoung/folder-hash@v2
+      id: folder-hash
+      with:
+        path: ./build
+        
+
     - name: Cache Build File
       uses: actions/cache@v2.1.6
       with:
         # A list of files, directories, and wildcard patterns to cache and restore
         path: ./build
         # An explicit key for restoring and saving the cache
-        key: fca-build-file
+        key: ${{ runner.os }}-fca-build-${{ steps.run_tests.outputs.hash }}
   
   deploy:
     runs-on: ubuntu-latest
