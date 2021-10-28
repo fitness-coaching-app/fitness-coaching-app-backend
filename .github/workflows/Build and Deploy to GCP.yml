@@ -24,8 +24,11 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build
-    - name: Copy package.json to build/src folder
-      run: cp package.json ./build/src
+    - name: Copy package.json to build/src folder & Change target
+      run: |
+        jq '.main = "index.js"' package.json > build/src/package.json
+        cat build/src/package.json
+        
     - name: Folder Hash
       uses: theowenyoung/folder-hash@v2
       id: folder-hash
