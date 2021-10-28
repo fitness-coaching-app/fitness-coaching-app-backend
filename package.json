@@ -2,13 +2,17 @@
   "name": "fitness-coaching-app-backend",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.ts",
   "engines": {
     "node": ">=14.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "functions-framework --source=build/src --target=api",
+    "start-ts": "nodemon src/index.ts",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -21,6 +25,14 @@
   },
   "homepage": "https://github.com/fitness-coaching-app/fitness-coaching-app-backend#readme",
   "dependencies": {
+    "@google-cloud/functions-framework": "^1.9.0",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.11.6",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
   }
 }
