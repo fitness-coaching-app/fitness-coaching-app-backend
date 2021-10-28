@@ -53,8 +53,10 @@ jobs:
       with:
         path: ./build
         key: ${{ runner.os }}-fca-build-${{ steps.folder-hash.outputs.hash }}
+    - run: ls -l build/src
     - name: Cloud Functions Deploy
       uses: google-github-actions/deploy-cloud-functions@v0.1.2
+      id: deploy
       with:
         name: fca-api
         # Project to deploy the function in.
