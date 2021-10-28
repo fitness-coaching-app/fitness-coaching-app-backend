@@ -30,7 +30,7 @@ jobs:
       uses: theowenyoung/folder-hash@v2
       id: folder-hash
       with:
-        path: ./build
+        path: ./src
         
     - name: Cache Build File
       uses: actions/cache@v2.1.6
@@ -42,6 +42,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps: 
+    - name: Folder Hash
+      uses: theowenyoung/folder-hash@v2
+      id: folder-hash
+      with:
+        path: ./src
     - name: Restore Build File
       uses: actions/cache@v2.1.6
       with:
