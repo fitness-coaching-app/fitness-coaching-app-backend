@@ -31,6 +31,7 @@ jobs:
         path: ./build/src
         # An explicit key for restoring and saving the cache
         key: fca-build-file
+    - run: ls -l
   
   deploy:
     runs-on: ubuntu-latest
