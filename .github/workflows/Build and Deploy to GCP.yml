@@ -72,5 +72,4 @@ jobs:
         entry_point: functions.api
         # Runtime to use for the function.
         runtime: nodejs14
-    - run: curl "${{ steps.deploy.outputs.url }}"
   
