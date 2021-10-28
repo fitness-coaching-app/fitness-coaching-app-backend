@@ -24,6 +24,8 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build
+    - name: Copy package.json to build/src folder
+      run: cp package.json ./build/src
     - name: Cache Build File
       uses: actions/cache@v2.1.6
       with:
@@ -31,7 +33,6 @@ jobs:
         path: ./build
         # An explicit key for restoring and saving the cache
         key: fca-build-file
-    - run: ls -l
   
   deploy:
     runs-on: ubuntu-latest
