@@ -27,12 +27,17 @@ jobs:
   
   deploy:
     runs-on: ubuntu-latest
-    
+    needs: build
     steps: 
     - name: Cloud Functions Deploy
       uses: google-github-actions/deploy-cloud-functions@v0.1.2
       with:
         name: fca-api
+        # Project to deploy the function in.
+        project_id: ${{ secrets.RUN_PROJECT }}
+        # The email address of the IAM service account associated with the function at runtime.
+        service_account_email: ${{ secrets.SA_EMAIL }}
+        credentials: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         # Region to deploy the function in. Defaults to us-central1, if not specified.
         region: asia-southeast1
         # Path to function deployment directory within the source repo.
