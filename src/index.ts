@@ -1,6 +1,6 @@
 import {config} from 'dotenv';
-
 import express from 'express';
+import router from './routes';
 
 config();
 
@@ -10,5 +10,6 @@ app.get('/', (req, res) => {
     res.status(200).send('Fitness Coaching Application API')
 });
 
-export const api = app;
+app.use(router);
 
+export const api = app;
