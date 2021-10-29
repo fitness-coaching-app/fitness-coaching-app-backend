@@ -8,72 +8,36 @@ on:
     branches: [ develop ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x]
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build
-        
-    - name: Folder Hash
-      uses: theowenyoung/folder-hash@v2
-      id: folder-hash
-      with:
-        path: ./src
-        
-    - name: Cache Build File
-      uses: actions/cache@v2.1.6
-      with:
-        path: ./build
-        key: ${{ runner.os }}-fca-build-${{ steps.folder-hash.outputs.hash }}
-  
   deploy:
     runs-on: ubuntu-latest
-    needs: build
-    steps: 
-    - uses: actions/checkout@v2
-    - name: Folder Hash
-      uses: theowenyoung/folder-hash@v2
-      id: folder-hash
-      with:
-        path: ./src
-    - name: Restore Build File
-      uses: actions/cache@v2.1.6
-      with:
-        path: ./build
-        key: ${{ runner.os }}-fca-build-${{ steps.folder-hash.outputs.hash }}
-        
-        
-    - name: Copy package.json to build/src folder & Change target
-      run: jq '.main = "index.js"' package.json > build/src/package.json
-      
-      
-    - name: Cloud Functions Deploy
-      uses: google-github-actions/deploy-cloud-functions@v0.1.2
-      id: deploy
-      with:
-        name: dev-api
-        # Project to deploy the function in.
-        project_id: ${{ secrets.RUN_PROJECT }}
-        # The email address of the IAM service account associated with the function at runtime.
-        service_account_email: ${{ secrets.SA_EMAIL }}
-        credentials: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-        # Region to deploy the function in. Defaults to us-central1, if not specified.
-        region: asia-southeast1
-        # Path to function deployment directory within the source repo.
-        source_dir: ./build/src
-        # Name of a function (as defined in source code) that will be executed. Defaults to the resource name suffix, if not specified. 
-        entry_point: api
-        # Runtime to use for the function.
-        runtime: nodejs14
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'npm'
+      - name: Build
+        run: npm run build
+      - name: Copy package.json to build/src folder & Change target
+        run: jq '.main = "index.js"' package.json > build/src/package.json
+      - name: Cloud Functions Deploy
+        uses: google-github-actions/deploy-cloud-functions@v0.1.2
+        id: deploy
+        with:
+          name: dev-api
+          # Project to deploy the function in.
+          project_id: ${{ secrets.RUN_PROJECT }}
+          # The email address of the IAM service account associated with the function at runtime.
+          service_account_email: ${{ secrets.SA_EMAIL }}
+          credentials: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          # Region to deploy the function in. Defaults to us-central1, if not specified.
+          region: asia-southeast1
+          # Path to function deployment directory within the source repo.
+          source_dir: ./build/src
+          # Name of a function (as defined in source code) that will be executed. Defaults to the resource name suffix, if not specified.
+          entry_point: api
+          # Runtime to use for the function.
+          runtime: nodejs14
+          env_vars: MONGODB_URI=${{ secrets.DEV_MONGODB_URI }}
   
