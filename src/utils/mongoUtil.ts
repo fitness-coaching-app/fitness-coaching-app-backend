@@ -1,9 +1,9 @@
-import {MongoClient} from 'mongodb';
+import {Db, MongoClient} from 'mongodb';
 import config from '../config';
 
 const uri: string = config.mongoDB.uri ? config.mongoDB.uri : "";
 
-let _db: any;
+let _db: Db;
 
 export const connect = async () => {
     const client = new MongoClient(uri);
@@ -18,6 +18,6 @@ export const connect = async () => {
     }
 }
 
-export const getDB = () => _db;
+export const getDB = (): Db => _db;
 
 
