@@ -8,5 +8,5 @@ const {validate} = new Validator({})
 
 authentication.post('/sign-in', AuthController.signIn);
 authentication.post('/register', validate({body: schema.registerSchema as ValidateFunction}), AuthController.register);
-
+authentication.get('/verifyEmail', AuthController.verifyEmail);
 export default authentication

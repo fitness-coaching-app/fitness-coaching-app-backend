@@ -21,10 +21,12 @@ export const sendVerificationEmail = (userInfo: { displayName: string, email: st
         },
     });
 
+    const link = config.apiHostUrl + `/auth/verifyEmail?displayName=${userInfo.displayName}&token=${token}`;
+
     return transporter.sendMail({
         from: '"Fitness Coaching App" <fitnesscoachingapp@gmail.com>',
         to: userInfo.email,
         subject: "Verify your email address",
-        text: `Please verify in 10 minutes by clicking this link\n${token}`,
+        html: `Please verify in 10 minutes by clicking this link<br><br><a href="${link}">Verify Email</a>`,
     });
 }

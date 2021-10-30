@@ -9,7 +9,8 @@ const config = {
     },
     gmail: {
         password: process.env.GMAIL_PASSWORD
-    }
+    },
+    apiHostUrl: process.env.API_HOST_URL
 }
 
 export default config
