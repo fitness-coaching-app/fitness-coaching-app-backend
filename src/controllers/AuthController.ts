@@ -18,11 +18,10 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
             password: hashPassword(info.password),
         }
 
-        // Development Only
-        // await models.users.insertOne(infoToInsert);
-        await sendVerificationEmail({...infoToInsert, email: ""});
+        await models.users.insertOne(infoToInsert);
+        await sendVerificationEmail({...infoToInsert});
 
-        res.status(200).json(success(res.statusCode, "Register Completed", {data: infoToInsert}));
+        res.status(200).json(success(res.statusCode, "Register Completed - Waiting for Verification", {data: infoToInsert}));
     } catch (e: any) {
         next(e)
     }

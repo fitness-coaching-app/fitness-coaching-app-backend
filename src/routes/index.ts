@@ -20,10 +20,17 @@ const mongoServerErrorMiddleware = (error: any, req: Request, res: Response, nex
 	next();
 }
 
+const otherError = (error: any, req: Request, res: Response, next: NextFunction) => {
+	if (res.headersSent) next(error);
+	else res.status(500).json(response.error(res.statusCode, error.toString()));
+	next();
+}
+
 router.use('/auth', auth)
 
 router.use(validationErrorMiddleware)
 router.use(mongoServerErrorMiddleware)
+router.use(otherError)
 
 export default router
 
