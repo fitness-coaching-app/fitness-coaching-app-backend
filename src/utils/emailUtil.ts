@@ -5,9 +5,9 @@ import jwt from 'jsonwebtoken';
 export const sendVerificationEmail = (userInfo: { displayName: string, email: string, password: string }) => {
     const token = jwt.sign(
         {
-            displayName: userInfo.displayName,
+            email: userInfo.email,
         },
-        userInfo.password,
+        config.jwtSecret,
         {
             expiresIn: '10m'
         }
@@ -21,7 +21,7 @@ export const sendVerificationEmail = (userInfo: { displayName: string, email: st
         },
     });
 
-    const link = config.apiHostUrl + `/auth/verifyEmail?displayName=${userInfo.displayName}&token=${token}`;
+    const link = config.apiHostUrl + `/auth/verifyEmail/${token}`;
 
     return transporter.sendMail({
         from: '"Fitness Coaching App" <fitnesscoachingapp@gmail.com>',

@@ -40,8 +40,8 @@ export const verifyEmail = async (req: Request, res: Response, next: NextFunctio
         let decoded = jwt.verify(token!, userInfo!.password)
         await models.users.updateEmailVerificationComplete(userInfo!.displayName)
 
-        res.status(200).send("Email Verification Success!\nYou can close this window now.");
+        res.status(200).send(`<h1>Email Verification Success!</h1>You can close this window now.`);
     } catch (e: any) {
-        res.status(500).send("There's a problem with the verification process.\nPlease try again.");
+        res.status(500).send(`<h1>There's a problem with the verification process.</h1>Please try again.`);
     }
 }
