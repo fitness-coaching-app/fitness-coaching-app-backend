@@ -15,7 +15,7 @@ export const insertOne = async (document: object) => {
     return await db.collection('users').insertOne(document);
 }
 
-export const updateEmailVerificationComplete = async (displayName: string) => {
+export const updateEmailVerificationComplete = async (email: string) => {
     let db = mongoUtil.getDB();
-    return await db.collection('users').updateOne({displayName}, {$set: {status: "SETTING_UP"}});
+    return await db.collection('users').updateOne({email}, {$set: {status: "SETTING_UP"}});
 }
