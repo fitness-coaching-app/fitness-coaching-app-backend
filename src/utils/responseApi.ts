@@ -30,6 +30,8 @@ export const validationError = (statusCode: number, message: string, errors: Val
 export const ErrorCode = {
     mongoDBError: "MONGODB_ERROR",
     emailAlreadyExists: "DUPLICATE_EMAIL",
+    userNotFound: "USER_NOT_FOUND",
+    incorrectPassword: "INCORRECT_PASSWORD",
     displayNameAlreadyExists: "DUPLICATE_DISPLAY_NAME",
     otherError: "OTHER_ERROR",
 }

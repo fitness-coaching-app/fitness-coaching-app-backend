@@ -1,13 +1,41 @@
 import {NextFunction, Request, Response} from 'express';
 import models from '../models'
 import {error, success, ErrorCode} from '../utils/responseApi'
-import {hashPassword} from '../utils/passwordUtil'
+import {hashPassword, comparePassword} from '../utils/passwordUtil'
 import {sendVerificationEmail} from "../utils/emailUtil";
 import jwt, {TokenExpiredError} from "jsonwebtoken";
 import config from "../config";
 
-export const signIn = async (req: Request, res: Response) => {
-    res.status(200).send('AuthController.signIn');
+export const signIn = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const info: { email: string, password: string } = req.body;
+        const userResult = await models.users.findOne({email: info.email});
+        if (!userResult) {
+            res.status(400).json(error(res.statusCode, `User with email '${info.email}' not found`, [ErrorCode.userNotFound]));
+            return;
+        }
+
+        // Check password
+        const isPasswordCorrect = comparePassword(info.password, userResult.password)
+        if (!isPasswordCorrect) {
+            res.status(400).json(error(res.statusCode, `Incorrect password`, [ErrorCode.incorrectPassword]));
+            return;
+        }
+
+        const accessToken = jwt.sign({
+                displayName: userResult.displayName
+            },
+            config.jwtSecret,
+            {
+                expiresIn: '1d'
+            })
+
+
+        res.status(200).json(success(res.statusCode, "Sign in success", {accessToken: accessToken}));
+    } catch (e) {
+        next(e);
+    }
+
 }
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
