@@ -9,11 +9,12 @@ export const success = (statusCode: number, message: string, results: any) => {
     }
 }
 
-export const error = (statusCode: number, message: string) => {
+export const error = (statusCode: number, message: string, errorCode: Array<string> | undefined) => {
     return {
         code: statusCode,
         message: message,
-        error: true
+        error: true,
+        errorMessage: errorCode,
     }
 }
 
@@ -24,4 +25,9 @@ export const validationError = (statusCode: number, message: string, errors: Val
         error: true,
         errorMessage: errors.validationErrors
     }
+}
+
+export const ErrorCode = {
+    emailAlreadyExists: "DUPLICATE_EMAIL",
+    displayNameAlreadyExists: "DUPLICATE_DISPLAY_NAME"
 }

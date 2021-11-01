@@ -1,9 +1,9 @@
 import {NextFunction, Request, Response} from 'express';
 import models from '../models'
-import {success} from '../utils/responseApi'
+import {error, success, ErrorCode} from '../utils/responseApi'
 import {hashPassword} from '../utils/passwordUtil'
 import {sendVerificationEmail} from "../utils/emailUtil";
-import jwt from "jsonwebtoken";
+import jwt, {TokenExpiredError} from "jsonwebtoken";
 import config from "../config";
 
 export const signIn = async (req: Request, res: Response) => {
@@ -18,6 +18,16 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
             displayName: info.displayName,
             email: info.email,
             password: hashPassword(info.password),
+        }
+        let isEmailDuplicate = !!(await models.users.findOne({email: info.email}));
+        if (isEmailDuplicate) {
+            res.status(400).json(error(res.statusCode, "Register Failed: Email Already Exists", [ErrorCode.emailAlreadyExists]));
+            return;
+        }
+        let isDisplayNameDuplicate = !!(await models.users.findOne({displayName: info.displayName}));
+        if (isDisplayNameDuplicate) {
+            res.status(400).json(error(res.statusCode, "Register Failed: Display Name Already Exists", [ErrorCode.displayNameAlreadyExists]));
+            return;
         }
 
         await models.users.insertOne(infoToInsert);
@@ -44,17 +54,22 @@ export const verifyEmail = async (req: Request, res: Response, next: NextFunctio
         let decoded: any = jwt.verify(token!, config.jwtSecret);
         let userInfo = await models.users.findOne({email: decoded.email});
         if (!userInfo) {
-            res.status(500).send(verifyEmailErrorMessage("Can't find the account"));
+            res.status(500).send(verifyEmailErrorMessage("Can't Find the Account"));
             return;
         }
         if (userInfo.status !== "VERIFICATION") {
-            res.status(500).send(verifyEmailErrorMessage("Status doesn't match"));
+            res.status(500).send(verifyEmailErrorMessage("Account Already Verified"));
             return;
         }
 
         await models.users.updateEmailVerificationComplete(decoded.email);
         res.status(200).send(`<h1>Email Verification Success!</h1>You can close this window now.`);
     } catch (e: any) {
-        next(e);
+        if (e instanceof TokenExpiredError) {
+            res.status(500).send(verifyEmailErrorMessage("Token Expired"));
+        } else {
+            res.status(500).send(verifyEmailErrorMessage(e.toString()));
+        }
+        next(e)
     }
 }
