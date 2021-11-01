@@ -3,6 +3,7 @@ import router from './routes';
 import * as mongoUtil from './utils/mongoUtil';
 import {validationError} from './utils/responseApi'
 import {Request, Response, NextFunction} from 'express'
+import passport from 'passport';
 
 mongoUtil.connect().then();
 
@@ -15,7 +16,9 @@ const requestSyntaxErrorMiddleware = (error: any, req: Request, res: Response, n
     res.status(400).json(validationError(res.statusCode, "Request Syntax Error", error));
     next();
 }
+require('./utils/passport');
 
+app.use(passport.initialize());
 // app.use(requestSyntaxErrorMiddleware);
 app.use(router);
 
