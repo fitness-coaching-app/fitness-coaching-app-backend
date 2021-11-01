@@ -11,9 +11,9 @@ const errorHandler = (error: any, req: Request, res: Response, next: NextFunctio
 	else if (error instanceof ValidationError)
 		res.status(400).json(response.validationError(res.statusCode, "Request Format Validation Error", error));
 	else if (error instanceof MongoServerError)
-		res.status(500).json(response.error(res.statusCode, error.toString()));
+		res.status(500).json(response.error(res.statusCode, error.toString(), [response.ErrorCode.mongoDBError]));
 	else
-		res.status(500).json(response.error(res.statusCode, error.toString()));
+		res.status(500).json(response.error(res.statusCode, error.toString(), [response.ErrorCode.otherError]));
 
 	next()
 }
