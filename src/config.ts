@@ -1,6 +1,6 @@
-import * as dotenv from 'dotenv';
-
-console.log(dotenv.config());
+// import * as dotenv from 'dotenv';
+//
+// console.log(dotenv.config());
 
 const config = {
     environment: process.env.NODE_ENV,
