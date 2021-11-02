@@ -23,6 +23,15 @@ jobs:
         run: npm run build
       - name: Copy package.json to build/src folder & Change target
         run: jq '.main = "index.js"' package.json > build/src/package.json
+      - name: create .env in build/src
+        run: |
+          cd ./build/src/
+          touch .env
+          echo "NODE_ENV='DEV'" >> .env
+          echo "MONGODB_URI='${{ secrets.DEV_MONGODB_URI }}'" >> .env
+          echo "GMAIL_PASSWORD='${{ secrets.GMAIL_PASSWORD }'" >> .env
+          echo "API_HOST_URL='${{ secrets.DEV_API_HOST_URL }}'" >> .env
+          echo "JWT_SECRET='${{ secrets.JWT_SECRET }}'" >> .env
       - name: Cloud Functions Deploy
         uses: google-github-actions/deploy-cloud-functions@v0.1.2
         id: deploy
@@ -41,5 +50,4 @@ jobs:
           entry_point: api
           # Runtime to use for the function.
           runtime: nodejs14
-          env_vars: NODE_ENV=DEV,MONGODB_URI=${{ secrets.DEV_MONGODB_URI }},GMAIL_PASSWORD=${{ secrets.GMAIL_PASSWORD }},API_HOST_URL=${{ secrets.DEV_API_HOST_URL }},JWT_SECRET=${{ secrets.JWT_SECRET }}
   
