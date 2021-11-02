@@ -29,9 +29,10 @@ jobs:
           touch .env
           echo "NODE_ENV='DEV'" >> .env
           echo "MONGODB_URI='${{ secrets.DEV_MONGODB_URI }}'" >> .env
-          echo "GMAIL_PASSWORD='${{ secrets.GMAIL_PASSWORD }'" >> .env
+          echo "GMAIL_PASSWORD='${{ secrets.GMAIL_PASSWORD }}'" >> .env
           echo "API_HOST_URL='${{ secrets.DEV_API_HOST_URL }}'" >> .env
           echo "JWT_SECRET='${{ secrets.JWT_SECRET }}'" >> .env
+          
       - name: Cloud Functions Deploy
         uses: google-github-actions/deploy-cloud-functions@v0.1.2
         id: deploy
