@@ -14,7 +14,7 @@ export const error = (statusCode: number, message: string, errorCode: Array<stri
         code: statusCode,
         message: message,
         error: true,
-        errorMessage: errorCode,
+        errorCode: errorCode,
     }
 }
 
@@ -33,5 +33,7 @@ export const ErrorCode = {
     userNotFound: "USER_NOT_FOUND",
     incorrectPassword: "INCORRECT_PASSWORD",
     displayNameAlreadyExists: "DUPLICATE_DISPLAY_NAME",
+    tokenMismatch: "TOKEN_MISMATCH",
+    jwtError: "JWT_ERROR",
     otherError: "OTHER_ERROR",
 }

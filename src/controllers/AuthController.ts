@@ -5,33 +5,20 @@ import {hashPassword} from '../utils/passwordUtil'
 import {sendVerificationEmail} from "../utils/emailUtil";
 import jwt, {TokenExpiredError} from "jsonwebtoken";
 import config from "../config";
-import passport from 'passport';
 import {generateAccessToken, generateRefreshToken} from "../utils/tokenUtil";
 
 export const signIn = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        passport.authenticate('local', (err, user, info) => {
-            if (err) return next(err);
-            else if (!user) {
-                res.status(400).json(error(res.statusCode, info.message, info.errorCode));
-                return;
-            } else {
-                req.logIn(user, {session: false}, (err) => {
-                    if (err) throw err;
-                    else {
-                        const accessToken = generateAccessToken(user.displaynName);
+        const user: any = req.user!;
 
-                        const refreshToken = generateRefreshToken(user.displayName);
+        const accessToken = generateAccessToken(user.displayName);
+        const refreshToken = generateRefreshToken(user.displayName);
 
-                        res.status(200).json(success(res.statusCode, "Sign in success", {
-                            user,
-                            accessToken,
-                            refreshToken
-                        }));
-                    }
-                })
-            }
-        })(req, res, next);
+        res.status(200).json(success(res.statusCode, "Sign in success", {
+            user: {...user, password: undefined},
+            accessToken,
+            refreshToken
+        }));
 
     } catch (e) {
         next(e);
@@ -100,4 +87,12 @@ export const verifyEmail = async (req: Request, res: Response, next: NextFunctio
         }
         next(e)
     }
+}
+
+export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+    const user: any = req.user!
+    const accessToken = generateAccessToken(user.displayName)
+
+    res.status(200).json(success(res.statusCode, "New Access Token Generated", {accessToken}));
+    next();
 }
