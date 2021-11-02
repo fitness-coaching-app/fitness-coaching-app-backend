@@ -39,5 +39,5 @@ jobs:
           entry_point: api
           # Runtime to use for the function.
           runtime: nodejs14
-          env_vars: MONGODB_URI=${{ secrets.DEV_MONGODB_URI }},GMAIL_PASSWORD=${{ secrets.GMAIL_PASSWORD }},API_HOST_URL=${{ secrets.DEV_API_HOST_URL }},JWT_SECRET=${{secrets.JWT_SECRET}}
+          env_vars: NODE_ENV='DEV',MONGODB_URI='${{ secrets.DEV_MONGODB_URI }}',GMAIL_PASSWORD='${{ secrets.GMAIL_PASSWORD }}',API_HOST_URL='${{ secrets.DEV_API_HOST_URL }}',JWT_SECRET='${{ secrets.JWT_SECRET }}'
   
