@@ -6,6 +6,7 @@ import {sendVerificationEmail} from "../utils/emailUtil";
 import jwt, {TokenExpiredError} from "jsonwebtoken";
 import config from "../config";
 import passport from 'passport';
+import {generateAccessToken, generateRefreshToken} from "../utils/tokenUtil";
 
 export const signIn = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -18,13 +19,15 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
                 req.logIn(user, {session: false}, (err) => {
                     if (err) throw err;
                     else {
-                        const accessToken = jwt.sign({
-                                displayName: user.displayName
-                            },
-                            config.jwtSecret,
-                        ) // TODO: Set access token expire date.
+                        const accessToken = generateAccessToken(user.displaynName);
 
-                        res.status(200).json(success(res.statusCode, "Sign in success", {accessToken: accessToken}));
+                        const refreshToken = generateRefreshToken(user.displayName);
+
+                        res.status(200).json(success(res.statusCode, "Sign in success", {
+                            user,
+                            accessToken,
+                            refreshToken
+                        }));
                     }
                 })
             }
