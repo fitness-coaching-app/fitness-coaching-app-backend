@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: '14'
           cache: 'npm'
+      - name: Install Node.js dependencies
+        run: npm install
       - name: Build
         run: npm run build
       - name: Copy package.json to build/src folder & Change target
