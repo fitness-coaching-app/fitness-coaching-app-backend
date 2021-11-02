@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 
-dotenv.config({path: `${process.cwd()}/.env`});
+dotenv.config({path: `${__dirname}/.env`});
 
 const config = {
     environment: process.env.NODE_ENV,
