@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 
-dotenv.config();
+console.log(dotenv.config());
 
 const config = {
     environment: process.env.NODE_ENV,
