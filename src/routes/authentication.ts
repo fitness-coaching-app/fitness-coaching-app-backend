@@ -4,13 +4,13 @@ import * as AuthController from '../controllers/AuthController'
 import * as schema from './schema/authenticationSchema'
 import {passportAuthenticate} from "../utils/passport";
 
-const authentication = Router()
+const router = Router()
 const {validate} = new Validator({})
 
-authentication.post('/sign-in', passportAuthenticate('local'), validate({body: schema.signInSchema}), AuthController.signIn);
-authentication.post('/register', validate({body: schema.registerSchema}), AuthController.register);
-authentication.get('/verifyEmail/:token', AuthController.verifyEmail);
+router.post('/sign-in', passportAuthenticate('local'), validate({body: schema.signInSchema}), AuthController.signIn);
+router.post('/register', validate({body: schema.registerSchema}), AuthController.register);
+router.get('/verifyEmail/:token', AuthController.verifyEmail);
 
-authentication.get('/refreshToken', passportAuthenticate('refreshTokenJwt'), AuthController.refreshToken);
+router.get('/refreshToken', passportAuthenticate('refreshTokenJwt'), AuthController.refreshToken);
 
-export default authentication
+export default router
