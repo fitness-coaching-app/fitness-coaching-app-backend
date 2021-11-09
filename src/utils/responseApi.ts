@@ -33,6 +33,7 @@ export const ErrorCode = {
     userNotFound: "USER_NOT_FOUND",
     incorrectPassword: "INCORRECT_PASSWORD",
     displayNameAlreadyExists: "DUPLICATE_DISPLAY_NAME",
+    tokenTypeMismatch: "TOKEN_TYPE_MISMATCH",
     tokenMismatch: "TOKEN_MISMATCH",
     jwtError: "JWT_ERROR",
     otherError: "OTHER_ERROR",

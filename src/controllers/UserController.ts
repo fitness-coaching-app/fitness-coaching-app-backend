@@ -3,11 +3,19 @@ import Busboy, {BusboyHeaders} from 'busboy';
 import path from "path";
 import * as fs from "fs";
 import * as os from "os";
-import {success} from "../utils/responseApi";
+import {error, ErrorCode, success} from "../utils/responseApi";
 
 
 export const editUserInfo = async (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).send("OK");
+    try {
+        let user: any = req.user!;
+        console.log(user);
+
+        res.status(200).send("OK");
+    } catch (e) {
+        next(e)
+    }
+
 }
 
 export const editProfilePicture = async (req: Request, res: Response, next: NextFunction) => {
@@ -23,10 +31,13 @@ export const editProfilePicture = async (req: Request, res: Response, next: Next
         file.pipe(fs.createWriteStream(filepath));
     })
     busboy.on('finish', function () {
-
         res.status(200).send(success(res.statusCode, "Profile Picture Upload Success", {}));
     });
-
+    const user: any = req.user!;
+    if (user.displayName !== displayName) {
+        res.status(400).send(error(res.statusCode, "Token mismatch with display name", [ErrorCode.tokenMismatch]))
+        return;
+    }
     // @ts-ignore
     busboy.end(req.rawBody);
 }

@@ -49,7 +49,7 @@ passport.use('accessTokenJwt', new JwtStrategy({
         if (jwtPayload.type !== 'accessToken')
             return callback(new Error('Token type mismatch'), false, {
                 message: 'Token type mismatch',
-                errorCode: [ErrorCode.tokenMismatch]
+                errorCode: [ErrorCode.tokenTypeMismatch]
             });
 
         return await models.users.findOne({displayName: jwtPayload.displayName})
@@ -70,7 +70,7 @@ passport.use('refreshTokenJwt', new JwtStrategy({
         if (jwtPayload.type !== 'refreshToken')
             return callback(new Error('Token type mismatch'), false, {
                 message: 'Token type mismatch',
-                errorCode: [ErrorCode.tokenMismatch]
+                errorCode: [ErrorCode.tokenTypeMismatch]
             });
         return await models.users.findOne({displayName: jwtPayload.displayName})
             .then(user => {
