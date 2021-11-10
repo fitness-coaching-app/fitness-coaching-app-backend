@@ -8,7 +8,7 @@ import {userExists} from '../models/users';
 export const editUserInfo = async (req: Request, res: Response, next: NextFunction) => {
     try {
         let user: any = req.user!;
-        let infoToEdit = req.body;
+        let infoToEdit: any = req.body;
         if (!!(infoToEdit.displayName)) {
             const isDuplicate: boolean = await userExists(infoToEdit.displayName)
             if (isDuplicate) {
@@ -16,9 +16,9 @@ export const editUserInfo = async (req: Request, res: Response, next: NextFuncti
                 return;
             }
         }
+        await models.users.updateOne({displayName: user.displayName}, infoToEdit)
 
-
-        res.status(200).send("OK");
+        res.status(200).send(success(res.statusCode, "User Info Edit Successfully"))
     } catch (e) {
         next(e)
     }
@@ -38,6 +38,35 @@ export const editProfilePicture = async (req: Request, res: Response, next: Next
         await models.users.updateOne({displayName: user.displayName}, {profilePicture: gcsLink})
 
         res.status(200).send(success(res.statusCode, "Profile Picture Changed Successfully", {profilePicture: gcsLink}))
+    } catch (e) {
+        next(e)
+    }
+}
+
+export const newUserSetup = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user: any = req.user!;
+        let infoToUpdate: any = req.body;
+        if (!(user.status === "SETTING_UP")) {
+            res.status(400).send(error(res.statusCode, `User status is ${user.status} (SETTING_UP Required)`, [ErrorCode.userStatusError]))
+            return;
+        }
+
+        await models.users.updateOne({displayName: user.displayName}, {...infoToUpdate, status: "ACTIVE"});
+
+        res.status(200).send(success(res.statusCode, "New User Setup Success"))
+    } catch (e) {
+        next(e)
+    }
+}
+
+export const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const displayName = req.params.displayName;
+
+        const result: object | null = await models.users.findOne({displayName});
+
+        res.status(200).send(success(res.statusCode, "User Info Fetched", result));
     } catch (e) {
         next(e)
     }
