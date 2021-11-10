@@ -7,7 +7,7 @@ const router = Router();
 router.use(passportAuthenticate('accessTokenJwt'))
 
 router.post("/editUserInfo", UserController.editUserInfo)
-router.post("/editProfilePicture/:displayName", UserController.editProfilePicture)
+router.post("/editProfilePicture", UserController.editProfilePicture)
 
 
 export default router;
