@@ -23,16 +23,19 @@ jobs:
         run: npm run build
       - name: Copy package.json to build/src folder & Change target
         run: jq '.main = "index.js"' package.json > build/src/package.json
-      - name: create .env in build/src
+      - name: Create .env in build/src
         run: |
           cd ./build/src/
           touch .env
-          echo "NODE_ENV='DEV'" >> .env
-          echo "MONGODB_URI='${{ secrets.DEV_MONGODB_URI }}'" >> .env
-          echo "GMAIL_PASSWORD='${{ secrets.GMAIL_PASSWORD }}'" >> .env
-          echo "API_HOST_URL='${{ secrets.DEV_API_HOST_URL }}'" >> .env
-          echo "JWT_SECRET='${{ secrets.JWT_SECRET }}'" >> .env
-          
+          echo "${{ secrets.DEV_DOTENV }}" >> .env
+      - name: Create .env in build/src
+        run: |
+          cd ../
+          mkdir google-cloud
+          cd google-cloud
+          touch fitness-coaching-app-5942f56e3512.json
+          echo "${{ secrets.GCS_CREDENTIALS }}" >> fitness-coaching-app-5942f56e3512.json
+
       - name: Cloud Functions Deploy
         uses: google-github-actions/deploy-cloud-functions@v0.1.2
         id: deploy

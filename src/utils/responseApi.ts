@@ -1,6 +1,6 @@
 import {ValidationError} from 'express-json-validator-middleware';
 
-export const success = (statusCode: number, message: string, results: any) => {
+export const success = (statusCode: number, message: string, results: object | null = {}) => {
     return {
         code: statusCode,
         message: message,
@@ -33,7 +33,9 @@ export const ErrorCode = {
     userNotFound: "USER_NOT_FOUND",
     incorrectPassword: "INCORRECT_PASSWORD",
     displayNameAlreadyExists: "DUPLICATE_DISPLAY_NAME",
+    tokenTypeMismatch: "TOKEN_TYPE_MISMATCH",
     tokenMismatch: "TOKEN_MISMATCH",
     jwtError: "JWT_ERROR",
+    userStatusError: "USER_STATUS_ERROR",
     otherError: "OTHER_ERROR",
 }

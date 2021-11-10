@@ -1,5 +1,6 @@
 import {Request, Response, NextFunction, Router} from 'express'
 import auth from './authentication'
+import user from './user'
 import * as response from '../utils/responseApi'
 import {ValidationError} from "express-json-validator-middleware";
 import {MongoServerError} from "mongodb";
@@ -19,6 +20,7 @@ const errorHandler = (error: any, req: Request, res: Response, next: NextFunctio
 }
 
 router.use('/auth', auth)
+router.use('/user', user)
 
 router.use(errorHandler)
 
