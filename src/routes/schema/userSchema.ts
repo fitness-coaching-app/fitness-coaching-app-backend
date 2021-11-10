@@ -4,8 +4,6 @@ export const editUserInfo: ValidateFunction = {
     type: "object",
     additionalProperties: false,
     properties: {
-        email: {type: "string"},
-        password: {type: "string"},
         displayName: {type: "string"},
         birthYear: {type: "number"},
         gender: {

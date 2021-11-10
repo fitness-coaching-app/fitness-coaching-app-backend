@@ -15,7 +15,12 @@ export const insertOne = async (document: object) => {
     return await db.collection('users').insertOne(document);
 }
 
-export const userExists = async (displayName: string) => {
+export const updateOne = async (query: object, newValue: object) => {
+    let db = mongoUtil.getDB();
+    return await db.collection('users').updateOne(query, {$set: newValue});
+}
+
+export const userExists = async (displayName: string): Promise<boolean> => {
     let db = mongoUtil.getDB();
     return !!(await db.collection('users').findOne({displayName}));
 }

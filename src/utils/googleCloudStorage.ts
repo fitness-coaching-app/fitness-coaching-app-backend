@@ -6,3 +6,10 @@ export const storage = new Storage({
 });
 
 export const getPublicUrl = (bucketName: string, fileName: string) => `https://storage.googleapis.com/${bucketName}/${fileName}`;
+export const parseURL = (url: string) => {
+    const temp = url.slice(31);
+    const bucketName = temp.split("/")[0];
+    const fileName = temp.replace(bucketName + "/", "")
+
+    return {bucketName, fileName};
+}
