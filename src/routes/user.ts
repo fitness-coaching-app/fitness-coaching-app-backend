@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import * as UserController from '../controllers/UserController'
 import {passportAuthenticate} from "../utils/passport";
-import * as schema from './schema/userSchema'
+import * as schema from './validator/userValidator'
 import {Validator} from 'express-json-validator-middleware'
 
 const router = Router();
