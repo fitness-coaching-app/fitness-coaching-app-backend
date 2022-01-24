@@ -20,8 +20,8 @@ const errorHandler = (error: any, req: Request, res: Response, next: NextFunctio
 	next()
 }
 
-router.use('/auth', auth)
-router.use('/user', user)
+router.use('/auth', auth);
+router.use('/user', user);
 router.use('/course', course);
 
 router.use(errorHandler)
