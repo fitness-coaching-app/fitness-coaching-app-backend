@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/fitness-coaching-app/fitness-coaching-app-backend#readme",
   "dependencies": {
-    "@google-cloud/functions-framework": "^1.9.0",
+    "@google-cloud/functions-framework": "^2.1.0",
     "@google-cloud/storage": "^5.15.6",
     "@types/bcrypt": "^5.0.0",
     "@types/busboy": "^0.3.1",
