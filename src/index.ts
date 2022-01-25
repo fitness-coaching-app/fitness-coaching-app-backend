@@ -45,7 +45,7 @@ const multiFileSwagger = () => {
 };
 
 multiFileSwagger().then((swaggerDocument) => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 })
 
 app.get('/', (req: Request, res: Response) => {
