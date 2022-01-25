@@ -13,3 +13,9 @@ servers:
 paths:
   /auth/signIn:
     $ref: './paths/auth/signIn.yaml'
+  /auth/register:
+    $ref: './paths/auth/register.yaml'
+  /auth/verifyEmail/{token}:
+    $ref: './paths/auth/verifyEmail@{token}.yaml'
+  /auth/refreshToken:
+    $ref: './paths/auth/refreshToken.yaml'

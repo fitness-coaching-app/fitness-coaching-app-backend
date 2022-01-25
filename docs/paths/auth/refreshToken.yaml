@@ -1,0 +1,23 @@
+get:
+  tags:
+    - Authentication
+    - TODO
+  summary: Refresh Access Token
+  description: Refresh access token with refresh token (Currently In Development)
+  responses:
+    200:
+      description: Refresh token successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: New Access Token Generated
+            error: false
+            results:
+              accessToken: "[Access Token]"
+    400:
+      $ref: '../../responses/400Error.yaml'
+    500:
+      $ref: '../../responses/500Error.yaml'
