@@ -1,0 +1,11 @@
+description: User info
+value:
+  _id: 617e3fe1db8cd3ba0cdf9511
+  status: ACTIVE
+  displayName: poramee
+  email: poramee.chansuksett@gmail.com
+  profilePicture: https://storage.googleapis.com/fca-bucket/profilePicture/profilePicture_poramee_1636552020783.jpeg
+  gender: MALE
+  partToAvoid: [ "back", "front" ]
+  birthYear: 2000
+  exercisePreference: [ "test" ]
