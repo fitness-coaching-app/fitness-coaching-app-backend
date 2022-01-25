@@ -23,12 +23,15 @@ jobs:
         run: npm run build
       - name: Copy package.json to build/src folder & Change target
         run: jq '.main = "index.js"' package.json > build/src/package.json
+      - name: Copy openAPI docs to build/src
+        run: |
+          cp -R ./docs ./build/src
       - name: Create .env in build/src
         run: |
           cd ./build/src/
           touch .env
           echo "${{ secrets.DEV_DOTENV }}" >> .env
-      - name: Create googe-cloud .json in build/src
+      - name: Create google-cloud .json in build/src
         run: |
           cd ./build/src/
           mkdir google-cloud

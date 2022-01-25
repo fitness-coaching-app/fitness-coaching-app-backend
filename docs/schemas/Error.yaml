@@ -1,0 +1,21 @@
+type: object
+properties:
+  code:
+    type: integer
+  message:
+    type: string
+  error:
+    type: boolean
+  errorCode:
+    type: string
+    enum:
+      - MONGODB_ERROR
+      - DUPLICATE_EMAIL
+      - USER_NOT_FOUND
+      - INCORRECT_PASSWORD
+      - DUPLICATE_DISPLAY_NAME
+      - TOKEN_TYPE_MISMATCH
+      - TOKEN_MISMATCH
+      - JWT_ERROR
+      - USER_STATUS_ERROR
+      - OTHER_ERROR

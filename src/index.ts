@@ -6,7 +6,6 @@ import passport from 'passport';
 
 mongoUtil.connect().then();
 
-
 const app = express()
 
 require('./utils/passport');
@@ -14,8 +13,43 @@ require('./utils/passport');
 app.use(passport.initialize());
 app.use(router);
 
+
+// OPENAPI DOCS
+import swaggerUi from 'swagger-ui-express';
+import yamljs from 'yamljs';
+import {resolveRefsAt} from 'json-refs';
+import path from "path";
+
+/**
+ * Return JSON with resolved references
+ * @returns {Promise.<JSON>}
+ */
+const multiFileSwagger = () => {
+  const options = {
+    filter: ["relative", "remote"],
+    loaderOptions: {
+      processContent: function (res: any, callback: any) {
+        callback(null, yamljs.parse(res.text));
+      },
+    },
+  };
+
+  return resolveRefsAt(path.join(__dirname, "./docs/openapi.yaml"), options).then(
+      function (results: any) {
+        return results.resolved;
+      },
+      function (err: any) {
+        console.log(err.stack);
+      }
+  );
+};
+
+multiFileSwagger().then((swaggerDocument) => {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+})
+
 app.get('/', (req: Request, res: Response) => {
-    res.status(200).send('Fitness Coaching Application API')
+  res.status(200).send('Fitness Coaching Application API')
 });
 
 export const api = app;

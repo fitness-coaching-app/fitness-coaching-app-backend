@@ -1,0 +1,59 @@
+post:
+  tags:
+    - Authentication
+  summary: Register
+  description: Register new user and send verification email.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [ "displayName", "email", "password" ]
+          properties:
+            displayName:
+              type: string
+            email:
+              type: string
+            password:
+              type: string
+  responses:
+    '200':
+      description: Register Completed - Waiting for Verification
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Register Completed - Waiting for Verification
+            error: false
+            results:
+              data:
+                status: "VERIFICATION"
+                displayName: "displayName"
+                email: "email@test.com"
+                password: "[password (hashed)]"
+
+    '400':
+      description: Register failed - Client side error
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Error.yaml'
+          examples:
+            'Email Already Exists':
+              value:
+                code: 400
+                message: 'Register Failed: Email Already Exists'
+                error: true
+                errorCode: DUPLICATE_EMAIL
+            'Display Name Already Exists':
+              value:
+                code: 400
+                message: 'Register Failed: Display Name Already Exists'
+                error: true
+                errorCode: DUPLICATE_DISPLAY_NAME
+
+    '500':
+      $ref: '../../responses/500Error.yaml'

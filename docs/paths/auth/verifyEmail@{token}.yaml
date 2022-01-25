@@ -1,0 +1,24 @@
+get:
+  tags:
+    - Authentication
+  summary: Verify Email Address
+  description: Verify email of the registered user (presented as a clicable link inside the email)
+  parameters:
+    - in: path
+      name: token
+      required: true
+      schema:
+        type: string
+      description: The verification token (JWT)
+  responses:
+    200:
+      description: Verification Success
+      content:
+        text/html:
+          example:
+            <h1>Email Verification Success!</h1>You can close this window now.
+
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"
