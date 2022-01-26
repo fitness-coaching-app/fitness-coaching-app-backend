@@ -1,0 +1,36 @@
+post:
+  tags:
+    - User
+  summary: Edit Profile Picture
+  description: Edit or add profile
+  security:
+    - BearerAccessToken: [ ]
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            profilePicture:
+              type: string
+              format: base64
+        encoding:
+          profilePicture:
+            contentType: image/jpeg
+  responses:
+    200:
+      description: Profile picture changed successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Profile Picture Changed Successfully
+            error: false
+            results:
+              profilePicture: "[GCS Profile Picture URL]"
+    400:
+      $ref: '../../responses/400Error.yaml'
+    500:
+      $ref: '../../responses/500Error.yaml'

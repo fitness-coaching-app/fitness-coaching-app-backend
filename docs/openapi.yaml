@@ -30,5 +30,9 @@ paths:
     $ref: './paths/auth/verifyEmail@{token}.yaml'
   /auth/refreshToken:
     $ref: './paths/auth/refreshToken.yaml'
+
   /user/editUserInfo:
     $ref: './paths/user/editUserInfo.yaml'
+  /user/editProfilePicture:
+    $ref: './paths/user/editProfilePicture.yaml'
+
