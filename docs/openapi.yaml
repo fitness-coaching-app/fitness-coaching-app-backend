@@ -31,8 +31,12 @@ paths:
   /auth/refreshToken:
     $ref: './paths/auth/refreshToken.yaml'
 
+  /user/getUserInfo:
+    $ref: './paths/user/getUserInfo@{displayName}.yaml'
   /user/editUserInfo:
     $ref: './paths/user/editUserInfo.yaml'
   /user/editProfilePicture:
     $ref: './paths/user/editProfilePicture.yaml'
+  /user/newUserSetup:
+    $ref: './paths/user/newUserSetup.yaml'
 
