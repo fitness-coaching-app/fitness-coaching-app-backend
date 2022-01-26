@@ -31,7 +31,7 @@ paths:
   /auth/refreshToken:
     $ref: './paths/auth/refreshToken.yaml'
 
-  /user/getUserInfo:
+  /user/getUserInfo/{displayName}:
     $ref: './paths/user/getUserInfo@{displayName}.yaml'
   /user/editUserInfo:
     $ref: './paths/user/editUserInfo.yaml'
