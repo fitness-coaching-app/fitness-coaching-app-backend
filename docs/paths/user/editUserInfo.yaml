@@ -1,0 +1,58 @@
+post:
+  tags:
+    - User
+  summary: Edit User Info
+  description: |
+    Use this function to edit and/or add user info.
+    An individual field data will be replaced only when the new data is provided in request body.
+  security:
+    - BearerAccessToken: [ ]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            displayName:
+              type: string
+            birthYear:
+              type: number
+            gender:
+              type: string
+              enum: [ MALE, FEMALE, OTHERS ]
+            exercisePreference:
+              type: array
+              items:
+                type: string
+            partToAvoid:
+              type: array
+              items:
+                type: string
+  responses:
+    200:
+      description: User Info Edit Successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: New Access Token Generated
+            error: false
+            results: ~
+    400:
+      description: Edit User Info Failed - Client side error
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Error.yaml'
+          examples:
+            'Display Name Already Exists':
+              value:
+                code: 400
+                message: 'Display Name Already Exists'
+                error: true
+                errorCode: DUPLICATE_DISPLAY_NAME
+    500:
+      $ref: '../../responses/500Error.yaml'

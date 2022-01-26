@@ -1,0 +1,45 @@
+post:
+  tags:
+    - User
+  summary: User Data Upload for New User Setup Setup
+  description: For use in new user setup section (excluding profile picture upload)
+  security:
+    - BearerAccessToken: [ ]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [ birthYear, gender, exercisePreference, partToAvoid ]
+          properties:
+            birthYear:
+              type: number
+            gender:
+              type: string
+              enum: [ MALE, FEMALE, OTHERS ]
+            exercisePreference:
+              type: array
+              items:
+                type: string
+            partToAvoid:
+              type: array
+              items:
+                type: string
+  responses:
+    200:
+      description: New User Setup Success
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: New User Setup Success
+            error: false
+            results:
+              $ref: "../../examples/User.yaml"
+    400:
+      $ref: '../../responses/400Error.yaml'
+    500:
+      $ref: '../../responses/500Error.yaml'

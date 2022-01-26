@@ -1,9 +1,10 @@
 get:
   tags:
     - Authentication
-    - TODO
   summary: Refresh Access Token
   description: Refresh access token with refresh token (Currently In Development)
+  security:
+    - BearerRefreshToken: [ ]
   responses:
     200:
       description: Refresh token successfully

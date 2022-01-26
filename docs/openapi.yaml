@@ -10,6 +10,17 @@ servers:
   - url: https://asia-southeast1-fitness-coaching-app.cloudfunctions.net/fca-api
     description: Production server
 
+components:
+  securitySchemes:
+    BearerRefreshToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    BearerAccessToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
 paths:
   /auth/signIn:
     $ref: './paths/auth/signIn.yaml'
@@ -19,3 +30,13 @@ paths:
     $ref: './paths/auth/verifyEmail@{token}.yaml'
   /auth/refreshToken:
     $ref: './paths/auth/refreshToken.yaml'
+
+  /user/getUserInfo/{displayName}:
+    $ref: './paths/user/getUserInfo@{displayName}.yaml'
+  /user/editUserInfo:
+    $ref: './paths/user/editUserInfo.yaml'
+  /user/editProfilePicture:
+    $ref: './paths/user/editProfilePicture.yaml'
+  /user/newUserSetup:
+    $ref: './paths/user/newUserSetup.yaml'
+
