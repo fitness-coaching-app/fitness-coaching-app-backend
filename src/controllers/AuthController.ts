@@ -99,8 +99,6 @@ export const forgetPassword = async (req: Request, res: Response, next: NextFunc
         }
         const newPasswordRaw = Math.random().toString(36).slice(-8);
         const newPasswordHashed = hashPassword(newPasswordRaw);
-        console.log(newPasswordRaw);
-        console.log(newPasswordHashed);
 
         await models.users.updateOne({email: info.email}, {password: newPasswordHashed});
         await sendForgetPasswordEmail(info.email, newPasswordRaw);
