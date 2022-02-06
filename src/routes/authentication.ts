@@ -10,6 +10,7 @@ const {validate} = new Validator({})
 router.post('/signIn', passportAuthenticate('local'), validate({body: schema.signInSchema}), AuthController.signIn);
 router.post('/register', validate({body: schema.registerSchema}), AuthController.register);
 router.get('/verifyEmail/:token', AuthController.verifyEmail);
+router.post('/forgetPassword', validate({body: schema.forgetPasswordSchema}), AuthController.forgetPassword);
 
 router.get('/refreshToken', passportAuthenticate('refreshTokenJwt'), AuthController.refreshToken);
 

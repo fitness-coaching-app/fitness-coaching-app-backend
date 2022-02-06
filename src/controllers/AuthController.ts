@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 import models from '../models'
 import {error, success, ErrorCode} from '../utils/responseApi'
 import {hashPassword} from '../utils/passwordUtil'
-import {sendVerificationEmail} from "../utils/emailUtil";
+import {sendVerificationEmail, sendForgetPasswordEmail} from "../utils/emailUtil";
 import jwt, {TokenExpiredError} from "jsonwebtoken";
 import config from "../config";
 import {generateAccessToken, generateRefreshToken} from "../utils/tokenUtil";
@@ -85,6 +85,28 @@ export const verifyEmail = async (req: Request, res: Response, next: NextFunctio
         } else {
             res.status(500).send(verifyEmailErrorMessage(e.toString()));
         }
+        next(e)
+    }
+}
+
+export const forgetPassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const info = req.body
+        const isUserExists = !!(await models.users.findOne({email: info.email}))
+        if (!isUserExists) {
+            res.status(400).json(error(res.statusCode, "User email not found", [ErrorCode.userNotFound]));
+            return;
+        }
+        const newPasswordRaw = Math.random().toString(36).slice(-8);
+        const newPasswordHashed = hashPassword(newPasswordRaw);
+        console.log(newPasswordRaw);
+        console.log(newPasswordHashed);
+
+        await models.users.updateOne({email: info.email}, {password: newPasswordHashed});
+        await sendForgetPasswordEmail(info.email, newPasswordRaw);
+
+        res.status(200).json(success(res.statusCode, "Reset password success", null));
+    } catch (e: any) {
         next(e)
     }
 }
