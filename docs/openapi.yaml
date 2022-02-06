@@ -30,8 +30,8 @@ paths:
     $ref: './paths/auth/verifyEmail@{token}.yaml'
   /auth/refreshToken:
     $ref: './paths/auth/refreshToken.yaml'
-  /auth/forgetPassword/{email}:
-    $ref: './paths/auth/forgetPassword@{email}.yaml'
+  /auth/forgetPassword:
+    $ref: './paths/auth/forgetPassword.yaml'
 
   /user/getUserInfo/{displayName}:
     $ref: './paths/user/getUserInfo@{displayName}.yaml'
