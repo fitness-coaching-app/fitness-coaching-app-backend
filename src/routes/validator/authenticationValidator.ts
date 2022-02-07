@@ -20,3 +20,12 @@ export const signInSchema: ValidateFunction = {
         password: {type: "string"},
     }
 }
+
+export const forgetPasswordSchema: ValidateFunction = {
+    type: "object",
+    required: ["email"],
+    additionalProperties: false,
+    properties: {
+        email: {type: "string"}
+    }
+}
