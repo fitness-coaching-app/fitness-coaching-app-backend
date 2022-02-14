@@ -1,0 +1,24 @@
+get:
+  tags:
+    - User
+  summary: Check User's Verification Status
+  description: |
+    Check user's verification status using access token.
+    For use with email verification process.
+  security:
+    - BearerAccessToken: [ ]
+  responses:
+    200:
+      description: Verification status fetched successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Verification status fetched successfully
+            error: false
+            results:
+              displayName: poramee
+              status: ACTIVE
+              isVerified: true

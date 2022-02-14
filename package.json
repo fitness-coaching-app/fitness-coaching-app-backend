@@ -12,8 +12,7 @@
     "watch": "concurrently \"tsc -w\" \"nodemon --watch ./build --exec npm run start\"",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "copy-docs": "cp -R ./docs ./build/src",
-    "watch-docs": "\"nodemon -e yaml --watch ./docs --exec npm run copy-docs\""
+    "watch-docs": "swagger-ui-watcher ./docs/openapi.yaml"
   },
   "repository": {
     "type": "git",
