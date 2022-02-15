@@ -2,7 +2,7 @@ get:
   tags:
     - Authentication
   summary: Verify Email Address
-  description: Verify email of the registered user (presented as a clicable link inside the email)
+  description: Verify email of the registered user (presented as a clicable link inside the email). Will change the user's status to "SETTING_UP"
   parameters:
     - in: path
       name: token

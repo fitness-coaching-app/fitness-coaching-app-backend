@@ -22,3 +22,7 @@ get:
               displayName: poramee
               status: ACTIVE
               isVerified: true
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"
