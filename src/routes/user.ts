@@ -16,6 +16,6 @@ router.use(passportAuthenticate('accessTokenJwt'))
 router.post("/editUserInfo", validate({body: schema.editUserInfo}), UserController.editUserInfo)
 router.post("/editProfilePicture", UserController.editProfilePicture)
 router.post("/newUserSetup", validate({body: schema.newUserSetup}), UserController.newUserSetup)
-
+router.get("/checkVerificationStatus", UserController.checkVerificationStatus)
 
 export default router;
