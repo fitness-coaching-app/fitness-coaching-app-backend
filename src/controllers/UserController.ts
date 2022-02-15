@@ -71,3 +71,17 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
         next(e)
     }
 }
+
+export const checkVerificationStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user: any = req.user!
+        const result = {
+            displayName: user.displayName,
+            status: user.status,
+            isVerified: user.status != "VERIFICATION"
+        }
+        res.status(200).send(success(res.statusCode, "Verification status fetched successfully", result));
+    } catch (e) {
+        next(e)
+    }
+}

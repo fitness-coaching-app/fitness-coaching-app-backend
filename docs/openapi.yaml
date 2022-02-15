@@ -41,4 +41,6 @@ paths:
     $ref: './paths/user/editProfilePicture.yaml'
   /user/newUserSetup:
     $ref: './paths/user/newUserSetup.yaml'
+  /user/checkVerificationStatus:
+    $ref: './paths/user/checkVerificationStatus.yaml'
 
