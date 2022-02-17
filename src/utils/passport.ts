@@ -91,9 +91,11 @@ passport.use('refreshTokenJwt', new JwtStrategy({
 export const passportAuthenticate = (strategy: string) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         passport.authenticate(strategy, (err, user, info) => {
-            if (err)
+            if (err) {
+                console.log("Error in passportAuthenticate =====================");
+                console.log(err);
                 return res.status(500).json(error(res.statusCode, info.message, info.errorCode));
-            else if (info instanceof JsonWebTokenError)
+            } else if (info instanceof JsonWebTokenError)
                 return res.status(400).json(error(res.statusCode, info.message, [ErrorCode.jwtError]));
             else if (!user) {
                 return res.status(400).json(error(res.statusCode, info.message, info.errorCode));
