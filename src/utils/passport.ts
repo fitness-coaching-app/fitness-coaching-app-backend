@@ -94,7 +94,9 @@ export const passportAuthenticate = (strategy: string) => {
             if (err) {
                 console.log("Error in passportAuthenticate =====================");
                 console.log(err);
-                return res.status(500).json(error(res.statusCode, info.message, info.errorCode));
+                if (info == null) {
+                    return res.status(500).json(error(res.statusCode, err.toString(), [ErrorCode.otherError]));
+                } else return res.status(500).json(error(res.statusCode, info.message, info.errorCode));
             } else if (info instanceof JsonWebTokenError)
                 return res.status(400).json(error(res.statusCode, info.message, [ErrorCode.jwtError]));
             else if (!user) {

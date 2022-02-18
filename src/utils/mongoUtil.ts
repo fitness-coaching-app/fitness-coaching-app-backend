@@ -18,6 +18,6 @@ export const connect = async () => {
     }
 }
 
-export const getDB = (): Db => _db;
+export const db = (): Db => _db;
 
 
