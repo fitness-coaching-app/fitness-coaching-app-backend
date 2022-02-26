@@ -1,8 +1,12 @@
 import express from 'express';
 import router from './routes';
 import * as mongoUtil from './utils/mongoUtil';
-import {Request, Response, NextFunction} from 'express'
+import {Request, Response} from 'express'
 import passport from 'passport';
+import swaggerUi from 'swagger-ui-express';
+import yamljs from 'yamljs';
+import {resolveRefsAt} from 'json-refs';
+import path from "path";
 
 mongoUtil.connect().then();
 
@@ -18,12 +22,6 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(router);
 
-
-// OPENAPI DOCS
-import swaggerUi from 'swagger-ui-express';
-import yamljs from 'yamljs';
-import {resolveRefsAt} from 'json-refs';
-import path from "path";
 
 /**
  * Return JSON with resolved references
