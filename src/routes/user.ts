@@ -14,5 +14,6 @@ router.post("/editUserInfo", UserController.editUserInfo)
 router.post("/editProfilePicture", UserController.editProfilePicture)
 router.post("/newUserSetup", UserController.newUserSetup)
 router.get("/checkVerificationStatus", UserController.checkVerificationStatus)
+router.post("/setNewPassword", UserController.setNewPassword)
 
 export default router;

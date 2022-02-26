@@ -27,5 +27,6 @@ export const ErrorCode = {
     jwtError: "JWT_ERROR",
     userStatusError: "USER_STATUS_ERROR",
     requestError: "REQUEST_ERROR",
+    invalidParameter: "INVALID_PARAMETER",
     otherError: "OTHER_ERROR",
 }
