@@ -37,5 +37,6 @@ export const ErrorCode = {
     tokenMismatch: "TOKEN_MISMATCH",
     jwtError: "JWT_ERROR",
     userStatusError: "USER_STATUS_ERROR",
+    requestError: "REQUEST_ERROR",
     otherError: "OTHER_ERROR",
 }
