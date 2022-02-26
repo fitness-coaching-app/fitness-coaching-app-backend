@@ -43,4 +43,6 @@ paths:
     $ref: './paths/user/newUserSetup.yaml'
   /user/checkVerificationStatus:
     $ref: './paths/user/checkVerificationStatus.yaml'
+  /user/setNewPassword:
+    $ref: './paths/user/setNewPassword.yaml'
 
