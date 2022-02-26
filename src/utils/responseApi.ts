@@ -1,5 +1,3 @@
-import {ValidationError} from 'express-json-validator-middleware';
-
 export const success = (statusCode: number, message: string, results: object | null = {}) => {
     return {
         code: statusCode,
@@ -15,15 +13,6 @@ export const error = (statusCode: number, message: string, errorCode: Array<stri
         message: message,
         error: true,
         errorCode: errorCode,
-    }
-}
-
-export const validationError = (statusCode: number, message: string, errors: ValidationError) => {
-    return {
-        code: statusCode,
-        message: message,
-        error: true,
-        errorMessage: errors.validationErrors
     }
 }
 
