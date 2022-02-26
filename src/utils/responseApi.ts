@@ -1,5 +1,3 @@
-import {ValidationError} from 'express-json-validator-middleware';
-
 export const success = (statusCode: number, message: string, results: object | null = {}) => {
     return {
         code: statusCode,
@@ -18,15 +16,6 @@ export const error = (statusCode: number, message: string, errorCode: Array<stri
     }
 }
 
-export const validationError = (statusCode: number, message: string, errors: ValidationError) => {
-    return {
-        code: statusCode,
-        message: message,
-        error: true,
-        errorMessage: errors.validationErrors
-    }
-}
-
 export const ErrorCode = {
     mongoDBError: "MONGODB_ERROR",
     emailAlreadyExists: "DUPLICATE_EMAIL",
@@ -37,5 +26,7 @@ export const ErrorCode = {
     tokenMismatch: "TOKEN_MISMATCH",
     jwtError: "JWT_ERROR",
     userStatusError: "USER_STATUS_ERROR",
+    requestError: "REQUEST_ERROR",
+    invalidParameter: "INVALID_PARAMETER",
     otherError: "OTHER_ERROR",
 }

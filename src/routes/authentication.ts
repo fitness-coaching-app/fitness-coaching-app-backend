@@ -1,16 +1,13 @@
 import {Router} from 'express'
-import {Validator} from 'express-json-validator-middleware'
 import * as AuthController from '../controllers/AuthController'
-import * as schema from './validator/authenticationValidator'
 import {passportAuthenticate} from "../utils/passport";
 
 const router = Router()
-const {validate} = new Validator({})
 
-router.post('/signIn', passportAuthenticate('local'), validate({body: schema.signInSchema}), AuthController.signIn);
-router.post('/register', validate({body: schema.registerSchema}), AuthController.register);
+router.post('/signIn', passportAuthenticate('local'), AuthController.signIn);
+router.post('/register', AuthController.register);
 router.get('/verifyEmail/:token', AuthController.verifyEmail);
-router.post('/forgetPassword', validate({body: schema.forgetPasswordSchema}), AuthController.forgetPassword);
+router.post('/forgetPassword', AuthController.forgetPassword);
 
 router.get('/refreshToken', passportAuthenticate('refreshTokenJwt'), AuthController.refreshToken);
 

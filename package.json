@@ -40,7 +40,7 @@
     "busboy": "^0.3.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "express-json-validator-middleware": "^2.2.1",
+    "express-openapi-validator": "^4.13.5",
     "json-refs": "^3.0.15",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.1.3",

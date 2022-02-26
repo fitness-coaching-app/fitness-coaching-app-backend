@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: '3.0.0'
 info:
   title: Fitness Coaching App Backend API
   description: Backend API for Fitness Coaching App
@@ -9,6 +9,8 @@ servers:
     description: Development server
   - url: https://asia-southeast1-fitness-coaching-app.cloudfunctions.net/fca-api
     description: Production server
+  - url: ''
+    description: Local server
 
 components:
   securitySchemes:
@@ -43,4 +45,6 @@ paths:
     $ref: './paths/user/newUserSetup.yaml'
   /user/checkVerificationStatus:
     $ref: './paths/user/checkVerificationStatus.yaml'
+  /user/setNewPassword:
+    $ref: './paths/user/setNewPassword.yaml'
 

@@ -3,6 +3,7 @@ import {deleteByURL, uploadSingle} from "../utils/gcsFileUtil";
 import {error, ErrorCode, success} from "../utils/responseApi";
 import models from '../models';
 import {userExists} from '../models/users';
+import {comparePassword, hashPassword} from "../utils/passwordUtil";
 
 
 export const editUserInfo = async (req: Request, res: Response, next: NextFunction) => {
@@ -85,3 +86,28 @@ export const checkVerificationStatus = async (req: Request, res: Response, next:
         next(e)
     }
 }
+
+export const setNewPassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user: any = req.user!
+        const {oldPassword, newPassword, confirmNewPassword} = req.body;
+        const dbPassword = user.password;
+
+        // Check old password
+        if (!(comparePassword(oldPassword, dbPassword))) {
+            res.status(400).send(error(res.statusCode, "Old password is incorrect", [ErrorCode.invalidParameter]));
+            return;
+        }
+        // Check newPassword == confirmNewPassword
+        if (newPassword !== confirmNewPassword) {
+            res.status(400).send(error(res.statusCode, "New password and confirm new password didn't match", [ErrorCode.incorrectPassword]));
+        }
+
+        await models.users.updateOne({email: user.email}, {password: hashPassword(newPassword)});
+
+        res.status(200).send(success(res.statusCode, "New password has been set", null));
+    } catch (e) {
+        next(e);
+    }
+}
+
