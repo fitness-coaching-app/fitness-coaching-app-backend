@@ -47,7 +47,7 @@ app.use((req, res, next) => {
 
 app.use(OpenApiValidator.middleware({
         apiSpec: './docs/openapi.yaml',
-        ignoreUndocumented: false
+        ignoreUndocumented: true
     })
 );
 
