@@ -1,0 +1,77 @@
+get:
+  tags:
+    - Home
+  summary: Get Home Feed
+  description: Get home feed sections
+  security:
+    - BearerAccessToken: [ ]
+  responses:
+    200:
+      description: Home feed sections fetched successfully. Returns a sorted array of feed sections.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+              error:
+                type: boolean
+              results:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  sectionType:
+                    type: string
+                    enum:
+                      - BANNER
+                      - COURSE
+                  order:
+                    type: int
+                  useUserData:
+                    type: bool
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      oneOf:
+                        - additionalProperties: false
+                          required:
+                            - picture
+                            - onClickAction
+                          properties:
+                            picture:
+                              type: string
+                            onClickAction:
+                              type: string
+                        - additionalProperties: false
+                          required:
+                            - courseId
+                          properties:
+                            courseId:
+                              type: objectId
+
+          example:
+            code: 200
+            message: Home feed sections fetched successfully
+            error: false
+            results:
+              - name: Default Banner
+                sectionType: BANNER
+                useUserData: false
+                data:
+                  - picture: URL
+                    onClickAction: open --course=15aruv210c
+              - name: Just for You
+                sectionType: COURSE
+                useUserData: true
+                data:
+                  - courseId: 158sdFDdas5
+                  - courseId: q8d146a8w4d
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

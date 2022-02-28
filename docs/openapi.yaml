@@ -48,3 +48,6 @@ paths:
   /user/setNewPassword:
     $ref: './paths/user/setNewPassword.yaml'
 
+  /home/getSections:
+    $ref: './paths/home/getSections.yaml'
+
