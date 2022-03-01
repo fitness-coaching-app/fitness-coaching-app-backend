@@ -46,7 +46,7 @@ app.use((req, res, next) => {
 });
 
 app.use(OpenApiValidator.middleware({
-        apiSpec: './docs/openapi.yaml',
+        apiSpec: path.join(__dirname, "./docs/openapi.yaml"),
         ignoreUndocumented: true
     })
 );
