@@ -30,9 +30,9 @@ get:
                       - BANNER
                       - COURSE
                   order:
-                    type: int
+                    type: integer
                   useUserData:
-                    type: bool
+                    type: boolean
                   data:
                     type: array
                     items:
