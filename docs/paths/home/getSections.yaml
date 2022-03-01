@@ -52,7 +52,7 @@ get:
                             - courseId
                           properties:
                             courseId:
-                              type: objectId
+                              type: string
 
           example:
             code: 200
