@@ -1,0 +1,41 @@
+get:
+  tags:
+    - Course
+  summary: Get Course By Course ID
+  description: Get course detail using course ID.
+  parameters:
+    - in: path
+      name: courseId
+      required: true
+      schema:
+        type: string
+      description: Course ID
+  responses:
+    200:
+      description: The course information has been fetched successfully.
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Get Course Successfully
+            error: false
+            results:
+              - _id: objectId
+                name: Course Name
+                description: Description
+                category: Course category
+                bodyParts: [ "body" ]
+                viewCount: 1
+                rating:
+                  - userId: userId
+                    rating: 4
+                difficulty: MEDIUM
+                coverPicture: string
+                courseData: (URL to the course.yaml file)
+
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

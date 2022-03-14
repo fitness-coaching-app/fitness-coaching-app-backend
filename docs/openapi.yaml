@@ -51,3 +51,7 @@ paths:
   /home/getSections:
     $ref: './paths/home/getSections.yaml'
 
+  /course/id/{courseId}:
+    $ref: './paths/course/id@{courseId}.yaml'
+
+
