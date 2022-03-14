@@ -3,7 +3,7 @@ import * as CourseController from '../controllers/CourseController'
 
 const router = Router()
 
-router.get('/getCourse/:courseId', CourseController.getCourse)
+router.get('/id/:courseId', CourseController.getCourseById)
 
 
 export default router;
