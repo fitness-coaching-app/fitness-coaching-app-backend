@@ -54,4 +54,7 @@ paths:
   /course/id/{courseId}:
     $ref: './paths/course/id@{courseId}.yaml'
 
+  /exercise/complete:
+    $ref: './paths/exercise/complete.yaml'
+
 
