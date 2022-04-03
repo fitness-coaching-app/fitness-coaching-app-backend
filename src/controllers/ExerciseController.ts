@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { success } from "../utils/responseApi";
-import { ObjectId } from 'mongodb';
+import { Double, ObjectId } from 'mongodb';
 import models from '../models';
 import fs from 'fs';
 import os from 'os';
@@ -28,14 +28,6 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         // TODO: Check if the user is level up
         // TODO: Check if the user is eligible for any new achievement
 
-        const data = {
-            courseId: new ObjectId(body.courseId),
-            duration: body.duration,
-            calories: body.calories,
-            score: body.score,
-            xpEarned: xpEarned,
-            poseData: body.poseData
-        }
 
         // Create PoseData temp file waiting for upload
         const doc = new YAML.Document()
@@ -45,7 +37,16 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         fs.writeFileSync(tempFilePath, doc.toString())
 
         // Upload the temp file
-        await uploadLocalFile(tempFilePath, user._id.toString(), "poseData", "text/yaml")
+        const poseDataURL = await uploadLocalFile(tempFilePath, user._id.toString(), "poseData", "text/yaml")
+
+        const data = {
+            courseId: new ObjectId(body.courseId),
+            duration: new Double(body.duration),
+            calories: new Double(body.calories),
+            score: body.score,
+            xpEarned: xpEarned,
+            poseData: poseDataURL
+        }
 
         const infoToInsert = {
             userId: new ObjectId(user._id),
@@ -58,15 +59,16 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         }
 
         // TODO: mongoDB insert
-        
+        await models.activities.insertOne(infoToInsert)
 
         const result = {
             levelUp: false, // TODO: Change this
             xpEarned: xpEarned
         }
 
-        res.status(200).send(success(res.statusCode, "The exercise data is received successfully.",))
+        res.status(200).send(success(res.statusCode, "The exercise data is received successfully.",result))
     } catch (error) {
+        console.log(JSON.stringify(error))
         next(error)
     }
 }
