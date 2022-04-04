@@ -10,6 +10,8 @@ import path from "path";
 import * as OpenApiValidator from 'express-openapi-validator';
 import errorHandler from './utils/errorHandler';
 
+
+const openApiPath = path.join(__dirname, "../docs/openapi.yaml");
 /**
  * Return JSON with resolved references
  * @returns {Promise.<JSON>}
@@ -24,7 +26,7 @@ const multiFileSwagger = () => {
         },
     };
 
-    return resolveRefsAt(path.join(__dirname, "./docs/openapi.yaml"), options).then(
+    return resolveRefsAt(openApiPath, options).then(
         function (results: any) {
             return results.resolved;
         },
@@ -46,7 +48,7 @@ app.use((req, res, next) => {
 });
 
 app.use(OpenApiValidator.middleware({
-    apiSpec: path.join(__dirname, "./docs/openapi.yaml"),
+    apiSpec: openApiPath,
     ignoreUndocumented: true
 })
 );
