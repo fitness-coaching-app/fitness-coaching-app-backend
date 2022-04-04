@@ -1,11 +1,11 @@
 import express from 'express';
 import router from './routes';
 import * as mongoUtil from './utils/mongoUtil';
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 import passport from 'passport';
 import swaggerUi from 'swagger-ui-express';
 import yamljs from 'yamljs';
-import {resolveRefsAt} from 'json-refs';
+import { resolveRefsAt } from 'json-refs';
 import path from "path";
 import * as OpenApiValidator from 'express-openapi-validator';
 import errorHandler from './utils/errorHandler';
@@ -34,7 +34,7 @@ const multiFileSwagger = () => {
     );
 };
 
-mongoUtil.connect().then();
+mongoUtil.connect();
 
 const app = express();
 
@@ -46,9 +46,9 @@ app.use((req, res, next) => {
 });
 
 app.use(OpenApiValidator.middleware({
-        apiSpec: path.join(__dirname, "./docs/openapi.yaml"),
-        ignoreUndocumented: true
-    })
+    apiSpec: path.join(__dirname, "./docs/openapi.yaml"),
+    ignoreUndocumented: true
+})
 );
 
 app.use(passport.initialize());

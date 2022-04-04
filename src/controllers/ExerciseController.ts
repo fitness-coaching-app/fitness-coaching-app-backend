@@ -58,7 +58,7 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
             comments: []
         }
 
-        // TODO: mongoDB insert
+        // mongoDB insert
         await models.activities.insertOne(infoToInsert)
 
         const result = {
