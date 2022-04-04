@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import router from './routes';
 import * as mongoUtil from './utils/mongoUtil';
 import { Request, Response } from 'express'
@@ -36,9 +36,8 @@ const multiFileSwagger = () => {
     );
 };
 
-mongoUtil.connect();
-
 const app = express();
+app.use(express.json());
 
 require('./utils/passport');
 
@@ -52,6 +51,14 @@ app.use(OpenApiValidator.middleware({
     ignoreUndocumented: true
 })
 );
+
+app.use(async (req:Request, res:Response, next: NextFunction) => {
+    if(!mongoUtil.isConnected()){
+        await mongoUtil.connect();
+    }
+
+    next();
+})
 
 app.use(passport.initialize());
 app.use(router);

@@ -1,16 +1,21 @@
 import {Db, MongoClient} from 'mongodb';
 import config from '../config';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
-const uri: string = config.mongoDB.uri ? config.mongoDB.uri : "";
+let uri: string = config.mongoDB.uri ? config.mongoDB.uri : "";
 
 let _db: Db;
 
 export const connect = async () => {
-    const client = new MongoClient(uri);
     try {
+        if(config.environment === "TEST"){
+            let mongod = await MongoMemoryServer.create();
+            uri = mongod.getUri();
+        }
+        const client = new MongoClient(uri);
         await client.connect();
         await client.db("admin").command({ping: 1});
-        console.log("Connected to MongoDB Cluster");
+        console.log(`MongoDB - Connected [NODE_ENV=${config.environment}]`);
 
         _db = client.db('fcadb');
     } catch (e) {
@@ -19,5 +24,8 @@ export const connect = async () => {
 }
 
 export const db = (): Db => _db;
+export const isConnected = () => {
+    return !!_db;
+}
 
 

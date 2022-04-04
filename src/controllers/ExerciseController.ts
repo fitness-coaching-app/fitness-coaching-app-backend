@@ -66,7 +66,7 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
             xpEarned: xpEarned
         }
 
-        res.status(200).send(success(res.statusCode, "The exercise data is received successfully.",result))
+        res.status(200).send(success(res.statusCode, "Exercise data is received successfully",result))
     } catch (error) {
         console.log(JSON.stringify(error))
         next(error)
