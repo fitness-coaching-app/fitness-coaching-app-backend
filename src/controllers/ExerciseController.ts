@@ -6,6 +6,7 @@ import fs from 'fs';
 import os from 'os';
 import YAML from 'yaml';
 import { uploadLocalFile } from '../utils/gcsFileUtil';
+import { level } from '../utils/userLevel';
 
 const difficultyScore: {
     [key: string]: number,
@@ -25,7 +26,10 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         // Calculate xp = (difficulty * 10) + (score * 20)
         const xpEarned = difficultyScore[courseInfo.difficulty] + (body.score * 20);
 
-        // TODO: Check if the user is level up
+        // Check if the user is level up
+        const isLevelUp = level(user.xp) !== level(user.xp + xpEarned);
+
+
         // TODO: Check if the user is eligible for any new achievement
 
 
@@ -62,7 +66,7 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         await models.activities.insertOne(infoToInsert)
 
         const result = {
-            levelUp: false, // TODO: Change this
+            levelUp: isLevelUp,
             xpEarned: xpEarned
         }
 
