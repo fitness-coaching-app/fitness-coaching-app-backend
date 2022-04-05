@@ -27,6 +27,14 @@ const levelMinXp: number[] = [
 	30000,
 ];
 
+export const difficultyScore: {
+    [key: string]: number,
+} = {
+    EASY: 100,
+    MEDIUM: 200,
+    HARD: 300
+}
+
 export const level = (xp: number) => {
 	let currentLevel = 0;
 	for(let i = 0;i < levelMinXp.length;++i){

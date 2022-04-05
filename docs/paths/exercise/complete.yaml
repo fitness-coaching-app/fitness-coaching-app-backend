@@ -38,8 +38,7 @@ post:
             results: 
               levelUp: true
               xpEarned: 1422
-              user:
-                $ref: "../../examples/User.yaml"
+              activityId: ObjectId
     400:
       $ref: '../../responses/400Error.yaml'
     500:

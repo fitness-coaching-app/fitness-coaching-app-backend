@@ -6,15 +6,7 @@ import fs from 'fs';
 import os from 'os';
 import YAML from 'yaml';
 import { uploadLocalFile } from '../utils/gcsFileUtil';
-import { level } from '../utils/userLevel';
-
-const difficultyScore: {
-    [key: string]: number,
-} = {
-    EASY: 100,
-    MEDIUM: 200,
-    HARD: 300
-}
+import { level, difficultyScore } from '../utils/userScore';
 
 export const complete = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -29,8 +21,12 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         // Check if the user is level up
         const isLevelUp = level(user.xp) !== level(user.xp + xpEarned);
 
+        // Update user's xp
+        await models.users.updateOne({_id: user._id},{$set: {xp: user.xp + xpEarned}});
+
 
         // TODO: Check if the user is eligible for any new achievement
+
 
 
         // Create PoseData temp file waiting for upload
@@ -62,12 +58,15 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
             comments: []
         }
 
-        // mongoDB insert
-        await models.activities.insertOne(infoToInsert)
+        // mongoDB insert activities
+        const activityId = (await models.activities.insertOne(infoToInsert)).insertedId.toString()
 
         const result = {
             levelUp: isLevelUp,
-            xpEarned: xpEarned
+            currentLevel: level(user.xp + xpEarned),
+            currentXp: user.xp + xpEarned,
+            xpEarned: xpEarned,
+            activityId
         }
 
         res.status(200).send(success(res.statusCode, "Exercise data is received successfully",result))

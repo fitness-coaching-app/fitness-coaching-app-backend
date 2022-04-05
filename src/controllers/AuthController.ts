@@ -37,12 +37,12 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
             weightHistory: [],
             heightHistory: [],
             achievement: [],
-            userPreference:{
+            userPreference: {
                 publishScoreToLeaderboard: true,
                 publishActivityToFollowers: true,
                 allowReactions: true,
                 exerciseReminder: false,
-                reminderTime: null
+                reminderTime: new Date()
             }
         }
         let isEmailDuplicate = !!(await models.users.findOne({email: info.email}));
