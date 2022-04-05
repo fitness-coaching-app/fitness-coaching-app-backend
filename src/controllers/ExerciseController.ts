@@ -20,9 +20,7 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
 
         // Check if the user is level up
         const isLevelUp = level(user.xp) !== level(user.xp + xpEarned);
-
-        // Update user's xp
-        await models.users.updateOne({_id: user._id},{$set: {xp: user.xp + xpEarned}});
+        const newXp = user.xp + xpEarned;
 
 
         // TODO: Check if the user is eligible for any new achievement
@@ -60,6 +58,8 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
 
         // mongoDB insert activities
         const activityId = (await models.activities.insertOne(infoToInsert)).insertedId.toString()
+        // Update user's xp
+        await models.users.updateOne({_id: user._id},{$set: {xp: newXp}});
 
         const result = {
             levelUp: isLevelUp,
