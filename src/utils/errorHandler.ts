@@ -16,7 +16,7 @@ const errorHandler = (error: any, req: Request, res: Response, next: NextFunctio
             res.status(500).json(response.error(res.statusCode, error.toString(), [response.ErrorCode.mongoDBError]));
         else res.status(500).json(response.error(res.statusCode, error.toString(), [response.ErrorCode.otherError]));
     } else if (error instanceof BadRequest || MethodNotAllowed || NotFound || Unauthorized) {
-        res.status(error.status).json(response.error(res.statusCode, error.message, [response.ErrorCode.requestError]));
+        res.status(error.status || 500).json(response.error(res.statusCode, error.message, [response.ErrorCode.requestError]));
     } else {
         res.status(error.status || 500).json(response.error(res.statusCode, error.toString(), [response.ErrorCode.otherError]));
     }

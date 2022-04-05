@@ -1,15 +1,17 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import router from './routes';
 import * as mongoUtil from './utils/mongoUtil';
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 import passport from 'passport';
 import swaggerUi from 'swagger-ui-express';
 import yamljs from 'yamljs';
-import {resolveRefsAt} from 'json-refs';
+import { resolveRefsAt } from 'json-refs';
 import path from "path";
 import * as OpenApiValidator from 'express-openapi-validator';
 import errorHandler from './utils/errorHandler';
 
+
+const openApiPath = path.join(__dirname, "../docs/openapi.yaml");
 /**
  * Return JSON with resolved references
  * @returns {Promise.<JSON>}
@@ -24,7 +26,7 @@ const multiFileSwagger = () => {
         },
     };
 
-    return resolveRefsAt(path.join(__dirname, "./docs/openapi.yaml"), options).then(
+    return resolveRefsAt(openApiPath, options).then(
         function (results: any) {
             return results.resolved;
         },
@@ -34,9 +36,8 @@ const multiFileSwagger = () => {
     );
 };
 
-mongoUtil.connect().then();
-
 const app = express();
+app.use(express.json());
 
 require('./utils/passport');
 
@@ -46,10 +47,18 @@ app.use((req, res, next) => {
 });
 
 app.use(OpenApiValidator.middleware({
-        apiSpec: path.join(__dirname, "./docs/openapi.yaml"),
-        ignoreUndocumented: true
-    })
+    apiSpec: openApiPath,
+    ignoreUndocumented: true
+})
 );
+
+app.use(async (req:Request, res:Response, next: NextFunction) => {
+    if(!mongoUtil.isConnected()){
+        await mongoUtil.connect();
+    }
+
+    next();
+})
 
 app.use(passport.initialize());
 app.use(router);

@@ -33,6 +33,17 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
             displayName: info.displayName,
             email: info.email,
             password: hashPassword(info.password),
+            xp: 0,
+            weightHistory: [],
+            heightHistory: [],
+            achievement: [],
+            userPreference: {
+                publishScoreToLeaderboard: true,
+                publishActivityToFollowers: true,
+                allowReactions: true,
+                exerciseReminder: false,
+                reminderTime: new Date()
+            }
         }
         let isEmailDuplicate = !!(await models.users.findOne({email: info.email}));
         if (isEmailDuplicate) {
