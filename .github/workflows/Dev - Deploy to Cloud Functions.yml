@@ -28,7 +28,7 @@ jobs:
           cp -R ./docs ./build
       - name: Create .env in build/src
         run: |
-          cd ./build/src
+          cd ./build
           touch .env
           echo "${{ secrets.DEV_DOTENV }}" >> .env
       - name: Create google-cloud.json in build
