@@ -38,6 +38,7 @@ jobs:
           cd google-cloud
           touch fitness-coaching-app-5942f56e3512.json
           echo '${{ secrets.GCS_CREDENTIALS }}' >> fitness-coaching-app-5942f56e3512.json
+          cd ../
           ls -R
 
       - name: Cloud Functions Deploy
