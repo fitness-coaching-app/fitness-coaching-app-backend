@@ -33,12 +33,14 @@ jobs:
           echo "${{ secrets.DEV_DOTENV }}" >> .env
       - name: Create google-cloud .json in build
         run: |
-          cd ./build
+          cd ./build/src
           mkdir google-cloud
           cd google-cloud
           touch fitness-coaching-app-5942f56e3512.json
           echo '${{ secrets.GCS_CREDENTIALS }}' >> fitness-coaching-app-5942f56e3512.json
-          cd ../
+      - name: ls -R for debugging
+        run: |
+          cd ./build
           ls -R
 
       - name: Cloud Functions Deploy
