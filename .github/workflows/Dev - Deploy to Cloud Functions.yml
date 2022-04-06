@@ -22,7 +22,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Copy package.json to build folder & change target
-        run: jq '.main = "index.js"' package.json > build/src/package.json
+        run: jq '.main = "index.js"' package.json > build/package.json
       - name: Copy openAPI docs to build folder
         run: |
           cp -R ./docs ./build
