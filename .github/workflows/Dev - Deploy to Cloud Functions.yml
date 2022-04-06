@@ -22,7 +22,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Copy package.json to build folder & change target
-        run: jq '.main = "index.js"' package.json > build/package.json
+        run: jq '.main = "index.js" | .scripts.start = "functions-framework --source=./ --target=api"' package.json > build/package.json
       - name: Copy openAPI docs to build
         run: |
           cp -R ./docs ./build
@@ -31,7 +31,7 @@ jobs:
           cd ./build
           touch .env
           echo "${{ secrets.DEV_DOTENV }}" >> .env
-      - name: Create google-cloud .json in build
+      - name: Create google-cloud.json in build
         run: |
           cd ./build/src
           mkdir google-cloud
