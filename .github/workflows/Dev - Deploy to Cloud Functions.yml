@@ -21,17 +21,17 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-      - name: Copy package.json to build folder
-        run: cp package.json ./build/package.json
-      - name: Copy openAPI docs to build/src
+      - name: Copy package.json to build folder & change target
+        run: jq '.main = "index.js"' package.json > build/package.json
+      - name: Copy openAPI docs to build
         run: |
           cp -R ./docs ./build
-      - name: Create .env in build/src
+      - name: Create .env in build
         run: |
           cd ./build
           touch .env
           echo "${{ secrets.DEV_DOTENV }}" >> .env
-      - name: Create google-cloud .json in build/src
+      - name: Create google-cloud .json in build
         run: |
           cd ./build
           mkdir google-cloud
