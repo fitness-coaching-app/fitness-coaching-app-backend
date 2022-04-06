@@ -22,10 +22,10 @@ jobs:
       - name: Build
         run: npm run build
       - name: Copy package.json to build folder & change target
-        run: jq '.main = "index.js" | .scripts.start = "functions-framework --source=./ --target=api"' package.json > build/package.json
-      - name: Copy openAPI docs to build
+        run: jq '.main = "index.js"' package.json > build/src/package.json
+      - name: Copy openAPI docs to build folder
         run: |
-          cp -R ./docs ./build
+          cp -R ./docs ./build/src
       - name: Create .env in build/src
         run: |
           cd ./build/src
@@ -56,7 +56,7 @@ jobs:
           # Region to deploy the function in. Defaults to us-central1, if not specified.
           region: asia-southeast1
           # Path to function deployment directory within the source repo.
-          source_dir: ./build
+          source_dir: ./build/src
           # Name of a function (as defined in source code) that will be executed. Defaults to the resource name suffix, if not specified.
           entry_point: api
           # Runtime to use for the function.
