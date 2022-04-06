@@ -9,6 +9,7 @@ import { resolveRefsAt } from 'json-refs';
 import path from "path";
 import * as OpenApiValidator from 'express-openapi-validator';
 import errorHandler from './utils/errorHandler';
+import { sendMailTest } from './utils/emailUtil';
 
 
 const openApiPath = path.join(__dirname, "../docs/openapi.yaml");
@@ -70,6 +71,7 @@ multiFileSwagger().then((swaggerDocument) => {
 app.get('/', (req: Request, res: Response) => {
     res.status(200).send('Fitness Coaching Application API')
 });
+
 
 app.use(errorHandler);
 
