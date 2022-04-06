@@ -10,9 +10,10 @@
     "test": "NODE_ENV=TEST jest --forceExit",
     "start": "functions-framework --source=build --target=api",
     "watch": "concurrently \"tsc -w\" \"nodemon --watch ./build --exec npm run start\"",
-    "build": "tsc --build",
+    "build": "tsc --build; npm run copy-files",
     "clean": "tsc --build --clean",
-    "watch-docs": "swagger-ui-watcher ./docs/openapi.yaml"
+    "watch-docs": "swagger-ui-watcher ./docs/openapi.yaml",
+    "copy-files": "copyfiles \"./src/utils/emailFormat/*.ejs\" \"./build/src/utils/emailFormat/*.ejs\""
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "@types/yamljs": "^0.2.31",
     "bcrypt": "^5.0.1",
     "busboy": "^0.3.1",
+    "copyfiles": "^2.4.1",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
