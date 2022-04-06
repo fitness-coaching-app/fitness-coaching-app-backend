@@ -59,7 +59,7 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         // mongoDB insert activities
         const activityId = (await models.activities.insertOne(infoToInsert)).insertedId.toString()
         // Update user's xp
-        await models.users.updateOne({_id: user._id},{$set: {xp: newXp}});
+        await models.users.updateOne({_id: user._id},{xp: newXp});
 
         const result = {
             levelUp: isLevelUp,

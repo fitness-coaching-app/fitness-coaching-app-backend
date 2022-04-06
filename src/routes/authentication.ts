@@ -8,7 +8,7 @@ router.post('/signIn', passportAuthenticate('local'), AuthController.signIn);
 router.post('/register', AuthController.register);
 router.get('/verifyEmail/:token', AuthController.verifyEmail);
 router.post('/forgetPassword', AuthController.forgetPassword);
-router.get('/resendVerificationEmail', AuthController.resendVerificationEmail);
+router.post('/resendVerificationEmail', AuthController.resendVerificationEmail);
 
 router.get('/refreshToken', passportAuthenticate('refreshTokenJwt'), AuthController.refreshToken);
 

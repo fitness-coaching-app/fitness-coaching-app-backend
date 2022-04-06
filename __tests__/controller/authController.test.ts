@@ -1,47 +1,30 @@
 import { api } from '../../index'
 import request from 'supertest'
-import { mockCourse, mockUser } from '../../mock_functions/mocks.mock'
+import { mockUser } from '../../mock_functions/mocks.mock'
 import * as mongoUtil from '../../src/utils/mongoUtil'
-import { ObjectId } from 'mongodb'
-
-let user: any = null
-let accessToken: string = ""
-let refreshToken: string = ""
-let courseId: string = "";
 
 beforeAll(async () => {
 	await mongoUtil.connect();
-
-	await mockUser();
-	courseId = (await mockCourse()).insertedId.toString();
-	
-	const res = await request(api)
-		.post(`/auth/signIn`)
-		.send({
-			email: "test@jest.com",
-			password: "test"
-		})
-	user = res.body.results.user
-	accessToken = res.body.results.accessToken
-	refreshToken = res.body.results.refreshToken
+	await mockUser({status: "VERIFICATION"});
+	await mockUser({email: "test@active.com",status: "ACTIVE"});
 }, 10000)
 
-describe('GET /auth/resendVerificationEmail', () => {
+describe('POST /auth/resendVerificationEmailEmail', () => {
 	it('should send the email successfully', async () => {
 		const res = await request(api)
-			.post(`/auth/resendVerification`)
+			.post(`/auth/resendVerificationEmail`)
 			.send({
 				email: "test@jest.com"
 			})
 
 		expect(res.statusCode).toEqual(200);
-		expect(res.body.message).toEqual("Exercise data is received successfully");
+		expect(res.body.message).toEqual("Verification email sent");
 		expect(res.body.error).toEqual(false);
 	})
 
 	it('should not accept any request without an email specified', async () => {
 		const res = await request(api)
-			.post(`/auth/resendVerification`)
+			.post(`/auth/resendVerificationEmail`)
 			.send({
 				emmmaaiilll: "test@jest.com"
 			})
@@ -52,23 +35,25 @@ describe('GET /auth/resendVerificationEmail', () => {
 
 	it('should not accept a non existence email address', async () => {
 		const res = await request(api)
-			.post(`/auth/resendVerification`)
+			.post(`/auth/resendVerificationEmail`)
 			.send({
 				email: "test123123@jest.com"
 			})
 
 		expect(res.statusCode).toEqual(400);
+		expect(res.body.message).toEqual("User email not found"); 
 		expect(res.body.error).toEqual(true);
 	})
 
 	it('should reject a verified email', async () => {
 		const res = await request(api)
-			.post(`/auth/resendVerification`)
+			.post(`/auth/resendVerificationEmail`)
 			.send({
-				email: "test@jest.com"
+				email: "test@active.com"
 			})
 
 		expect(res.statusCode).toEqual(400);
+		expect(res.body.message).toEqual("Account Already Verified"); 
 		expect(res.body.error).toEqual(true);
 	})
 })

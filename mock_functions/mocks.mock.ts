@@ -2,8 +2,24 @@ import models from '../src/models'
 import { hashPassword } from '../src/utils/passwordUtil'
 import { db } from '../src/utils/mongoUtil'
 
-export const mockUser = async () => {
-	await models.users.insertOne({
+export const mockUser = async (
+	userInfoOverrides: {
+		status?: string;
+		email?: string;
+		password?: string;
+		displayName?: string;
+		birthyear?: number;
+		weightHistory?: [];
+		heightHistory?: [];
+		xp?: number;
+		level?: number;
+		profilePicture?: string;
+		gender?: string;
+		exercisePreference?: [];
+		partToAvoid?: [];
+		achievement?: []
+	} = {}) => {
+	return await models.users.insertOne({
 		status: "ACTIVE",
 		email: "test@jest.com",
 		password: hashPassword("test"),
@@ -17,7 +33,8 @@ export const mockUser = async () => {
 		gender: "MALE",
 		exercisePreference: [],
 		partToAvoid: [],
-		achievement: []
+		achievement: [],
+		...userInfoOverrides
 	})
 }
 

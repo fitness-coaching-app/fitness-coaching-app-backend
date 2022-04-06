@@ -23,7 +23,7 @@ post:
             $ref: '../../schemas/Success.yaml'
           example:
             code: 200
-            message: Reset password success
+            message: Verification email sent
             error: false
             results: ~
 
