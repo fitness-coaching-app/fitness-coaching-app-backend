@@ -8,6 +8,7 @@ import {comparePassword, hashPassword} from "../utils/passwordUtil";
 
 export const editUserInfo = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        // TODO: Check for duplicate email
         let user: any = req.user!;
         let infoToEdit: any = req.body;
         if (!!(infoToEdit.displayName)) {

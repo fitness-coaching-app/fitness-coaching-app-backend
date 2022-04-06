@@ -120,6 +120,17 @@ export const forgetPassword = async (req: Request, res: Response, next: NextFunc
     }
 }
 
+export const resendVerificationEmail = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const email = req.body.email;
+        
+
+
+    } catch (e){
+        next(e);
+    }
+}
+
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
     const user: any = req.user!
     const accessToken = generateAccessToken(user.displayName)

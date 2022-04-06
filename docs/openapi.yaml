@@ -34,6 +34,8 @@ paths:
     $ref: './paths/auth/refreshToken.yaml'
   /auth/forgetPassword:
     $ref: './paths/auth/forgetPassword.yaml'
+  /auth/resendVerificationEmail:
+    $ref: './paths/auth/resendVerificationEmail.yaml'
 
   /user/getUserInfo/{displayName}:
     $ref: './paths/user/getUserInfo@{displayName}.yaml'
