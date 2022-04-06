@@ -11,6 +11,8 @@ import * as OpenApiValidator from 'express-openapi-validator';
 import errorHandler from './utils/errorHandler';
 
 
+console.log(`Run with path: ${__dirname}`)
+
 const openApiPath = path.join(__dirname, "../docs/openapi.yaml");
 /**
  * Return JSON with resolved references

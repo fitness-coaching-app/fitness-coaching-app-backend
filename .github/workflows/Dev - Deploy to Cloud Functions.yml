@@ -25,10 +25,10 @@ jobs:
         run: jq '.main = "index.js"' package.json > build/src/package.json
       - name: Copy openAPI docs to build folder
         run: |
-          cp -R ./docs ./build/src
-      - name: Create .env in build/src
+          cp -R ./docs ./build
+      - name: Create .env in build
         run: |
-          cd ./build/src
+          cd ./build
           touch .env
           echo "${{ secrets.DEV_DOTENV }}" >> .env
       - name: Create google-cloud.json in build
