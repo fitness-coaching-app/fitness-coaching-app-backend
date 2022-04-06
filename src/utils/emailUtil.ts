@@ -64,11 +64,6 @@ export const sendForgetPasswordEmail = async (email: string, rawPassword: string
         })
 }
 
-export const sendMailTest = async () => {
-    // await sendForgetPasswordEmail('poramee.chansuksett@gmail.com', 'seifuhasfw3' );
-    await sendVerificationEmail({displayName: 'poramee', email: 'poramee.chansuksett@gmail.com'});
-}
-
 
 
 

@@ -72,10 +72,6 @@ app.get('/', (req: Request, res: Response) => {
     res.status(200).send('Fitness Coaching Application API')
 });
 
-app.get('/test', async (req: Request, res: Response) => {
-    await sendMailTest();
-    res.status(200).send("OK");
-})
 
 app.use(errorHandler);
 

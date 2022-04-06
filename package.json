@@ -13,7 +13,7 @@
     "build": "tsc --build; npm run copy-files",
     "clean": "tsc --build --clean",
     "watch-docs": "swagger-ui-watcher ./docs/openapi.yaml",
-    "copy-files": "copyfiles \"./src/utils/emailFormat/*.ejs\" \"./build/src/utils/emailFormat/*.ejs\""
+    "copy-files": "copyfiles \"./src/utils/emailFormat/*.ejs\" \"./build\""
   },
   "repository": {
     "type": "git",
