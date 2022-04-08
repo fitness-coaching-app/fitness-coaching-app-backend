@@ -41,7 +41,6 @@ describe('POST /exercise/complete', () => {
 					"test": 1234
 				}
 			})
-
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.message).toEqual("Exercise data is received successfully");
 		expect(res.body.error).toEqual(false);

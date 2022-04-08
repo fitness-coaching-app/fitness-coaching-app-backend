@@ -1,0 +1,33 @@
+post:
+  tags:
+    - Authentication
+  summary: Resend Verification Email
+  description: Resend verification email
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [ "email" ]
+          properties:
+            email:
+              type: string
+
+  responses:
+    200:
+      description: Verification email sent
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Verification email sent
+            error: false
+            results: ~
+
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

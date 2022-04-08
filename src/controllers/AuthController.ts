@@ -120,6 +120,28 @@ export const forgetPassword = async (req: Request, res: Response, next: NextFunc
     }
 }
 
+export const resendVerificationEmail = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const email = req.body.email;
+        const user = await models.users.findOne({ email: email })
+
+        if(!(!!user)){
+            res.status(400).json(error(res.statusCode, "User email not found", [ErrorCode.userNotFound]));
+
+            return;
+        }
+        else if(user!.status !== "VERIFICATION"){
+            res.status(400).send(error(res.statusCode, "Account Already Verified", [ErrorCode.userStatusError]));
+            return;
+        }
+
+        await sendVerificationEmail({displayName: user!.displayName, email: user!.email});
+        res.status(200).send(success(res.statusCode, "Verification email sent"));
+    } catch (e){
+        next(e);
+    }
+}
+
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
     const user: any = req.user!
     const accessToken = generateAccessToken(user.displayName)

@@ -7,7 +7,7 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "test": "NODE_ENV=TEST jest --forceExit",
+    "test": "NODE_ENV=TEST jest --silent",
     "start": "functions-framework --source=build --target=api",
     "watch": "concurrently \"tsc -w\" \"nodemon --watch ./build --exec npm run start\"",
     "build": "tsc --build; npm run copy-files",
