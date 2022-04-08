@@ -84,4 +84,16 @@ describe('POST /exercise/postExercise', () => {
 		expect(res.body.message).toEqual("Exercise data is received successfully");
 		expect(res.body.error).toEqual(false);
 	})
+	it('should reject because of failed request validation', async () => {
+		const res = await request(api)
+			.post(`/exercise/postExercise`)
+			.set('Authorization', 'Bearer ' + accessToken)
+			.send({
+				"courseId": courseId,
+				"isPublic": false,
+				"courseRating": 3
+			})
+		expect(res.statusCode).toEqual(400);
+		expect(res.body.error).toEqual(true);
+	})
 })
