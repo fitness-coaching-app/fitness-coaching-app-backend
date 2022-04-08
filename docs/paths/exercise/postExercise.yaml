@@ -32,10 +32,7 @@ post:
             code: 200
             message: Exercise data is received successfully
             error: false
-            results: 
-              levelUp: true
-              xpEarned: 1422
-              activityId: ObjectId
+            results: ~
     400:
       $ref: '../../responses/400Error.yaml'
     500:

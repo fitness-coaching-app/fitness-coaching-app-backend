@@ -7,3 +7,7 @@ export const find = async (query: object) => {
 export const findOne = async (query: object) => {
     return await db().collection('courses').findOne(query);
 }
+
+export const updateOne = async (query: object, update: object) => {
+    return await db().collection('courses').updateOne(query, update);
+}

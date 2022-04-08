@@ -47,7 +47,7 @@ describe('POST /exercise/complete', () => {
 		expect(res.body.message).toEqual("Exercise data is received successfully");
 		expect(res.body.error).toEqual(false);
 
-		activityId = res.body.result.activityId;
+		activityId = res.body.results.activityId;
 	})
 
 	it('should require token', async () => {
