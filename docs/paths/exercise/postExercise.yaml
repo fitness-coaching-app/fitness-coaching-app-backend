@@ -1,8 +1,8 @@
 post:
   tags:
     - Exercise
-  summary: Exercise Complete
-  description: Send data when user is completing an exercise.
+  summary: Pose Exercise
+  description: Receive the data in summary page of the exercise
   security:
     - BearerAccessToken: [ ]
   requestBody:
@@ -11,23 +11,19 @@ post:
       application/json:
         schema:
           type: object
-          required: [ isPublic, courseId, duration, calories, score, poseData ]
+          required: [ courseId, activityId, isPublic ]
           properties:
-            isPublic:
-              type: boolean
             courseId:
               type: string
-            duration:
+            activityId:
+              type: string
+            isPublic:
+              type: boolean
+            courseRating:
               type: number
-            calories:
-              type: number
-            score:
-              type: number
-            poseData:
-              type: object
   responses:
     200:
-      description: The exercise data is received successfully.
+      description: The post exercise data is received successfully.
       content:
         application/json:
           schema:
@@ -36,10 +32,7 @@ post:
             code: 200
             message: Exercise data is received successfully
             error: false
-            results: 
-              levelUp: true
-              xpEarned: 1422
-              activityId: ObjectId
+            results: ~
     400:
       $ref: '../../responses/400Error.yaml'
     500:

@@ -75,3 +75,25 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         next(error)
     }
 }
+
+export const postExercise = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const user: any = req.user;
+        const body = req.body;
+
+        await models.activities.updateOne({_id: new ObjectId(body.activityId)}, {$set: {isPublic: body.isPublic}})
+        if (body.courseRating != null){
+            const userRating = {
+                userId: user._id,
+                rating: body.courseRating
+            }
+            await models.courses.updateOne({_id: new ObjectId(body.courseId)}, {$push: {rating: userRating}});
+        }
+
+        res.status(200).send(success(res.statusCode, "Exercise data is received successfully"))
+    } catch(e){
+        next(e)
+    }
+}
+
+

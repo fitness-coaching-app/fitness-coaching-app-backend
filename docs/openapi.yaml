@@ -58,5 +58,7 @@ paths:
 
   /exercise/complete:
     $ref: './paths/exercise/complete.yaml'
+  /exercise/postExercise:
+    $ref: './paths/exercise/postExercise.yaml'
 
 

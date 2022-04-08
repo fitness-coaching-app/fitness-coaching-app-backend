@@ -9,6 +9,8 @@ let accessToken: string = ""
 let refreshToken: string = ""
 let courseId: string = "";
 
+let activityId: string = ""
+
 beforeAll(async () => {
 	await mongoUtil.connect();
 
@@ -44,6 +46,8 @@ describe('POST /exercise/complete', () => {
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.message).toEqual("Exercise data is received successfully");
 		expect(res.body.error).toEqual(false);
+
+		activityId = res.body.results.activityId;
 	})
 
 	it('should require token', async () => {
@@ -61,6 +65,35 @@ describe('POST /exercise/complete', () => {
 			})
 
 		expect(res.statusCode).toEqual(401);
+		expect(res.body.error).toEqual(true);
+	})
+})
+
+describe('POST /exercise/postExercise', () => {
+	it('should update exercise data and course rating', async () => {
+		const res = await request(api)
+			.post(`/exercise/postExercise`)
+			.set('Authorization', 'Bearer ' + accessToken)
+			.send({
+				"courseId": courseId,
+				"activityId": activityId,
+				"isPublic": false,
+				"courseRating": 3
+			})
+		expect(res.statusCode).toEqual(200);
+		expect(res.body.message).toEqual("Exercise data is received successfully");
+		expect(res.body.error).toEqual(false);
+	})
+	it('should reject because of failed request validation', async () => {
+		const res = await request(api)
+			.post(`/exercise/postExercise`)
+			.set('Authorization', 'Bearer ' + accessToken)
+			.send({
+				"courseId": courseId,
+				"isPublic": false,
+				"courseRating": 3
+			})
+		expect(res.statusCode).toEqual(400);
 		expect(res.body.error).toEqual(true);
 	})
 })

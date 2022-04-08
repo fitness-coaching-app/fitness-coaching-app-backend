@@ -11,3 +11,7 @@ export const findOne = async (query: object) => {
 export const insertOne = async (document: object) => {
     return await db().collection('activities').insertOne(document);
 }
+
+export const updateOne = async (query: object, update: object) => {
+    return await db().collection('activities').updateOne(query, update);
+}
