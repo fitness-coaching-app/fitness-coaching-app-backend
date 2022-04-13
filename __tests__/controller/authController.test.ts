@@ -1,6 +1,6 @@
 import { api } from '../../index'
 import request from 'supertest'
-import { mockUser } from '../../mock_functions/mocks.mock'
+import { mockUser } from '../helper/mocks'
 import * as mongoUtil from '../../src/utils/mongoUtil'
 
 beforeAll(async () => {
