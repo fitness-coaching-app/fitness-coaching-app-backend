@@ -6,10 +6,46 @@ get:
   parameters:
     - in: query
       name: q
-      required: true
+      required: false
       schema:
         type: string
       description: Query string to search
+    - in: query
+      name: category
+      required: false
+      schema:
+        type: array
+      description: filter category
+    - in: query
+      name: bodyParts
+      required: false
+      schema:
+        type: array
+      description: filter body parts
+    - in: query
+      name: minDuration
+      required: false
+      schema:
+        type: number
+      description: filter minimum duration
+    - in: query
+      name: maxDuration
+      required: false
+      schema:
+        type: number
+      description: filter maximum duration
+    - in: query
+      name: minRating
+      required: false
+      schema:
+        type: number
+      description: filter minimum rating
+    - in: query
+      name: maxRating
+      required: false
+      schema:
+        type: number
+      description: filter maximum rating
   responses:
     200:
       description: Searching has been done successfully
