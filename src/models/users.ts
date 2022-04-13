@@ -24,16 +24,36 @@ export const updateEmailVerificationComplete = async (email: string) => {
     return await db().collection('users').updateOne({ email }, { $set: { status: "SETTING_UP" } });
 }
 
-export const search = async (query: string) => {
-    return await aggregate([{
+export const search = async (query: string[], limit?: number): Promise<object[]> => {
+    // insert .* into query string
+    for(let i = 0;i < query.length;++i){
+        query[i] = ".*" + query[i] + ".*"
+    }
+    console.log(query)
+    return await (await aggregate([{
         $search: {
             index: "usersindex",
             regex: {
-                query: `.*${query}.*`,
-                path: ["displayName", "email"]
+                query: query,
+                path: ["displayName", "email"],
+                "allowAnalyzedField": true
             }
         }
-    }])
+    },
+    {
+        $match: { status: "ACTIVE" }
+    },
+    {
+        $project: {
+            "_id": true,
+            "displayName": true,
+            "email": true,
+            "status": true,
+            "profilePicture": true
+        }
+    },
+    ...(limit ? [{ $limit: limit }] : []), // item limiter
+    ])).toArray();
 }
 
 export const aggregate = async (pipeline: object[]) => {

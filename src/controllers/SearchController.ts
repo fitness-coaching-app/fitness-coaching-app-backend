@@ -7,11 +7,12 @@ export const search = async (req: Request, res: Response, next: NextFunction) =>
 	try {
 		const searchString = req.query.q as string;
 
-		const rawUserResults = await models.users.search(searchString)
+		let userResults = await models.users.search(searchString.split(' '), 10)
+		let courseResults = await models.courses.search(searchString.split(' '), 10)
 
 		const result = {
-			users: await rawUserResults.toArray(),
-			courses: []
+			users: userResults,
+			courses: courseResults
 		}
 
 		res.status(200).send(success(res.statusCode, "Searching has been done successfully", result))
