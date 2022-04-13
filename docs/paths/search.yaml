@@ -1,0 +1,34 @@
+get:
+  tags:
+    - Search
+  summary: Search
+  description: Search in course and user
+  parameters:
+    - in: query
+      name: q
+      required: true
+      schema:
+        type: string
+      description: Query string to search
+  responses:
+    200:
+      description: Searching has been done successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Searching has been done successfully
+            error: false
+            results:
+              users: [
+                "User Data Object"
+              ]
+              courses: [
+                "Course Data Object"
+              ]
+    400:
+      $ref: "../responses/400Error.yaml"
+    500:
+      $ref: "../responses/500Error.yaml"

@@ -81,8 +81,10 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/__tests__/mock/"
+      "/node_modules/"
+    ],
+    "modulePathIgnorePatterns": [
+      "/__tests__/helper/*"
     ]
   }
 }

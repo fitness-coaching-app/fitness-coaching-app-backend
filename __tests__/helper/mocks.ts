@@ -1,6 +1,6 @@
-import models from '../src/models'
-import { hashPassword } from '../src/utils/passwordUtil'
-import { db } from '../src/utils/mongoUtil'
+import models from '../../src/models'
+import { hashPassword } from '../../src/utils/passwordUtil'
+import { db } from '../../src/utils/mongoUtil'
 
 export const mockUser = async (
 	userInfoOverrides: {
@@ -39,13 +39,23 @@ export const mockUser = async (
 }
 
 
-export const mockCourse = async () => {
+export const mockCourse = async (
+	courseInfoToOverride: {
+		bodyParts?: string[],
+		category?: string,
+		description?: string,
+		difficulty?: string,
+		name?: string,
+		viewCount?: number
+	} = {}
+) => {
 	return await db().collection('courses').insertOne({
 		bodyParts: ["legs"],
 		category: "TEST",
 		description: "For testing purpose only",
 		difficulty: "EASY",
 		name: "test",
-		viewCount: 0
+		viewCount: 0,
+		...courseInfoToOverride
 	})
 }

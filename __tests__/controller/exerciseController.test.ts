@@ -1,6 +1,6 @@
 import { api } from '../../index'
 import request from 'supertest'
-import { mockCourse, mockUser } from '../../mock_functions/mocks.mock'
+import { mockCourse, mockUser } from '../helper/mocks'
 import * as mongoUtil from '../../src/utils/mongoUtil'
 import { ObjectId } from 'mongodb'
 
