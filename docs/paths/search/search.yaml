@@ -14,9 +14,7 @@ get:
       name: category
       required: false
       schema:
-        type: array
-        items:
-          type: string
+        type: string
       description: filter category
     - in: query
       name: bodyParts

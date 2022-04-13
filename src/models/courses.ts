@@ -9,10 +9,14 @@ export const findOne = async (query: object) => {
 }
 
 export const updateOneAggregate = async (query: object, update: object) => {
-    await db().collection('courses').updateOne(query, [
+    return await db().collection('courses').updateOne(query, [
         update,
         { $set: { overallRating: { $avg: "$ratings.rating" } } }
     ]);
+}
+
+export const distinct = async (field: string) => {
+    return await db().collection('courses').distinct(field);
 }
 
 export const search = async (query: string[], filter?: any, limit?: number): Promise<object[]> => {
@@ -25,9 +29,7 @@ export const search = async (query: string[], filter?: any, limit?: number): Pro
         match = {
             $match: {
                 ...(filter?.category ? {
-                    category: {
-                        $in: filter.category
-                    }
+                    category: filter.category
                 } : {}),
                 ...(filter?.bodyParts ? {
                     bodyParts: {
