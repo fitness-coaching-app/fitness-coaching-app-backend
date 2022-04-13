@@ -65,6 +65,11 @@ export const search = async (query: string[], filter?: any, limit?: number): Pro
         }
     },
         match,
+    {
+        $project: {
+            "ratings": false
+        }
+    },
     ...(limit ? [{ $limit: limit }] : []) // item limiter
     ])).toArray();
 }

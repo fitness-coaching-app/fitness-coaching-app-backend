@@ -1,0 +1,28 @@
+get:
+  tags:
+    - Search
+  summary: Get Filter Parameters
+  description: Get filter parameters for search ui
+  responses:
+    200:
+      description: Get filter parameters successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Get filter parameters successfully
+            error: false
+            results:
+              category: ["...category params"]
+              bodyParts: ["...bodyParts params"]
+              absMinDuration: 10
+              absMaxDuration: 100
+              absMinRating: 2
+              absMaxRating: 4.5
+
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

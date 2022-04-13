@@ -15,18 +15,24 @@ get:
       required: false
       schema:
         type: array
+        items:
+          type: string
       description: filter category
     - in: query
       name: bodyParts
       required: false
       schema:
         type: array
+        items:
+          type: string
       description: filter body parts
     - in: query
       name: difficulty
       required: false
       schema:
         type: array
+        items:
+          type: string
       description: filter difficulty
     - in: query
       name: minDuration
@@ -58,7 +64,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/Success.yaml'
+            $ref: '../../schemas/Success.yaml'
           example:
             code: 200
             message: Searching has been done successfully
@@ -71,6 +77,6 @@ get:
                 "Course Data Object"
               ]
     400:
-      $ref: "../responses/400Error.yaml"
+      $ref: "../../responses/400Error.yaml"
     500:
-      $ref: "../responses/500Error.yaml"
+      $ref: "../../responses/500Error.yaml"
