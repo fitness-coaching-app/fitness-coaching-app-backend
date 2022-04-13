@@ -47,7 +47,7 @@ export const mockCourse = async (
 		difficulty?: string,
 		name?: string,
 		viewCount?: number
-	}
+	} = {}
 ) => {
 	return await db().collection('courses').insertOne({
 		bodyParts: ["legs"],
