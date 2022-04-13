@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
+import { ObjectId } from 'mongodb'
 import models from '../models'
+import { updateOne } from '../models/users'
 import { error, success } from '../utils/responseApi'
 
 
@@ -11,6 +13,11 @@ export const search = async (req: Request, res: Response, next: NextFunction) =>
 
 		let userResults = await models.users.search(searchString, 10)
 		let courseResults = await models.courses.search(searchString, filter, 10)
+
+		if (query) {
+			const user: any = req.user;
+			await models.users.updateOne({ _id: new ObjectId(user._id) }, { $push: { searchHistory: query } })
+		}
 
 		const result = {
 			users: userResults,
@@ -40,7 +47,7 @@ export const getFilterParams = async (req: Request, res: Response, next: NextFun
 				"$group": { 
 					_id: null, 
 					minRating: { "$min": "$overallRating" },
-					maxRating: { "$max": "$overallRating"} 
+					maxRating: { "$max": "$overallRating" } 
 				}
 			}
 		])).toArray();
