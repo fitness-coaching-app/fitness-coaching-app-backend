@@ -3,6 +3,8 @@ get:
     - Search
   summary: Search
   description: Search in course and user
+  security:
+    - BearerAccessToken: [ ]
   parameters:
     - in: query
       name: q
