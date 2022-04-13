@@ -20,6 +20,40 @@ export const search = async (query: string[], filter?: any, limit?: number): Pro
     for (let i = 0; i < query.length; ++i) {
         query[i] = ".*" + query[i] + ".*"
     }
+    let match = {}
+    if (filter) {
+        match = {
+            $match: {
+                ...(filter?.category ? {
+                    category: {
+                        $in: filter.category
+                    }
+                } : {}),
+                ...(filter?.bodyParts ? {
+                    bodyParts: {
+                        $in: filter.bodyParts
+                    }
+                } : {}),
+                ...(filter?.minDuration || filter?.maxDuration ? {
+                    duration: {
+                        ...(filter?.minDuration ? { $gte: filter?.minDuration } : {}),
+                        ...(filter?.maxDuration ? { $lte: filter?.maxDuration } : {}),
+                    }
+                } : {}),
+                ...(filter?.difficulty ? {
+                    difficulty: {
+                        $in: filter?.difficulty
+                    }
+                } : {}),
+                ...(filter?.minRating || filter?.maxRating ? {
+                    overallRating: {
+                        ...(filter?.minRating ? { $gte: filter?.minRating } : {}),
+                        ...(filter?.maxRating ? { $lte: filter?.maxRating } : {}),
+                    }
+                } : {})
+            }
+        }
+    }
     return await (await aggregate([{
         $search: {
             index: "coursesindex",
@@ -30,31 +64,7 @@ export const search = async (query: string[], filter?: any, limit?: number): Pro
             }
         }
     },
-    {
-        $match: {
-            ...(filter?.category ? {
-                category: {
-                    $in: filter.category
-                }
-            } : {}),
-            ...(filter?.bodyParts ? {
-                bodyParts: {
-                    $in: filter.bodyParts
-                }
-            } : {}),
-            duration: {
-                $gte: filter?.minDuration,
-                $lte: filter?.maxDuration
-            },
-            difficulty: {
-                $in: filter?.difficulty
-            },
-            overallRating: {
-                $gte: filter?.minRating,
-                $lte: filter?.maxRating
-            }
-        }
-    },
+        match,
     ...(limit ? [{ $limit: limit }] : []) // item limiter
     ])).toArray();
 }
