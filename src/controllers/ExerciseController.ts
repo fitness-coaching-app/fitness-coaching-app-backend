@@ -59,7 +59,7 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         // mongoDB insert activities
         const activityId = (await models.activities.insertOne(infoToInsert)).insertedId.toString()
         // Update user's xp
-        await models.users.updateOne({_id: user._id},{xp: newXp});
+        await models.users.updateOne({ _id: user._id }, { xp: newXp });
 
         const result = {
             levelUp: isLevelUp,
@@ -69,7 +69,7 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
             activityId
         }
 
-        res.status(200).send(success(res.statusCode, "Exercise data is received successfully",result))
+        res.status(200).send(success(res.statusCode, "Exercise data is received successfully", result))
     } catch (error) {
         console.log(JSON.stringify(error))
         next(error)
@@ -77,21 +77,29 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
 }
 
 export const postExercise = async (req: Request, res: Response, next: NextFunction) => {
-    try{
+    try {
         const user: any = req.user;
         const body = req.body;
 
-        await models.activities.updateOne({_id: new ObjectId(body.activityId)}, {$set: {isPublic: body.isPublic}})
-        if (body.courseRating != null){
+        await models.activities.updateOne({ _id: new ObjectId(body.activityId) }, { $set: { isPublic: body.isPublic } })
+        if (body.courseRating != null) {
             const userRating = {
                 userId: user._id,
                 rating: body.courseRating
             }
-            await models.courses.updateOne({_id: new ObjectId(body.courseId)}, {$push: {rating: userRating}});
+            const pipeline = {
+                $set: {
+                    ratings: {
+                        $concatArrays: ["$ratings", [userRating]]
+                    }
+                }
+            }
+            await models.courses.updateOneAggregate({ _id: new ObjectId(body.courseId) }, pipeline);
         }
 
         res.status(200).send(success(res.statusCode, "Exercise data is received successfully"))
-    } catch(e){
+    } catch (e) {
+        console.log(JSON.stringify(e));
         next(e)
     }
 }

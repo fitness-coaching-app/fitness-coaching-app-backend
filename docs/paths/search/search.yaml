@@ -1,0 +1,80 @@
+get:
+  tags:
+    - Search
+  summary: Search
+  description: Search in course and user
+  parameters:
+    - in: query
+      name: q
+      required: false
+      schema:
+        type: string
+      description: Query string to search
+    - in: query
+      name: category
+      required: false
+      schema:
+        type: string
+      description: filter category
+    - in: query
+      name: bodyParts
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: filter body parts
+    - in: query
+      name: difficulty
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: filter difficulty
+    - in: query
+      name: minDuration
+      required: false
+      schema:
+        type: number
+      description: filter minimum duration
+    - in: query
+      name: maxDuration
+      required: false
+      schema:
+        type: number
+      description: filter maximum duration
+    - in: query
+      name: minRating
+      required: false
+      schema:
+        type: number
+      description: filter minimum rating
+    - in: query
+      name: maxRating
+      required: false
+      schema:
+        type: number
+      description: filter maximum rating
+  responses:
+    200:
+      description: Searching has been done successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Searching has been done successfully
+            error: false
+            results:
+              users: [
+                "User Data Object"
+              ]
+              courses: [
+                "Course Data Object"
+              ]
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

@@ -62,6 +62,8 @@ paths:
     $ref: './paths/exercise/postExercise.yaml'
 
   /search:
-    $ref: './paths/search.yaml'
+    $ref: './paths/search/search.yaml'
+  /search/getFilterParams:
+    $ref: './paths/search/getFilterParams.yaml'
 
 
