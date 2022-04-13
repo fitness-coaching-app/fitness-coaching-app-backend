@@ -61,4 +61,7 @@ paths:
   /exercise/postExercise:
     $ref: './paths/exercise/postExercise.yaml'
 
+  /search:
+    $ref: './paths/search.yaml'
+
 
