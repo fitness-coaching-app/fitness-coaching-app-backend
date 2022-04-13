@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
 import models from '../models'
-import { updateOne } from '../models/users'
 import { error, success } from '../utils/responseApi'
 
 

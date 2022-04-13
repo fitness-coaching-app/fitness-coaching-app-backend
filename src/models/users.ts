@@ -13,7 +13,7 @@ export const insertOne = async (document: object) => {
 }
 
 export const updateOne = async (query: object, newValue: object) => {
-    return await db().collection('users').updateOne(query, { $set: newValue });
+    return await db().collection('users').updateOne(query, newValue);
 }
 
 export const userExists = async (displayName: string): Promise<boolean> => {

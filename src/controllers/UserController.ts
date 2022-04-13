@@ -18,7 +18,7 @@ export const editUserInfo = async (req: Request, res: Response, next: NextFuncti
                 return;
             }
         }
-        await models.users.updateOne({displayName: user.displayName}, infoToEdit)
+        await models.users.updateOne({displayName: user.displayName}, { $set: infoToEdit })
 
         res.status(200).send(success(res.statusCode, "User Info Edit Successfully"))
     } catch (e) {
@@ -37,7 +37,7 @@ export const editProfilePicture = async (req: Request, res: Response, next: Next
         }
 
         const gcsLink = await uploadSingle(req, 'profilePicture', 'image/jpeg', user.displayName)
-        await models.users.updateOne({displayName: user.displayName}, {profilePicture: gcsLink})
+        await models.users.updateOne({displayName: user.displayName}, { $set: {profilePicture: gcsLink}})
 
         res.status(200).send(success(res.statusCode, "Profile Picture Changed Successfully", {profilePicture: gcsLink}))
     } catch (e) {
@@ -54,7 +54,7 @@ export const newUserSetup = async (req: Request, res: Response, next: NextFuncti
             return;
         }
 
-        await models.users.updateOne({displayName: user.displayName}, {...infoToUpdate, status: "ACTIVE"});
+        await models.users.updateOne({displayName: user.displayName}, { $set: {...infoToUpdate, status: "ACTIVE"}});
 
         res.status(200).send(success(res.statusCode, "New User Setup Success"))
     } catch (e) {
@@ -104,7 +104,7 @@ export const setNewPassword = async (req: Request, res: Response, next: NextFunc
             res.status(400).send(error(res.statusCode, "New password and confirm new password didn't match", [ErrorCode.incorrectPassword]));
         }
 
-        await models.users.updateOne({email: user.email}, {password: hashPassword(newPassword)});
+        await models.users.updateOne({email: user.email}, { $set: {password: hashPassword(newPassword)}});
 
         res.status(200).send(success(res.statusCode, "New password has been set", null));
     } catch (e) {

@@ -111,7 +111,7 @@ export const forgetPassword = async (req: Request, res: Response, next: NextFunc
         const newPasswordRaw = Math.random().toString(36).slice(-8);
         const newPasswordHashed = hashPassword(newPasswordRaw);
 
-        await models.users.updateOne({email: info.email}, {password: newPasswordHashed});
+        await models.users.updateOne({email: info.email}, { $set: {password: newPasswordHashed}});
         await sendForgetPasswordEmail(info.email, newPasswordRaw);
 
         res.status(200).json(success(res.statusCode, "Reset password success", null));
