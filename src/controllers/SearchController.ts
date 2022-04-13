@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
 import models from '../models'
-import { error, success } from '../utils/responseApi'
+import { success } from '../utils/responseApi'
 
 
 export const search = async (req: Request, res: Response, next: NextFunction) => {
