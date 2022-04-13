@@ -23,6 +23,12 @@ get:
         type: array
       description: filter body parts
     - in: query
+      name: difficulty
+      required: false
+      schema:
+        type: array
+      description: filter difficulty
+    - in: query
       name: minDuration
       required: false
       schema:

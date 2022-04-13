@@ -5,10 +5,12 @@ import { error, success } from '../utils/responseApi'
 
 export const search = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const searchString = req.query.q as string;
+		const query = req.query.q as string | undefined
+		const searchString = query? query.split(' '): [""];
+		const filter = req.query
 
-		let userResults = await models.users.search(searchString.split(' '), 10)
-		let courseResults = await models.courses.search(searchString.split(' '), 10)
+		let userResults = await models.users.search(searchString, 10)
+		let courseResults = await models.courses.search(searchString,filter, 10)
 
 		const result = {
 			users: userResults,

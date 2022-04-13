@@ -29,7 +29,6 @@ export const search = async (query: string[], limit?: number): Promise<object[]>
     for(let i = 0;i < query.length;++i){
         query[i] = ".*" + query[i] + ".*"
     }
-    console.log(query)
     return await (await aggregate([{
         $search: {
             index: "usersindex",
