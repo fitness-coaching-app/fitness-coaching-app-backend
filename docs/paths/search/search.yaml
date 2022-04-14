@@ -70,12 +70,8 @@ get:
             message: Searching has been done successfully
             error: false
             results:
-              users: [
-                "User Data Object"
-              ]
-              courses: [
-                "Course Data Object"
-              ]
+              users: ["User Data Object"]
+              courses: ["Course Data Object"]
     400:
       $ref: "../../responses/400Error.yaml"
     500:
