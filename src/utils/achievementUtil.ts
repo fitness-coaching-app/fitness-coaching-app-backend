@@ -67,7 +67,7 @@ export const Action = {
 			const userAchievement = user.achievement || [] as any[];
 			const newAchievementList = [] as ObjectId[];
 			for (let i of achievementList) {
-				if (!userAchievement.some(e => e.achievementId === i._id)) {
+				if (!userAchievement.some(e => e.achievementId.toString() === i._id.toString())) {
 					const func = new Function("exercise", i.criteria);
 					if(func(exerciseEvent)){
 						newAchievementList.push(i._id);

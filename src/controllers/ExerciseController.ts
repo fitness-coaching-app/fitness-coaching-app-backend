@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { success } from "../utils/responseApi";
-import { Double, Long, ObjectId } from 'mongodb';
+import { Double, Long, Int32, ObjectId } from 'mongodb';
 import models from '../models';
 import fs from 'fs';
 import os from 'os';
@@ -11,7 +11,8 @@ import { Action, ExerciseEvent } from '../utils/achievementUtil';
 
 export const complete = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user: any = req.user!
+        let user: any = req.user!
+        user.xp = user.xp || 0;
         let body: any = req.body
 
         // Get the course info
@@ -20,19 +21,22 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         const xpEarned = difficultyScore[courseInfo.difficulty] + (body.score * 20);
 
         // Check if the user is level up
-        const isLevelUp = level(user.xp || 0) !== level((user.xp || 0) + xpEarned);
-        const newXp = (user.xp || 0) + xpEarned;
+        const isLevelUp = level(user.xp) !== level(user.xp + xpEarned);
+        const newXp = user.xp + xpEarned;
+        const currentLevel = level(newXp);
 
 
-        // TODO: Check if the user is eligible for any new achievement
+        // Check if the user is eligible for any new achievement
         const newAchievementList = await Action.Exercise.newAchievement(user);
         const timestamp = new Date(Date.now());
         let newAchievementObjList = [];
-        for(let i of newAchievementList){
+        let newAchievementForResults = [];
+        for (let i of newAchievementList) {
             newAchievementObjList.push({
                 achievementId: i,
                 timestamp
             })
+            newAchievementForResults.push(i.toString());
         }
 
         // Create PoseData temp file waiting for upload
@@ -45,42 +49,57 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         // Upload the temp file
         const poseDataURL = await uploadLocalFile(tempFilePath, user._id.toString(), "poseData", "text/yaml")
 
-        const data = {
-            courseId: new ObjectId(body.courseId),
-            duration: new Double(body.duration),
-            calories: new Double(body.calories),
-            score: body.score,
-            xpEarned: xpEarned,
-            poseData: poseDataURL
-        }
-
-        const infoToInsert = {
+        const activityInfo = {
             userId: new ObjectId(user._id),
             activityType: "EXERCISE",
             timestamp: timestamp,
             isPublic: body.isPublic,
-            data: data,
+            data: {
+                courseId: new ObjectId(body.courseId),
+                duration: new Double(body.duration),
+                calories: new Double(body.calories),
+                score: body.score,
+                xpEarned: xpEarned,
+                poseData: poseDataURL
+            },
             reactions: [],
             comments: []
         }
 
         // mongoDB insert activities
-        const activityId = (await models.activities.insertOne(infoToInsert)).insertedId.toString()
+        const activityId = (await models.activities.insertOne(activityInfo)).insertedId.toString()
+        // if level up, insert
+        if (isLevelUp) {
+            const activityLevelUpInfo = {
+                userId: new ObjectId(user._id),
+                activityType: "LEVEL_UP",
+                timestamp: timestamp,
+                isPublic: true, // TODO: Can change later
+                data: {
+                    level: new Int32(currentLevel)
+                },
+                reactions: [],
+                comments: []
+            };
+            await models.activities.insertOne(activityLevelUpInfo);
+        }
         // Update user's xp and newAchievements
-        await models.users.updateOne({ _id: user._id }, { $set: { xp: new Long(newXp) }, $push: { achievement: {$each: newAchievementObjList}}});
+        await models.users.updateOne({ _id: user._id }, { $set: { xp: new Long(newXp) }, $push: { achievement: { $each: newAchievementObjList } } });
+
+
+
 
         const result = {
             levelUp: isLevelUp,
-            currentLevel: level(user.xp + xpEarned),
+            currentLevel: currentLevel,
             currentXp: user.xp + xpEarned,
             xpEarned: xpEarned,
+            newAchievementsId: newAchievementForResults,
             activityId
         }
 
         res.status(200).send(success(res.statusCode, "Exercise data is received successfully", result))
-        // res.status(200).send(success(res.statusCode, "Exercise data is received successfully"))
     } catch (error) {
-        console.log(JSON.stringify(error))
         next(error)
     }
 }

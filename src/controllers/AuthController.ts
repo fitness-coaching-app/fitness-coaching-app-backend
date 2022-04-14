@@ -6,6 +6,7 @@ import {sendVerificationEmail, sendForgetPasswordEmail} from "../utils/emailUtil
 import jwt, {TokenExpiredError} from "jsonwebtoken";
 import config from "../config";
 import {generateAccessToken, generateRefreshToken} from "../utils/tokenUtil";
+import { Long } from 'mongodb';
 
 export const signIn = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -33,7 +34,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
             displayName: info.displayName,
             email: info.email,
             password: hashPassword(info.password),
-            xp: 0,
+            xp: new Long(0),
             weightHistory: [],
             heightHistory: [],
             achievement: [],
