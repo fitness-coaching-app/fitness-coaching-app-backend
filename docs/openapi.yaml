@@ -66,4 +66,7 @@ paths:
   /search/getFilterParams:
     $ref: './paths/search/getFilterParams.yaml'
 
+  /achievement/getList:
+    $ref: './paths/achievement/getList.yaml'
+
 

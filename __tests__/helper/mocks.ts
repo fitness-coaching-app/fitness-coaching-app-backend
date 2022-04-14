@@ -59,3 +59,21 @@ export const mockCourse = async (
 		...courseInfoToOverride
 	})
 }
+
+
+export const mockAchievement = async (
+	achievement: {
+		title?: string,
+		description?: string,
+		picture?: string,
+		criteria?: string,
+	} = {}
+) => {
+	return await db().collection('achievements').insertOne({
+		title: "test",
+		description: "test",
+		picture: "",
+		criteria: "return true;",
+		...achievement
+	})
+}
