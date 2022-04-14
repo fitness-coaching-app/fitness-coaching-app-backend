@@ -4,11 +4,29 @@ import { mockAchievement, mockUser } from '../helper/mocks'
 import * as mongoUtil from '../../src/utils/mongoUtil'
 
 
+let expectedResult: any[] = [];
 beforeAll(async () => {
 	await mongoUtil.connect();
-	await mockAchievement({title: "test1"});
-	await mockAchievement({title: "test2"});
-	await mockAchievement({title: "test3"});
+	expectedResult = [
+	{
+		_id: (await mockAchievement({title: "test1"})).insertedId.toString(),
+		title: "test1",
+		description: "test",
+		picture: "",
+	},
+	{
+		_id: (await mockAchievement({title: "test2"})).insertedId.toString(),
+		title: "test2",
+		description: "test",
+		picture: "",
+	},
+	{
+		_id: (await mockAchievement({title: "test3"})).insertedId.toString(),
+		title: "test3",
+		description: "test",
+		picture: "",
+	},
+	]
 }, 10000)
 
 
@@ -20,9 +38,6 @@ describe('GET /achievement/getList',() => {
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.message).toEqual("Achievements fetched successfully");
 		expect(res.body.error).toEqual(false);
-		console.log(res.body)
-		expect(res.body.results).toContainEqual({title: "test1"})
-		expect(res.body.results).toContainEqual({title: "test2"})
-		expect(res.body.results).toContainEqual({title: "test3"})
+		expect(res.body.results).toEqual(expectedResult);
 	})
 })

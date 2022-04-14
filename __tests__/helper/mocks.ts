@@ -67,12 +67,13 @@ export const mockAchievement = async (
 		description?: string,
 		picture?: string,
 		criteria?: string,
-	} = {
+	} = {}
+) => {
+	return await db().collection('achievements').insertOne({
 		title: "test",
 		description: "test",
 		picture: "",
-		criteria: "return true;"
-	}
-) => {
-	return await db().collection('achievements').insertOne(achievement)
+		criteria: "return true;",
+		...achievement
+	})
 }
