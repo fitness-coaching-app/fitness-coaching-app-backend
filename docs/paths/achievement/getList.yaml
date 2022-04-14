@@ -1,0 +1,25 @@
+get:
+  tags:
+    - Achievement
+  summary: Fetch Achievement List
+  description: Fetch achievement list
+  responses:
+    200:
+      description: Achievements fetched successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Achievements fetched successfully
+            error: false
+            results:
+              - _id: id
+                title: title
+                description: description
+                picture: picture URL
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"
