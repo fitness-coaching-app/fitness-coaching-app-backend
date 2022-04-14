@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { success } from "../utils/responseApi";
-import { Double, ObjectId } from 'mongodb';
+import { Double, Long, ObjectId } from 'mongodb';
 import models from '../models';
 import fs from 'fs';
 import os from 'os';
 import YAML from 'yaml';
 import { uploadLocalFile } from '../utils/gcsFileUtil';
 import { level, difficultyScore } from '../utils/userScore';
+import { Action, ExerciseEvent } from '../utils/achievementUtil';
 
 export const complete = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -19,13 +20,20 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         const xpEarned = difficultyScore[courseInfo.difficulty] + (body.score * 20);
 
         // Check if the user is level up
-        const isLevelUp = level(user.xp) !== level(user.xp + xpEarned);
-        const newXp = user.xp + xpEarned;
+        const isLevelUp = level(user.xp || 0) !== level((user.xp || 0) + xpEarned);
+        const newXp = (user.xp || 0) + xpEarned;
 
 
         // TODO: Check if the user is eligible for any new achievement
-
-
+        const newAchievementList = await Action.Exercise.newAchievement(user);
+        const timestamp = new Date(Date.now());
+        let newAchievementObjList = [];
+        for(let i of newAchievementList){
+            newAchievementObjList.push({
+                achievementId: i,
+                timestamp
+            })
+        }
 
         // Create PoseData temp file waiting for upload
         const doc = new YAML.Document()
@@ -49,7 +57,7 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         const infoToInsert = {
             userId: new ObjectId(user._id),
             activityType: "EXERCISE",
-            timestamp: new Date(Date.now()),
+            timestamp: timestamp,
             isPublic: body.isPublic,
             data: data,
             reactions: [],
@@ -58,8 +66,8 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
 
         // mongoDB insert activities
         const activityId = (await models.activities.insertOne(infoToInsert)).insertedId.toString()
-        // Update user's xp
-        await models.users.updateOne({ _id: user._id }, { $set: { xp: newXp }});
+        // Update user's xp and newAchievements
+        await models.users.updateOne({ _id: user._id }, { $set: { xp: new Long(newXp) }, $push: { achievement: {$each: newAchievementObjList}}});
 
         const result = {
             levelUp: isLevelUp,
@@ -70,6 +78,7 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         }
 
         res.status(200).send(success(res.statusCode, "Exercise data is received successfully", result))
+        // res.status(200).send(success(res.statusCode, "Exercise data is received successfully"))
     } catch (error) {
         console.log(JSON.stringify(error))
         next(error)
