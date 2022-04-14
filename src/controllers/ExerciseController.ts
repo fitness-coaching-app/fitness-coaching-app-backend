@@ -25,19 +25,7 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         const newXp = user.xp + xpEarned;
         const currentLevel = level(newXp);
 
-
-        // Check if the user is eligible for any new achievement
-        const newAchievementList = await Action.Exercise.newAchievement(user);
         const timestamp = new Date(Date.now());
-        let newAchievementObjList = [];
-        let newAchievementForResults = [];
-        for (let i of newAchievementList) {
-            newAchievementObjList.push({
-                achievementId: i,
-                timestamp
-            })
-            newAchievementForResults.push(i.toString());
-        }
 
         // Create PoseData temp file waiting for upload
         const doc = new YAML.Document()
@@ -83,6 +71,18 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
             };
             await models.activities.insertOne(activityLevelUpInfo);
         }
+        // Check if the user is eligible for any new achievement
+        const newAchievementList = await Action.Exercise.newAchievement(user);
+        let newAchievementObjList = [];
+        let newAchievementForResults = [];
+        for (let i of newAchievementList) {
+            newAchievementObjList.push({
+                achievementId: i,
+                timestamp
+            })
+            newAchievementForResults.push(i.toString());
+        }
+
         // Update user's xp and newAchievements
         await models.users.updateOne({ _id: user._id }, { $set: { xp: new Long(newXp) }, $push: { achievement: { $each: newAchievementObjList } } });
 

@@ -24,6 +24,8 @@ export class ExerciseEvent {
 			}
 		]).toArray();
 
+		if(userExerciseActivity.length == 0) return 0;
+
 		let count = 0;
 		let dateToCheck = new Date();
 		dateToCheck.setUTCHours(0, 0, 0, 0);
@@ -59,22 +61,30 @@ export class ExerciseEvent {
 	}
 }
 
+const newAchievementCheck = async (user: any, action: string): Promise<any[]> => {
+	// Shim for allowing async function creation via new Function
+	const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+
+	const event = new ExerciseEvent(user);
+	const achievementList = await models.achievements.find({ action });
+	const userAchievement = user.achievement || [] as any[];
+	const newAchievementList = [] as ObjectId[];
+	for (let i of achievementList) {
+		if (!userAchievement.some((e: any) => e.achievementId.toString() === i._id.toString())) {
+			const func = new AsyncFunction("action", i.criteria);
+			if (await func(event)) {
+				newAchievementList.push(i._id);
+			}
+		}
+	}
+	return newAchievementList;
+}
+
 export const Action = {
 	Exercise: {
-		newAchievement: async (user: any): Promise<any[]> => {
-			const exerciseEvent = new ExerciseEvent(user);
-			const achievementList = await models.achievements.find({ action: "EXERCISE" });
-			const userAchievement = user.achievement || [] as any[];
-			const newAchievementList = [] as ObjectId[];
-			for (let i of achievementList) {
-				if (!userAchievement.some((e: any) => e.achievementId.toString() === i._id.toString())) {
-					const func = new Function("exercise", i.criteria);
-					if(func(exerciseEvent)){
-						newAchievementList.push(i._id);
-					}
-				}
-			}
-			return newAchievementList;
-		}
+		newAchievement: async (user: any) => newAchievementCheck(user, "EXERCISE")
+	},
+	LevelUp:{
+		newAchievement: async (user: any) => newAchievementCheck(user, "LEVEL_UP")
 	}
 }
