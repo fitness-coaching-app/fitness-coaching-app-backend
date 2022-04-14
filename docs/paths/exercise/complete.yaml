@@ -38,7 +38,10 @@ post:
             error: false
             results: 
               levelUp: true
+              currentLevel: 4
+              currentXp: 2120
               xpEarned: 1422
+              newAchievementsId: []
               activityId: ObjectId
     400:
       $ref: '../../responses/400Error.yaml'
