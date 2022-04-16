@@ -13,7 +13,7 @@ post:
           properties:
             profilePicture:
               type: string
-              format: base64
+              format: binary
         encoding:
           profilePicture:
             contentType: image/jpeg

@@ -2,23 +2,25 @@ import models from '../../src/models'
 import { hashPassword } from '../../src/utils/passwordUtil'
 import { db } from '../../src/utils/mongoUtil'
 
+type UserInfo = {
+	status?: string;
+	email?: string;
+	password?: string;
+	displayName?: string;
+	birthyear?: number;
+	weightHistory?: [];
+	heightHistory?: [];
+	xp?: number;
+	level?: number;
+	profilePicture?: string;
+	gender?: string;
+	exercisePreference?: [];
+	partToAvoid?: [];
+	achievement?: []
+}
+
 export const mockUser = async (
-	userInfoOverrides: {
-		status?: string;
-		email?: string;
-		password?: string;
-		displayName?: string;
-		birthyear?: number;
-		weightHistory?: [];
-		heightHistory?: [];
-		xp?: number;
-		level?: number;
-		profilePicture?: string;
-		gender?: string;
-		exercisePreference?: [];
-		partToAvoid?: [];
-		achievement?: []
-	} = {}) => {
+	userInfoOverrides: UserInfo = {}) => {
 	return await models.users.insertOne({
 		status: "ACTIVE",
 		email: "test@jest.com",
@@ -36,6 +38,30 @@ export const mockUser = async (
 		achievement: [],
 		...userInfoOverrides
 	})
+}
+
+export const mockManyUsers = async (userInfoOverrides: UserInfo[]) => {
+	let finalArray = []
+	for (let user of userInfoOverrides) {
+		finalArray.push({
+			status: "ACTIVE",
+			email: "test@jest.com",
+			password: hashPassword("test"),
+			displayName: "JestTest",
+			birthyear: 2022,
+			weightHistory: [],
+			heightHistory: [],
+			xp: 0,
+			level: 0,
+			profilePicture: "",
+			gender: "MALE",
+			exercisePreference: [],
+			partToAvoid: [],
+			achievement: [],
+			...user
+		})
+	}
+	return await db().collection('users').insertMany(finalArray);
 }
 
 

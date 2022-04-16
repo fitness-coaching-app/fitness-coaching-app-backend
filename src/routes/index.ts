@@ -6,6 +6,7 @@ import home from './home'
 import exercise from './exercise'
 import search from './search'
 import achievement from './achievement'
+import leaderboard from './leaderboard'
 
 const router = Router()
 
@@ -16,6 +17,7 @@ router.use('/home', home);
 router.use('/exercise', exercise);
 router.use('/search', search);
 router.use('/achievement', achievement);
+router.use('/leaderboard', leaderboard);
 
 export default router;
 

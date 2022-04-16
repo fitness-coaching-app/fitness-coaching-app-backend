@@ -13,6 +13,10 @@ beforeAll(async () => {
 
 
 }, 10000)
+afterAll(async () => {
+	await mongoUtil.client().close();
+})
+
 
 
 describe.skip('GET /search', () => {
