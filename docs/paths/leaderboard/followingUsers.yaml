@@ -20,14 +20,14 @@ get:
       description: Starting position of the leaderboard
   responses:
     200:
-      description: Following leaderboard fetched successfully
+      description: Following user leaderboard fetched successfully
       content:
         application/json:
           schema:
             $ref: '../../schemas/Success.yaml'
           example:
             code: 200
-            message: Following leaderboard fetched successfully
+            message: Following user leaderboard fetched successfully
             error: false
             results:
               - _id: userId
