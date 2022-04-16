@@ -29,6 +29,10 @@ beforeAll(async () => {
 	]
 }, 10000)
 
+afterAll(async () => {
+	await mongoUtil.client().close();
+})
+
 
 describe('GET /achievement/getList',() => {
 	it('should return a list of achievement', async () => {

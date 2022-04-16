@@ -9,6 +9,11 @@ beforeAll(async () => {
 	await mockUser({email: "test@active.com",status: "ACTIVE"});
 }, 10000)
 
+afterAll(async () => {
+	await mongoUtil.client().close();
+})
+
+
 describe('POST /auth/resendVerificationEmailEmail', () => {
 	it('should send the email successfully', async () => {
 		const res = await request(api)

@@ -27,6 +27,9 @@ beforeAll(async () => {
 	accessToken = res.body.results.accessToken
 	refreshToken = res.body.results.refreshToken
 }, 10000)
+afterAll(async () => {
+	await mongoUtil.client().close();
+})
 
 describe('POST /exercise/complete', () => {
 	it('should insert the exercise activity into database', async () => {
