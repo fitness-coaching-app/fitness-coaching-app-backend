@@ -1,6 +1,6 @@
 get:
   tags:
-    - Achievement
+    - Leaderboard
   summary: Fetch Global Leaderboard
   description: Fetch Global Leaderboard
   responses:
