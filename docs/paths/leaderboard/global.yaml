@@ -3,6 +3,19 @@ get:
     - Leaderboard
   summary: Fetch Global Leaderboard
   description: Fetch Global Leaderboard
+  parameters:
+    - in: query
+      name: limit
+      required: true
+      schema:
+        type: number
+      description: Limiting number of the leaderboard entries
+    - in: query
+      name: start
+      required: true
+      schema:
+        type: number
+      description: Starting position of the leaderboard
   responses:
     200:
       description: Global leaderboard fetched successfully
