@@ -29,13 +29,13 @@ get:
             error: false
             results:
               - _id: userId
-                position: 1
                 displayName: poramee
                 profilePicture: picture URL
+                xp: 1231
               - _id: userId
-                position: 2
                 displayName: poramee
                 profilePicture: picture URL
+                xp: 1122
     400:
       $ref: "../../responses/400Error.yaml"
     500:
