@@ -69,4 +69,7 @@ paths:
   /achievement/getList:
     $ref: './paths/achievement/getList.yaml'
 
+  /leaderboard/global:
+    $ref: './paths/leaderboard/global.yaml'
+
 

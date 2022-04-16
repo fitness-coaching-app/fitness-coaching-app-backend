@@ -1,0 +1,29 @@
+get:
+  tags:
+    - Achievement
+  summary: Fetch Global Leaderboard
+  description: Fetch Global Leaderboard
+  responses:
+    200:
+      description: Global leaderboard fetched successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Global leaderboard fetched successfully
+            error: false
+            results:
+              - _id: userId
+                position: 1
+                displayName: poramee
+                profilePicture: picture URL
+              - _id: userId
+                position: 2
+                displayName: poramee
+                profilePicture: picture URL
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"
