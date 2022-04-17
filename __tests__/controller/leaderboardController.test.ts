@@ -62,9 +62,7 @@ const generateGlobalLeaderboardArray = async (limit: number, skip: number) => {
 	return await (await models.users.aggregate([{
 		$match: {
 			status: "ACTIVE",
-			userPreference:{
-				publishScoreToLeaderboard: true
-			}
+			'userPreference.publishScoreToLeaderboard': true
 		}
 	},
 	{
@@ -99,9 +97,7 @@ const generateFollowingsLeaderboardArray = async (limit: number, skip: number, l
 				$in: listOfFollowings
 			},
 			status: "ACTIVE",
-			userPreference:{
-				publishScoreToLeaderboard: true
-			}
+			'userPreference.publishScoreToLeaderboard': true
 		}
 	},
 	{
@@ -133,9 +129,7 @@ const getRanking = async (displayName: string) => {
 	const leaderboard = await (await models.users.aggregate([{
 		$match: {
 			status: "ACTIVE",
-			userPreference:{
-				publishScoreToLeaderboard: true
-			}
+			'userPreference.publishScoreToLeaderboard': true
 		}
 	},
 	{

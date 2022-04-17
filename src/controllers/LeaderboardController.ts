@@ -10,9 +10,7 @@ export const globalLeaderboard = async (req: Request, res: Response, next: NextF
 		const result = await (await models.users.aggregate([{
 			$match: {
 				status: "ACTIVE",
-				userPreference: {
-					publishScoreToLeaderboard: true
-				}
+				'userPreference.publishScoreToLeaderboard': true
 			}
 		},
 		{
@@ -59,9 +57,7 @@ export const followingUsers = async (req: Request, res: Response, next: NextFunc
 					$in: followingListObjectId
 				},
 				status: "ACTIVE",
-				userPreference: {
-					publishScoreToLeaderboard: true
-				}
+				'userPreference.publishScoreToLeaderboard': true
 			}
 		},
 		{
@@ -102,9 +98,7 @@ export const me = async (req: Request, res: Response, next: NextFunction) => {
 		const leaderboard = await (await models.users.aggregate([{
 			$match: {
 				status: "ACTIVE",
-				userPreference: {
-					publishScoreToLeaderboard: true
-				}
+				'userPreference.publishScoreToLeaderboard': true
 			}
 		},
 		{
