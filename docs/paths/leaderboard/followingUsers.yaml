@@ -1,0 +1,44 @@
+get:
+  tags:
+    - Leaderboard
+  summary: Fetch Following Leaderboard
+  description: Fetch Following Leaderboard
+  security:
+    - BearerAccessToken: [ ]
+  parameters:
+    - in: query
+      name: limit
+      required: true
+      schema:
+        type: number
+      description: Limiting number of the leaderboard entries
+    - in: query
+      name: start
+      required: true
+      schema:
+        type: number
+      description: Starting position of the leaderboard
+  responses:
+    200:
+      description: Following user leaderboard fetched successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Following user leaderboard fetched successfully
+            error: false
+            results:
+              - _id: userId
+                displayName: poramee
+                profilePicture: picture URL
+                xp: 1231
+              - _id: userId
+                displayName: poramee
+                profilePicture: picture URL
+                xp: 1122
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

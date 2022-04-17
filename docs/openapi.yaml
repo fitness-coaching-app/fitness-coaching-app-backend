@@ -71,5 +71,7 @@ paths:
 
   /leaderboard/global:
     $ref: './paths/leaderboard/global.yaml'
+  /leaderboard/followingUsers:
+    $ref: './paths/leaderboard/followingUsers.yaml'
 
 
