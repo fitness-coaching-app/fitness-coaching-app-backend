@@ -14,30 +14,44 @@ let userFollowingList: ObjectId[] = []
 beforeAll(async () => {
 	await mongoUtil.connect();
 
-	let users = []
+	let users: any[] = []
 	for (var i = 0; i < 300; ++i) {
-		users.push({ displayName: (Math.random() * 10000000).toString(), xp: (Math.random() * 50000) });
+		const displayName = (Math.random() * 10000000).toString();
+		const xp = (Math.random() * 50000);
+		users.push({ email: `${displayName}@jest.com`, displayName, xp });
 	}
+
 	await mockManyUsers(users);
 
 	const res = await request(api)
 		.post(`/auth/signIn`)
 		.send({
-			email: "test@jest.com",
+			email: users[0].email,
 			password: "test"
 		})
 	user = res.body.results.user
 	accessToken = res.body.results.accessToken
 	refreshToken = res.body.results.refreshToken
 
+	const userToFollow: any = await db().collection('users').find({}).limit(15).toArray();
+
+	for (var i = 1; i <= 10; ++i) {
+		await db().collection('userFollowings').insertOne({
+			followerId: new ObjectId(user._id),
+			followingId: userToFollow[i]._id,
+			timestamp: new Date(Date.now())
+		})
+	}
+
 	const followings = await (db().collection('userFollowings').aggregate([
 		{
 			$match: {
-				followerId: user._id
+				followerId: new ObjectId(user._id)
 			}
 		},
 	])).toArray();
-	for(let i of followings){
+
+	for (let i of followings) {
 		userFollowingList.push(i.followingId);
 	}
 }, 60000)
@@ -199,9 +213,10 @@ describe('GET /leaderboard/global', () => {
 
 
 describe('GET /leaderboard/followingUsers', () => {
-	it('should calculate and fetch the global leaderboard', async () => {
+	it('should calculate and fetch the following leaderboard', async () => {
 		const res = await request(api)
 			.get(`/leaderboard/followingUsers`)
+			.set('Authorization', 'Bearer ' + accessToken)
 			.query({
 				limit: 50,
 				start: 1
@@ -217,6 +232,7 @@ describe('GET /leaderboard/followingUsers', () => {
 	it('should limit the number of leaderboard entries', async () => {
 		const res = await request(api)
 			.get(`/leaderboard/followingUsers`)
+			.set('Authorization', 'Bearer ' + accessToken)
 			.query({
 				limit: 25,
 				start: 1
@@ -232,6 +248,7 @@ describe('GET /leaderboard/followingUsers', () => {
 	it('should limit the number of leaderboard entries [250]', async () => {
 		const res = await request(api)
 			.get(`/leaderboard/followingUsers`)
+			.set('Authorization', 'Bearer ' + accessToken)
 			.query({
 				limit: 250,
 				start: 1
@@ -247,21 +264,23 @@ describe('GET /leaderboard/followingUsers', () => {
 	it('should be able to start the entry at a specified position', async () => {
 		const res = await request(api)
 			.get(`/leaderboard/followingUsers`)
+			.set('Authorization', 'Bearer ' + accessToken)
 			.query({
 				limit: 50,
-				start: 25
+				start: 5
 			})
 
 
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.message).toEqual("Following user leaderboard fetched successfully");
 		expect(res.body.error).toEqual(false);
-		const data = await generateFollowingsLeaderboardArray(50, 24, userFollowingList);
+		const data = await generateFollowingsLeaderboardArray(50, 4, userFollowingList);
 		expect(res.body.results).toEqual(data);
 	})
 	it('should reject a request with invalid parameters', async () => {
 		const res = await request(api)
 			.get(`/leaderboard/followingUsers`)
+			.set('Authorization', 'Bearer ' + accessToken)
 			.query({
 				start: 1
 			})
@@ -273,11 +292,23 @@ describe('GET /leaderboard/followingUsers', () => {
 	it('should reject a request with invalid parameters', async () => {
 		const res = await request(api)
 			.get(`/leaderboard/followingUsers`)
+			.set('Authorization', 'Bearer ' + accessToken)
 			.query({
 				limit: 50
 			})
 
 		expect(res.statusCode).toEqual(400);
+		expect(res.body.error).toEqual(true);
+	})
+	it('should require access token', async () => {
+		const res = await request(api)
+			.get(`/leaderboard/followingUsers`)
+			.query({
+				limit: 50,
+				start: 1
+			})
+
+		expect(res.statusCode).toEqual(401);
 		expect(res.body.error).toEqual(true);
 	})
 })

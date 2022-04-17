@@ -1,7 +1,7 @@
 import {db} from '../utils/mongoUtil';
 
 export const find = async (query: object, project: object = {}) => {
-    return await db().collection('userFollowings').find(query).project(project).toArray();
+    return (await db().collection('userFollowings').find(query).project(project)).toArray();
 }
 
 export const findOne = async (query: object) => {

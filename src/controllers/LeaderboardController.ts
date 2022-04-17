@@ -49,7 +49,6 @@ export const followingUsers = async (req: Request, res: Response, next: NextFunc
 		for (let i of followingList) {
 			followingListObjectId.push(i.followingId);
 		}
-		console.log(followingListObjectId);
 
 		const results = await (await models.users.aggregate([{
 			$match: {
