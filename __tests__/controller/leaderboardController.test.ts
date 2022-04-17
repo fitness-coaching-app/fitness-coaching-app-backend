@@ -56,17 +56,13 @@ beforeAll(async () => {
 	}
 }, 60000)
 
-afterAll(async () => {
-	await mongoUtil.client().close();
-})
+
 
 const generateGlobalLeaderboardArray = async (limit: number, skip: number) => {
 	return await (await models.users.aggregate([{
 		$match: {
 			status: "ACTIVE",
-			userPreference:{
-				publishScoreToLeaderboard: true
-			}
+			'userPreference.publishScoreToLeaderboard': true
 		}
 	},
 	{
@@ -93,7 +89,6 @@ const generateGlobalLeaderboardArray = async (limit: number, skip: number) => {
 	}
 	])).toArray();
 }
-
 
 const generateFollowingsLeaderboardArray = async (limit: number, skip: number, listOfFollowings: ObjectId[]) => {
 	return await (await models.users.aggregate([{
@@ -102,9 +97,7 @@ const generateFollowingsLeaderboardArray = async (limit: number, skip: number, l
 				$in: listOfFollowings
 			},
 			status: "ACTIVE",
-			userPreference:{
-				publishScoreToLeaderboard: true
-			}
+			'userPreference.publishScoreToLeaderboard': true
 		}
 	},
 	{
@@ -131,6 +124,46 @@ const generateFollowingsLeaderboardArray = async (limit: number, skip: number, l
 	}
 	])).toArray();
 }
+
+const getRanking = async (displayName: string) => {
+	const leaderboard = await (await models.users.aggregate([{
+		$match: {
+			status: "ACTIVE",
+			'userPreference.publishScoreToLeaderboard': true
+		}
+	},
+	{
+		$sort: {
+			xp: -1,
+			displayName: 1
+		}
+	},
+	{
+		$project: {
+			_id: {
+				$toString: "$_id"
+			},
+			displayName: true,
+			profilePicture: true,
+			xp: true
+		}
+	}
+	])).toArray();
+
+	var result = {}
+	for(var i = 0;i < leaderboard.length;++i){
+		if(leaderboard[i].displayName === user.displayName){
+			result = {
+				...leaderboard[i],
+				leaderboardRank: i + 1
+			}
+			break;
+		}
+	}
+
+	return result;
+}
+
 
 describe('GET /leaderboard/global', () => {
 	it('should calculate and fetch the global leaderboard', async () => {
@@ -316,5 +349,22 @@ describe('GET /leaderboard/followingUsers', () => {
 
 		expect(res.statusCode).toEqual(401);
 		expect(res.body.error).toEqual(true);
+	})
+})
+
+
+describe('GET /leaderboard/me', () => {
+	it(`should return user's ranking`, async () => {
+		const res = await request(api)
+			.get(`/leaderboard/me`)
+			.query({
+				displayName: user.displayName
+			})
+
+
+		expect(res.statusCode).toEqual(200);
+		expect(res.body.message).toEqual("Get ranking successfully");
+		expect(res.body.error).toEqual(false);
+		expect(res.body.results).toEqual(await getRanking(user.displayName));
 	})
 })

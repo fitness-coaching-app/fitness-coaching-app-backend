@@ -1,0 +1,33 @@
+get:
+  tags:
+    - Leaderboard
+  summary: Get My Ranking
+  description: Get My Ranking
+  parameters:
+    - in: query
+      name: displayName
+      required: true
+      schema:
+        type: number
+      description: Display name of the requesting user
+  responses:
+    200:
+      description: Get ranking successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Get ranking successfully
+            error: false
+            results:
+              _id: userId
+              displayName: poramee
+              profilePicture: picture URL
+              xp: 1231
+              rank: 4555
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"
