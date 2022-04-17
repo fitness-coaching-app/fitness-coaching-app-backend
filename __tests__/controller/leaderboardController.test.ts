@@ -56,9 +56,7 @@ beforeAll(async () => {
 	}
 }, 60000)
 
-afterAll(async () => {
-	await mongoUtil.client().close();
-})
+
 
 const generateGlobalLeaderboardArray = async (limit: number, skip: number) => {
 	return await (await models.users.aggregate([{
@@ -160,11 +158,12 @@ const getRanking = async (displayName: string) => {
 
 	var result = {}
 	for(var i = 0;i < leaderboard.length;++i){
-		if(leaderboard[i]._id === user._id){
+		if(leaderboard[i].displayName === user.displayName){
 			result = {
 				...leaderboard[i],
 				leaderboardRank: i + 1
 			}
+			break;
 		}
 	}
 
@@ -372,6 +371,6 @@ describe('GET /leaderboard/me', () => {
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.message).toEqual("Get ranking successfully");
 		expect(res.body.error).toEqual(false);
-		expect(res.body.results).toEqual(getRanking(user.displayName));
+		expect(res.body.results).toEqual(await getRanking(user.displayName));
 	})
 })

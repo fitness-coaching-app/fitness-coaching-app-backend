@@ -13,9 +13,6 @@ beforeAll(async () => {
 
 
 }, 10000)
-afterAll(async () => {
-	await mongoUtil.client().close();
-})
 
 
 
