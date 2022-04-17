@@ -18,7 +18,7 @@ beforeAll(async () => {
 	for (var i = 0; i < 300; ++i) {
 		const displayName = (Math.random() * 10000000).toString();
 		const xp = (Math.random() * 50000);
-		users.push({ email: `${displayName}@jest.com`, displayName, xp });
+		users.push({ email: `${displayName}@jest.com`, displayName, xp, userPreference: {publishScoreToLeaderboard: Math.random() > 0.5? true: false} });
 	}
 
 	await mockManyUsers(users);
@@ -63,7 +63,10 @@ afterAll(async () => {
 const generateGlobalLeaderboardArray = async (limit: number, skip: number) => {
 	return await (await models.users.aggregate([{
 		$match: {
-			status: "ACTIVE"
+			status: "ACTIVE",
+			userPreference:{
+				publishScoreToLeaderboard: true
+			}
 		}
 	},
 	{
@@ -98,7 +101,10 @@ const generateFollowingsLeaderboardArray = async (limit: number, skip: number, l
 			_id: {
 				$in: listOfFollowings
 			},
-			status: "ACTIVE"
+			status: "ACTIVE",
+			userPreference:{
+				publishScoreToLeaderboard: true
+			}
 		}
 	},
 	{

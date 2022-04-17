@@ -36,6 +36,9 @@ export const mockUser = async (
 		exercisePreference: [],
 		partToAvoid: [],
 		achievement: [],
+		userPreference: {
+			publishScoreToLeaderboard: true
+		},
 		...userInfoOverrides
 	})
 }

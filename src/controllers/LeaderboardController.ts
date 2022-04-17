@@ -9,7 +9,10 @@ export const globalLeaderboard = async (req: Request, res: Response, next: NextF
 		const { limit, start } = req.query as any;
 		const result = await (await models.users.aggregate([{
 			$match: {
-				status: "ACTIVE"
+				status: "ACTIVE",
+				userPreference: {
+					publishScoreToLeaderboard: true
+				}
 			}
 		},
 		{
@@ -55,7 +58,10 @@ export const followingUsers = async (req: Request, res: Response, next: NextFunc
 				_id: {
 					$in: followingListObjectId
 				},
-				status: "ACTIVE"
+				status: "ACTIVE",
+				userPreference: {
+					publishScoreToLeaderboard: true
+				}
 			}
 		},
 		{
