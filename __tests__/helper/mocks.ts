@@ -106,3 +106,22 @@ export const mockAchievement = async (
 		...achievement
 	})
 }
+
+
+
+export const mockNews = async (
+	news: {
+		title?: string,
+		coverPicture?: string,
+		data?: string,
+		likes?: any[],
+	} = {}
+) => {
+	return await db().collection('news').insertOne({
+		title: "test",
+		coverPicture: "test",
+		data: "",
+		likes: [],
+		...news
+	})
+}
