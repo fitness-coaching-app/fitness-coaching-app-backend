@@ -74,7 +74,7 @@ paths:
   /leaderboard/followingUsers:
     $ref: './paths/leaderboard/followingUsers.yaml'
 
-  /news:
+  /news/fetch:
     $ref: './paths/news/fetch.yaml'
 
 

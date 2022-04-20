@@ -13,13 +13,13 @@ afterAll(async () => {
 	await mongoUtil.client().close();
 })
 
-describe('GET /news', () => {
+describe('GET /news/fetch', () => {
 	it('Should fetch news', async () => {
 		const res = await request(api)
-			.get(`/news`)
+			.get(`/news/fetch`)
 
 		expect(res.statusCode).toEqual(200);
-		expect(res.body.message).toEqual("Achievements fetched successfully");
+		expect(res.body.message).toEqual("News fetch successfully");
 		expect(res.body.error).toEqual(false);
 		expect(res.body.results.length).toEqual(1);
 	})
