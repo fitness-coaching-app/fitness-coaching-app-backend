@@ -1,0 +1,25 @@
+get:
+  tags:
+    - News
+  summary: Fetch News
+  description: Fetch news
+  responses:
+    200:
+      description: News fetch successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: News fetch successfully
+            error: false
+            results:
+              - title: TITLE
+                coverPicture: URL
+                data: URL
+                likeCount: 324
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"
