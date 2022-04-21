@@ -1,0 +1,33 @@
+get:
+  tags:
+    - News
+  summary: Fetch News
+  description: Fetch news
+  parameters:
+    - in: query
+      name: userId
+      required: true
+      schema:
+        type: string
+      description: User ID to check liked news
+  responses:
+    200:
+      description: News fetch successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: News fetch successfully
+            error: false
+            results:
+              - title: TITLE
+                coverPicture: URL
+                data: URL
+                userIdLike: true
+                likeCount: 324
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"
