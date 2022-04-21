@@ -7,6 +7,7 @@ import exercise from './exercise'
 import search from './search'
 import achievement from './achievement'
 import leaderboard from './leaderboard'
+import news from './news'
 
 const router = Router()
 
@@ -18,6 +19,7 @@ router.use('/exercise', exercise);
 router.use('/search', search);
 router.use('/achievement', achievement);
 router.use('/leaderboard', leaderboard);
+router.use('/news', news);
 
 export default router;
 

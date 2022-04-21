@@ -4,6 +4,7 @@ import * as sections from './sections'
 import * as activities from './activities'
 import * as achievements from './achievements'
 import * as userFollowings from './userFollowings'
+import * as news from './news'
 
 let models = {
     users,
@@ -11,7 +12,8 @@ let models = {
     sections,
     activities,
     achievements,
-    userFollowings
+    userFollowings,
+    news
 }
 
 export default models;
