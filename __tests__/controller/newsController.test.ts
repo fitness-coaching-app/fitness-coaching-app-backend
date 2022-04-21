@@ -16,7 +16,7 @@ beforeAll(async () => {
 			email: "test@jest.com",
 			password: "test"
 		})
-	userId = res.body.results.userId
+	userId = res.body.results.user._id;
 
 }, 10000)
 afterAll(async () => {
@@ -31,9 +31,9 @@ describe('GET /news/fetch', () => {
 				userId: userId
 			})
 
-		expect(res.statusCode).toEqual(200);
 		expect(res.body.message).toEqual("News fetch successfully");
 		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
 		expect(res.body.results.length).toEqual(1);
 	})
 })

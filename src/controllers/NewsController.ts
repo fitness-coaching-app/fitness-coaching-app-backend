@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-import { truncate } from 'fs'
 import { ObjectId } from 'mongodb'
 import models from '../models'
 import { success } from '../utils/responseApi'
