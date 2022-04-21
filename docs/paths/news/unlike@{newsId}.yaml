@@ -1,0 +1,34 @@
+get:
+  tags:
+    - News
+  summary: Unlike The News
+  description: Unlike the news
+  security:
+    - BearerAccessToken: [ ]
+  parameters:
+    - in: path
+      name: newsId
+      required: true
+      schema:
+        type: string
+      description: News ID
+  responses:
+    200:
+      description: The news is unliked
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: The news is unliked
+            error: false
+            results:
+              - title: TITLE
+                coverPicture: URL
+                data: URL
+                likeCount: 324
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"
