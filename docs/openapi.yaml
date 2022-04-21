@@ -76,5 +76,9 @@ paths:
 
   /news/fetch:
     $ref: './paths/news/fetch.yaml'
+  /news/like/{newsId}:
+    $ref: './paths/news/like@{newsId}.yaml'
+  /news/unlike/{newsId}:
+    $ref: './paths/news/unlike@{newsId}.yaml'
 
 
