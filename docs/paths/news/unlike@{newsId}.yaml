@@ -23,11 +23,7 @@ get:
             code: 200
             message: The news is unliked
             error: false
-            results:
-              - title: TITLE
-                coverPicture: URL
-                data: URL
-                likeCount: 324
+            results: ~
     400:
       $ref: "../../responses/400Error.yaml"
     500:

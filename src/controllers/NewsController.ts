@@ -75,11 +75,35 @@ export const like = async (req: Request, res: Response, next: NextFunction) => {
 			})
 			res.status(200).send(success(res.statusCode, "The news is liked"))
 		}
-		else{
+		else {
 			res.status(200).send(success(res.statusCode, "User already liked"))
 		}
 	} catch (e) {
 		next(e);
 	}
+}
+
+export const unlike = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const newsId: any = req.params.newsId;
+		const user: any = req.user!;
+
+		const updateResult = await models.news.updateOne({ _id: new ObjectId(newsId) }, {
+			$pull: {
+				likes: {
+					userId: user._id
+				}
+			}
+		})
+		if(updateResult.modifiedCount === 0){
+			res.status(200).send(success(res.statusCode, "User hasn't been liked"))
+		}
+		else{
+			res.status(200).send(success(res.statusCode, "The news is unliked"))
+		}
+		
+	} catch (e) {
+	next(e);
+}
 }
 

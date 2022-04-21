@@ -72,6 +72,11 @@ describe('GET /news/unlike/:newsId', () => {
 
 describe('GET /news/fetch', () => {
 	it('should fetch news (with userId)', async () => {
+		// Like the news
+		await request(api)
+			.get(`/news/like/${newsId}`)
+			.set('Authorization', 'Bearer ' + accessToken)
+
 		const res = await request(api)
 			.get(`/news/fetch`)
 			.query({
