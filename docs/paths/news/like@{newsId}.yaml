@@ -14,7 +14,7 @@ get:
       description: News ID
   responses:
     200:
-      description: The news is liked.
+      description: The news is liked
       content:
         application/json:
           schema:
