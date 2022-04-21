@@ -45,9 +45,7 @@ describe('GET /news/like/:newsId', () => {
 	it('should register like', async () => {
 		const res = await request(api)
 			.get(`/news/like/${newsId}`)
-			.query({
-				userId: userId
-			})
+			.set('Authorization', 'Bearer ' + accessToken)
 
 		expect(res.body.message).toEqual("The news is liked");
 		expect(res.body.error).toEqual(false);
