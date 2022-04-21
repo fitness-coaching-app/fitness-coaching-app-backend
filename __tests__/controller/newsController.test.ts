@@ -52,4 +52,13 @@ describe('GET /news/like/:newsId', () => {
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.results.length).toEqual(1);
 	})
+	it('should not register duplicate like', async () => {
+		const res = await request(api)
+			.get(`/news/like/${newsId}`)
+			.set('Authorization', 'Bearer ' + accessToken)
+
+		expect(res.body.message).toEqual("User already liked");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
 })
