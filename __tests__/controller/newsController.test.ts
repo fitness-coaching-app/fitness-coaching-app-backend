@@ -49,6 +49,27 @@ describe('GET /news/like/:newsId', () => {
 	})
 })
 
+describe('GET /news/unlike/:newsId', () => {
+	it('should unlike the news', async () => {
+		const res = await request(api)
+			.get(`/news/unlike/${newsId}`)
+			.set('Authorization', 'Bearer ' + accessToken)
+
+		expect(res.body.message).toEqual("The news is unliked");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+	it('should not error when request unlike for the unliked user id', async () => {
+		const res = await request(api)
+			.get(`/news/unlike/${newsId}`)
+			.set('Authorization', 'Bearer ' + accessToken)
+
+		expect(res.body.message).toEqual("User hasn't been liked");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+})
+
 describe('GET /news/fetch', () => {
 	it('should fetch news (with userId)', async () => {
 		const res = await request(api)
