@@ -53,6 +53,14 @@ get:
                           properties:
                             courseId:
                               type: string
+                            name: 
+                              type: string
+                            difficulty:
+                              type: string
+                            coverPicture:
+                              type: string
+                            overallRating:
+                              type: number
 
           example:
             code: 200
@@ -69,8 +77,21 @@ get:
                 sectionType: COURSE
                 useUserData: true
                 data:
-                  - courseId: 158sdFDdas5
-                  - courseId: q8d146a8w4d
+                  - courseId: 61a327c3c7a0e060a8d16a39
+                    name: Test
+                    difficulty: EASY
+                    coverPicture: ~
+                    overallRating: 4.5
+                  - courseId: 61a327c3c7a0e060a8d16a39
+                    name: Test
+                    difficulty: EASY
+                    coverPicture: ~
+                    overallRating: 4.5
+                  - courseId: 61a327c3c7a0e060a8d16a39
+                    name: Test
+                    difficulty: EASY
+                    coverPicture: ~
+                    overallRating: 4.5
     400:
       $ref: "../../responses/400Error.yaml"
     500:
