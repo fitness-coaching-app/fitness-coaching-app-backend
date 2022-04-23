@@ -59,6 +59,8 @@ paths:
     $ref: './paths/user/getFollowingList.yaml'
   /user/activity:
     $ref: './paths/user/activity.yaml'
+  /user/activity/{displayName}:
+    $ref: './paths/user/activity@{displayName}.yaml'
   # /user/getFollowerList/{displayName}/public:
   #   $ref: './paths/user/getFollowerListPublic.yaml'
   # /user/getFollowingList/{displayName}/public:

@@ -1,0 +1,30 @@
+get:
+  tags:
+    - User
+  summary: Get activity based on display name
+  description: Get activity based on display name
+  parameters:
+    - in: path
+      name: displayName
+      required: true
+      schema:
+        type: string
+      description: Display name
+  responses:
+    200:
+      description: Get activity successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Get activity successfully
+            error: false
+            results:
+              - activity array...
+
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"
