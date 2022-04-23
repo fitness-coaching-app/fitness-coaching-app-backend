@@ -1,4 +1,5 @@
-import {db} from '../utils/mongoUtil';
+import { ObjectId } from 'mongodb';
+import { db } from '../utils/mongoUtil';
 
 export const find = async (query: object, project: object = {}) => {
     return (await db().collection('userFollowings').find(query).project(project)).toArray();
@@ -18,6 +19,60 @@ export const updateOne = async (query: object, update: object) => {
 
 export const deleteOne = async (query: object) => {
     return await db().collection('userFollowings').deleteOne(query);
+}
+
+export const getFollowingList = async (id: ObjectId) => {
+    return await aggregate([
+        {
+            $match: {
+                followingId: id
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "followerId",
+                foreignField: "_id",
+                as: "followerData",
+                pipeline: [
+                    {
+                        $project: {
+                            _id: true,
+                            displayName: true,
+                            profilePicture: true
+                        }
+                    }
+                ]
+            }
+        },
+    ]).toArray();
+}
+
+export const getFollowerList = async (id: ObjectId) => {
+    return await aggregate([
+        {
+            $match: {
+                followerId: id
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "followerId",
+                foreignField: "_id",
+                as: "followerData",
+                pipeline: [
+                    {
+                        $project: {
+                            _id: true,
+                            displayName: true,
+                            profilePicture: true
+                        }
+                    }
+                ]
+            }
+        },
+    ]).toArray();
 }
 
 export const aggregate = (pipeline: object[]) => db().collection('userFollowings').aggregate(pipeline);

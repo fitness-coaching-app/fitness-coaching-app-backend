@@ -175,30 +175,7 @@ export const removeFollower = async (req: Request, res: Response, next: NextFunc
 export const getFollowerList = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: any = req.user!;
-        const result = await models.userFollowings.aggregate([
-            {
-                $match: {
-                    followingId: user._id
-                }
-            },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "followerId",
-                    foreignField: "_id",
-                    as: "followerData",
-                    pipeline: [
-                        {
-                            $project: {
-                                _id: true,
-                                displayName: true,
-                                profilePicture: true
-                            }
-                        }
-                    ]
-                }
-            },
-        ]).toArray();
+        const result = await models.userFollowings.getFollowerList(user._id);
 
         res.status(200).send(success(res.statusCode, "Follower list fetch successfully", result));
     } catch (e) {
@@ -210,30 +187,7 @@ export const getFollowerList = async (req: Request, res: Response, next: NextFun
 export const getFollowingList = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: any = req.user!;
-        const result = await models.userFollowings.aggregate([
-            {
-                $match: {
-                    followerId: user._id
-                }
-            },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "followingId",
-                    foreignField: "_id",
-                    as: "followingData",
-                    pipeline: [
-                        {
-                            $project: {
-                                _id: true,
-                                displayName: true,
-                                profilePicture: true
-                            }
-                        }
-                    ]
-                }
-            },
-        ]).toArray();
+        const result = await models.userFollowings.getFollowingList(user._id);
 
         res.status(200).send(success(res.statusCode, "Following list fetch successfully", result));
     } catch (e) {

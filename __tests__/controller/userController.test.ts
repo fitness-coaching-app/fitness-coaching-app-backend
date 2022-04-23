@@ -126,16 +126,16 @@ describe('GET /user/getFollowerList', () => {
 	})
 })
 
-describe('GET /user/getFollowerList/{displayName}/public', () => {
-	it('should get follower list', async () => {
-		const res = await request(api)
-			.get(`/user/getFollowerList/Jack/public`)
+// describe('GET /user/getFollowerList/{displayName}/public', () => {
+// 	it('should get follower list', async () => {
+// 		const res = await request(api)
+// 			.get(`/user/getFollowerList/Jack/public`)
 
-		expect(res.body.message).toEqual("Follower list fetch successfully");
-		expect(res.body.error).toEqual(false);
-		expect(res.statusCode).toEqual(200);
-	})
-})
+// 		expect(res.body.message).toEqual("Follower list fetch successfully");
+// 		expect(res.body.error).toEqual(false);
+// 		expect(res.statusCode).toEqual(200);
+// 	})
+// })
 
 describe('GET /user/getFollowingList', () => {
 	it('should get following list', async () => {
@@ -156,13 +156,13 @@ describe('GET /user/getFollowingList', () => {
 	})
 })
 
-describe('GET /user/getFollowerList/{displayName}/public', () => {
-	it('should get following list', async () => {
-		const res = await request(api)
-			.get(`/user/getFollowerList/Jack/public`)
+// describe('GET /user/getFollowerList/{displayName}/public', () => {
+// 	it('should get following list', async () => {
+// 		const res = await request(api)
+// 			.get(`/user/getFollowerList/Jack/public`)
 
-		expect(res.body.message).toEqual("Following list fetch successfully");
-		expect(res.body.error).toEqual(false);
-		expect(res.statusCode).toEqual(200);
-	})
-})
+// 		expect(res.body.message).toEqual("Following list fetch successfully");
+// 		expect(res.body.error).toEqual(false);
+// 		expect(res.statusCode).toEqual(200);
+// 	})
+// })
