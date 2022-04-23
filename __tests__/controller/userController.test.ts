@@ -105,3 +105,64 @@ describe('GET /user/removeFollower', () => {
 		expect(res.statusCode).toEqual(400);
 	})
 })
+
+
+describe('GET /user/getFollowerList', () => {
+	it('should get follower list', async () => {
+		const res = await request(api)
+			.get(`/user/getFollowerList`)
+			.set('Authorization', 'Bearer ' + accessToken)
+
+		expect(res.body.message).toEqual("Follower list fetch successfully");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+	it('should reject if the token is not provided', async () => {
+		const res = await request(api)
+			.get(`/user/getFollowerList`)
+
+		expect(res.body.error).toEqual(true);
+		expect(res.statusCode).toEqual(401);
+	})
+})
+
+describe('GET /user/getFollowerList/{displayName}/public', () => {
+	it('should get follower list', async () => {
+		const res = await request(api)
+			.get(`/user/getFollowerList/Jack/public`)
+
+		expect(res.body.message).toEqual("Follower list fetch successfully");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+})
+
+describe('GET /user/getFollowingList', () => {
+	it('should get following list', async () => {
+		const res = await request(api)
+			.get(`/user/getFollowerList`)
+			.set('Authorization', 'Bearer ' + accessToken)
+
+		expect(res.body.message).toEqual("Following list fetch successfully");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+	it('should reject if the token is not provided', async () => {
+		const res = await request(api)
+			.get(`/user/getFollowingList`)
+
+		expect(res.body.error).toEqual(true);
+		expect(res.statusCode).toEqual(401);
+	})
+})
+
+describe('GET /user/getFollowerList/{displayName}/public', () => {
+	it('should get following list', async () => {
+		const res = await request(api)
+			.get(`/user/getFollowerList/Jack/public`)
+
+		expect(res.body.message).toEqual("Following list fetch successfully");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+})
