@@ -65,7 +65,7 @@ describe('GET /user/addFollower', () => {
 	})
 })
 
-describe.skip('GET /user/removeFollower', () => {
+describe('GET /user/removeFollower', () => {
 	it('should remove follower to the list for specific user', async () => {
 		const res = await request(api)
 			.get(`/user/removeFollower`)
@@ -74,8 +74,34 @@ describe.skip('GET /user/removeFollower', () => {
 			})
 			.set('Authorization', 'Bearer ' + accessToken)
 
-		expect(res.body.message).toEqual("Follower removeed successfully");
+		expect(res.body.message).toEqual("Follower removed successfully");
 		expect(res.body.error).toEqual(false);
 		expect(res.statusCode).toEqual(200);
+	})
+
+	it('should notice when trying to remove a follower that is not in the list', async () => {
+		const res = await request(api)
+			.get(`/user/removeFollower`)
+			.query({
+				displayName: "Jack"
+			})
+			.set('Authorization', 'Bearer ' + accessToken)
+
+		expect(res.body.message).toEqual("The follower is not in the list");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+
+	it('should return error when the display name is not found', async () => {
+		const res = await request(api)
+			.get(`/user/removeFollower`)
+			.query({
+				displayName: "Jacasdasdak"
+			})
+			.set('Authorization', 'Bearer ' + accessToken)
+
+		expect(res.body.message).toEqual("User Jacasdasdak not found");
+		expect(res.body.error).toEqual(true);
+		expect(res.statusCode).toEqual(400);
 	})
 })
