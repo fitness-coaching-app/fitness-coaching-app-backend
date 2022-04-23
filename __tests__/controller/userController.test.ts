@@ -140,7 +140,7 @@ describe('GET /user/getFollowerList', () => {
 describe('GET /user/getFollowingList', () => {
 	it('should get following list', async () => {
 		const res = await request(api)
-			.get(`/user/getFollowerList`)
+			.get(`/user/getFollowingList`)
 			.set('Authorization', 'Bearer ' + accessToken)
 
 		expect(res.body.message).toEqual("Following list fetch successfully");
