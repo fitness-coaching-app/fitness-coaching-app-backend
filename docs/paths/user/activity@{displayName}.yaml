@@ -2,7 +2,7 @@ get:
   tags:
     - User
   summary: Get activity based on display name
-  description: Get activity based on display name
+  description: Get activity based on display name, will produce error if the account is set to private.
   parameters:
     - in: path
       name: displayName

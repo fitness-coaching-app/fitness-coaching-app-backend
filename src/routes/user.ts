@@ -6,6 +6,7 @@ const router = Router();
 
 
 router.get("/getUserInfo/:displayName", UserController.getUserInfo)
+router.get("/activity/:displayName", UserController.activityDisplayName)
 
 // Functions with authentication
 router.use(passportAuthenticate('accessTokenJwt'))

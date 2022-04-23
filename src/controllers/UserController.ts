@@ -231,3 +231,24 @@ export const activity = async (req: Request, res: Response, next: NextFunction) 
         next(e)
     }
 }
+
+
+export const activityDisplayName = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const displayName = req.params.displayName;
+        const user = await models.users.findOne({displayName: displayName});
+        if(user === null){
+            res.status(400).send(error(res.statusCode, `User ${displayName} not found`, [ErrorCode.userNotFound]));
+        }
+        else if(!user.userPreference.publishActivityToFollowers){
+            res.status(400).send(error(res.statusCode, `User ${displayName} is set to private`, [ErrorCode.otherError]));
+        }
+        else{
+            const result = await models.activities.find({userId: user._id});
+            res.status(200).send(success(res.statusCode, "Get activity successfully", result));
+        }
+        
+    } catch (e) {
+        next(e)
+    }
+}
