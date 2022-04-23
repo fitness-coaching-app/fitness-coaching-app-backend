@@ -34,13 +34,13 @@ beforeAll(async () => {
 describe('GET /activity/feed', () => {
 	it('should return activity feed of the followers', async () => {
 		const res = await request(api)
-		.post(`/activity/feed`)
+		.get(`/activity/feed`)
 		.set('Authorization', 'Bearer ' + accessToken)
 
 		expect(res.body.message).toEqual("Get activity feed successfully");
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.error).toEqual(false);
-		expect(res.body.results.length).toEqual(2);
+		expect(res.body.results.length).toEqual(1);
 	})
 })
 
