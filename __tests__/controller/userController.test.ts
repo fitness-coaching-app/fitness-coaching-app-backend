@@ -163,3 +163,14 @@ describe('GET /user/activity', () => {
 		expect(res.statusCode).toEqual(401);
 	})
 })
+
+describe('GET /user/activity/{displayName}', () => {
+	it(`should get activity based on display name`, async () => {
+		const res = await request(api)
+			.get(`/user/activity/Jamie`)
+
+		expect(res.body.message).toEqual("Get activity successfully");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+})
