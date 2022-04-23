@@ -143,3 +143,32 @@ export const addFollower = async (req: Request, res: Response, next: NextFunctio
     }
 }
 
+
+export const removeFollower = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId: any = req.user!;
+        const followingDisplayName: string = req.query.displayName as string;
+
+        const followingUser = await models.users.findOne({displayName: followingDisplayName});
+        // check that display name exists
+        if(followingUser === null){
+            res.status(400).send(error(res.statusCode, `User ${followingDisplayName} not found`, [ErrorCode.userNotFound]));
+        }
+        else{
+            // insert the data to models
+            const result = await models.userFollowings.deleteOne({
+                followerId: userId._id,
+                followingId: followingUser._id,
+            });
+            if(result.deletedCount === 0){
+                res.status(200).send(success(res.statusCode, "The follower is not in the list", [ErrorCode.otherError]));
+            }
+            else{
+                res.status(200).send(success(res.statusCode, "Follower removed successfully", null));
+            }
+        }
+    } catch (e) {
+        next(e);
+    }
+}
+

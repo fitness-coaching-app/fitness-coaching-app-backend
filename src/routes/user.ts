@@ -16,5 +16,6 @@ router.post("/newUserSetup", UserController.newUserSetup)
 router.get("/checkVerificationStatus", UserController.checkVerificationStatus)
 router.post("/setNewPassword", UserController.setNewPassword)
 router.get("/addFollower", UserController.addFollower);
+router.get("/removeFollower", UserController.removeFollower);
 
 export default router;

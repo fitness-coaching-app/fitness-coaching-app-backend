@@ -16,4 +16,8 @@ export const updateOne = async (query: object, update: object) => {
     return await db().collection('userFollowings').updateOne(query, update);
 }
 
+export const deleteOne = async (query: object) => {
+    return await db().collection('userFollowings').deleteOne(query);
+}
+
 export const aggregate = (pipeline: object[]) => db().collection('userFollowings').aggregate(pipeline);
