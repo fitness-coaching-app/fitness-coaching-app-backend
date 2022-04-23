@@ -4,11 +4,11 @@ import {error, ErrorCode, success} from "../utils/responseApi";
 import models from '../models';
 import {userExists} from '../models/users';
 import {comparePassword, hashPassword} from "../utils/passwordUtil";
+import { MongoServerError } from 'mongodb';
 
 
 export const editUserInfo = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        // TODO: Check for duplicate email
         let user: any = req.user!;
         let infoToEdit: any = req.body;
         if (!!(infoToEdit.displayName)) {
@@ -109,6 +109,37 @@ export const setNewPassword = async (req: Request, res: Response, next: NextFunc
         res.status(200).send(success(res.statusCode, "New password has been set", null));
     } catch (e) {
         next(e);
+    }
+}
+
+export const addFollower = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId: any = req.user!;
+        const followingDisplayName: string = req.query.displayName as string;
+
+        const followingUser = await models.users.findOne({displayName: followingDisplayName});
+        // check that display name exists
+        if(followingUser === null){
+            res.status(400).send(error(res.statusCode, `User ${followingDisplayName} not found`, [ErrorCode.userNotFound]));
+        }
+        else{
+            // insert the data to models
+            await models.userFollowings.insertOne({
+                followerId: userId._id,
+                followingId: followingUser._id,
+                timestamp: new Date()
+            });
+
+            res.status(200).send(success(res.statusCode, "Follower added successfully", null));
+        }
+    } catch (e) {
+        if(e instanceof MongoServerError && e.code === 11000){
+            res.status(200).send(success(res.statusCode, "Follower already added", null));
+            next();
+        }
+        else{
+            next(e);
+        }
     }
 }
 

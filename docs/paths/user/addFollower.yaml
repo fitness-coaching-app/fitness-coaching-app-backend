@@ -8,7 +8,7 @@ get:
   parameters:
     - in: query
       name: displayName
-      required: false
+      required: true
       schema:
         type: string
       description: Follower's display name
