@@ -86,9 +86,6 @@ export const complete = async (req: Request, res: Response, next: NextFunction) 
         // Update user's xp and newAchievements
         await models.users.updateOne({ _id: user._id }, { $set: { xp: new Long(newXp) }, $push: { achievement: { $each: newAchievementObjList } } });
 
-
-
-
         const result = {
             levelUp: isLevelUp,
             currentLevel: currentLevel,

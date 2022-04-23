@@ -1,14 +1,14 @@
-import {NextFunction, Request, Response} from 'express';
-import {deleteByURL, uploadSingle} from "../utils/gcsFileUtil";
-import {error, ErrorCode, success} from "../utils/responseApi";
+import { NextFunction, Request, Response } from 'express';
+import { deleteByURL, uploadSingle } from "../utils/gcsFileUtil";
+import { error, ErrorCode, success } from "../utils/responseApi";
 import models from '../models';
-import {userExists} from '../models/users';
-import {comparePassword, hashPassword} from "../utils/passwordUtil";
+import { userExists } from '../models/users';
+import { comparePassword, hashPassword } from "../utils/passwordUtil";
+import { MongoServerError } from 'mongodb';
 
 
 export const editUserInfo = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        // TODO: Check for duplicate email
         let user: any = req.user!;
         let infoToEdit: any = req.body;
         if (!!(infoToEdit.displayName)) {
@@ -18,7 +18,7 @@ export const editUserInfo = async (req: Request, res: Response, next: NextFuncti
                 return;
             }
         }
-        await models.users.updateOne({displayName: user.displayName}, { $set: infoToEdit })
+        await models.users.updateOne({ displayName: user.displayName }, { $set: infoToEdit })
 
         res.status(200).send(success(res.statusCode, "User Info Edit Successfully"))
     } catch (e) {
@@ -37,9 +37,9 @@ export const editProfilePicture = async (req: Request, res: Response, next: Next
         }
 
         const gcsLink = await uploadSingle(req, 'profilePicture', 'image/jpeg', user.displayName)
-        await models.users.updateOne({displayName: user.displayName}, { $set: {profilePicture: gcsLink}})
+        await models.users.updateOne({ displayName: user.displayName }, { $set: { profilePicture: gcsLink } })
 
-        res.status(200).send(success(res.statusCode, "Profile Picture Changed Successfully", {profilePicture: gcsLink}))
+        res.status(200).send(success(res.statusCode, "Profile Picture Changed Successfully", { profilePicture: gcsLink }))
     } catch (e) {
         next(e)
     }
@@ -54,7 +54,7 @@ export const newUserSetup = async (req: Request, res: Response, next: NextFuncti
             return;
         }
 
-        await models.users.updateOne({displayName: user.displayName}, { $set: {...infoToUpdate, status: "ACTIVE"}});
+        await models.users.updateOne({ displayName: user.displayName }, { $set: { ...infoToUpdate, status: "ACTIVE" } });
 
         res.status(200).send(success(res.statusCode, "New User Setup Success"))
     } catch (e) {
@@ -66,7 +66,32 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
     try {
         const displayName = req.params.displayName;
 
-        const result: object | null = await models.users.findOne({displayName});
+        let result: any | null = await models.users.findOne({ displayName });
+        if (result !== null) {
+            const [{followerCount}] = await models.userFollowings.aggregate([{
+                $match: {
+                    followingId: result._id
+                }
+            },
+            {
+                $count: "followerCount"
+            }
+            ]).toArray();
+            const [{followingCount}] = await models.userFollowings.aggregate([{
+                $match: {
+                    followerId: result._id
+                }
+            },
+            {
+                $count: "followingCount"
+            }
+            ]).toArray();
+            result = {
+                ...result,
+                followerCount,
+                followingCount
+            }
+        }
 
         res.status(200).send(success(res.statusCode, "User Info Fetched", result));
     } catch (e) {
@@ -91,7 +116,7 @@ export const checkVerificationStatus = async (req: Request, res: Response, next:
 export const setNewPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: any = req.user!
-        const {oldPassword, newPassword, confirmNewPassword} = req.body;
+        const { oldPassword, newPassword, confirmNewPassword } = req.body;
         const dbPassword = user.password;
 
         // Check old password
@@ -104,7 +129,7 @@ export const setNewPassword = async (req: Request, res: Response, next: NextFunc
             res.status(400).send(error(res.statusCode, "New password and confirm new password didn't match", [ErrorCode.incorrectPassword]));
         }
 
-        await models.users.updateOne({email: user.email}, { $set: {password: hashPassword(newPassword)}});
+        await models.users.updateOne({ email: user.email }, { $set: { password: hashPassword(newPassword) } });
 
         res.status(200).send(success(res.statusCode, "New password has been set", null));
     } catch (e) {
@@ -112,3 +137,85 @@ export const setNewPassword = async (req: Request, res: Response, next: NextFunc
     }
 }
 
+export const addFollower = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId: any = req.user!;
+        const followingDisplayName: string = req.query.displayName as string;
+
+        const followingUser = await models.users.findOne({ displayName: followingDisplayName });
+        // check that display name exists
+        if (followingUser === null) {
+            res.status(400).send(error(res.statusCode, `User ${followingDisplayName} not found`, [ErrorCode.userNotFound]));
+        }
+        else {
+            // insert the data to models
+            await models.userFollowings.insertOne({
+                followerId: userId._id,
+                followingId: followingUser._id,
+                timestamp: new Date()
+            });
+
+            res.status(200).send(success(res.statusCode, "Follower added successfully", null));
+        }
+    } catch (e) {
+        if (e instanceof MongoServerError && e.code === 11000) {
+            res.status(200).send(success(res.statusCode, "Follower already added", null));
+            next();
+        }
+        else {
+            next(e);
+        }
+    }
+}
+
+
+export const removeFollower = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId: any = req.user!;
+        const followingDisplayName: string = req.query.displayName as string;
+
+        const followingUser = await models.users.findOne({ displayName: followingDisplayName });
+        // check that display name exists
+        if (followingUser === null) {
+            res.status(400).send(error(res.statusCode, `User ${followingDisplayName} not found`, [ErrorCode.userNotFound]));
+        }
+        else {
+            // insert the data to models
+            const result = await models.userFollowings.deleteOne({
+                followerId: userId._id,
+                followingId: followingUser._id,
+            });
+            if (result.deletedCount === 0) {
+                res.status(200).send(success(res.statusCode, "The follower is not in the list", [ErrorCode.otherError]));
+            }
+            else {
+                res.status(200).send(success(res.statusCode, "Follower removed successfully", null));
+            }
+        }
+    } catch (e) {
+        next(e);
+    }
+}
+
+export const getFollowerList = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user: any = req.user!;
+        const result = await models.userFollowings.getFollowerList(user._id);
+
+        res.status(200).send(success(res.statusCode, "Follower list fetch successfully", result));
+    } catch (e) {
+        next(e)
+    }
+}
+
+
+export const getFollowingList = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user: any = req.user!;
+        const result = await models.userFollowings.getFollowingList(user._id);
+
+        res.status(200).send(success(res.statusCode, "Following list fetch successfully", result));
+    } catch (e) {
+        next(e)
+    }
+}
