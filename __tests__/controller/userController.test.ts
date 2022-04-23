@@ -126,17 +126,6 @@ describe('GET /user/getFollowerList', () => {
 	})
 })
 
-// describe('GET /user/getFollowerList/{displayName}/public', () => {
-// 	it('should get follower list', async () => {
-// 		const res = await request(api)
-// 			.get(`/user/getFollowerList/Jack/public`)
-
-// 		expect(res.body.message).toEqual("Follower list fetch successfully");
-// 		expect(res.body.error).toEqual(false);
-// 		expect(res.statusCode).toEqual(200);
-// 	})
-// })
-
 describe('GET /user/getFollowingList', () => {
 	it('should get following list', async () => {
 		const res = await request(api)
@@ -156,13 +145,21 @@ describe('GET /user/getFollowingList', () => {
 	})
 })
 
-// describe('GET /user/getFollowerList/{displayName}/public', () => {
-// 	it('should get following list', async () => {
-// 		const res = await request(api)
-// 			.get(`/user/getFollowerList/Jack/public`)
+describe('GET /user/activity', () => {
+	it(`should get user's activity`, async () => {
+		const res = await request(api)
+			.get(`/user/activity`)
+			.set('Authorization', 'Bearer ' + accessToken)
 
-// 		expect(res.body.message).toEqual("Following list fetch successfully");
-// 		expect(res.body.error).toEqual(false);
-// 		expect(res.statusCode).toEqual(200);
-// 	})
-// })
+		expect(res.body.message).toEqual("Get user activity successfully");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+	it('should reject if the token is not provided', async () => {
+		const res = await request(api)
+			.get(`/user/activity`)
+
+		expect(res.body.error).toEqual(true);
+		expect(res.statusCode).toEqual(401);
+	})
+})
