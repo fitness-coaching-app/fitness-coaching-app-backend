@@ -66,7 +66,32 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
     try {
         const displayName = req.params.displayName;
 
-        const result: object | null = await models.users.findOne({ displayName });
+        let result: any | null = await models.users.findOne({ displayName });
+        if (result !== null) {
+            const [{followerCount}] = await models.userFollowings.aggregate([{
+                $match: {
+                    followingId: result._id
+                }
+            },
+            {
+                $count: "followerCount"
+            }
+            ]).toArray();
+            const [{followingCount}] = await models.userFollowings.aggregate([{
+                $match: {
+                    followerId: result._id
+                }
+            },
+            {
+                $count: "followingCount"
+            }
+            ]).toArray();
+            result = {
+                ...result,
+                followerCount,
+                followingCount
+            }
+        }
 
         res.status(200).send(success(res.statusCode, "User Info Fetched", result));
     } catch (e) {
