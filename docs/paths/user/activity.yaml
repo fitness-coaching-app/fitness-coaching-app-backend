@@ -7,14 +7,14 @@ get:
     - BearerAccessToken: [ ]
   responses:
     200:
-      description: Get user activity successfully
+      description: Get user's activity successfully
       content:
         application/json:
           schema:
             $ref: '../../schemas/Success.yaml'
           example:
             code: 200
-            message: Get user activity successfully
+            message: Get user's activity successfully
             error: false
             results:
               - activity array...

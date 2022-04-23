@@ -151,7 +151,7 @@ describe('GET /user/activity', () => {
 			.get(`/user/activity`)
 			.set('Authorization', 'Bearer ' + accessToken)
 
-		expect(res.body.message).toEqual("Get user activity successfully");
+		expect(res.body.message).toEqual("Get user's activity successfully");
 		expect(res.body.error).toEqual(false);
 		expect(res.statusCode).toEqual(200);
 	})

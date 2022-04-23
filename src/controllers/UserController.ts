@@ -219,3 +219,15 @@ export const getFollowingList = async (req: Request, res: Response, next: NextFu
         next(e)
     }
 }
+
+
+export const activity = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user: any = req.user!;
+        const result = await models.activities.find({userId: user._id});
+
+        res.status(200).send(success(res.statusCode, "Get user's activity successfully", result));
+    } catch (e) {
+        next(e)
+    }
+}
