@@ -1,0 +1,25 @@
+get:
+  tags:
+    - User
+  summary: Get user's activity
+  description: Get user's activity
+  security:
+    - BearerAccessToken: [ ]
+  responses:
+    200:
+      description: Get user activity successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Get user activity successfully
+            error: false
+            results:
+              - activity array...
+
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

@@ -57,6 +57,8 @@ paths:
     $ref: './paths/user/getFollowerList.yaml'
   /user/getFollowingList:
     $ref: './paths/user/getFollowingList.yaml'
+  /user/activity:
+    $ref: './paths/user/activity.yaml'
   # /user/getFollowerList/{displayName}/public:
   #   $ref: './paths/user/getFollowerListPublic.yaml'
   # /user/getFollowingList/{displayName}/public:
@@ -92,5 +94,10 @@ paths:
     $ref: './paths/news/like@{newsId}.yaml'
   /news/unlike/{newsId}:
     $ref: './paths/news/unlike@{newsId}.yaml'
+
+  # /activity/{displayName}:
+  #   $ref: './paths/activity/{displayName}.yaml'
+  # /activity/followers:
+  #   $ref: './paths/activity/followers.yaml'
 
 
