@@ -9,7 +9,7 @@ beforeAll(async () => {
 	await mongoUtil.connect();
 	await mockUser({ displayName: "Jamie", email: "jamie2000@email.com" });
 	await mockUser({ displayName: "Jack", email: "jackie@email.com" });
-	await mockUser({ displayName: "Patric", email: "ppatricc@email.com" });
+	await mockUser({ displayName: "Patric", email: "ppatricc@email.com", userPreference:{publishActivityToFollowers: false} });
 
 	await mongoUtil.db().collection('userFollowings').createIndex({followerId: 1, followingId: 1}, {unique: true});
 
@@ -126,17 +126,6 @@ describe('GET /user/getFollowerList', () => {
 	})
 })
 
-// describe('GET /user/getFollowerList/{displayName}/public', () => {
-// 	it('should get follower list', async () => {
-// 		const res = await request(api)
-// 			.get(`/user/getFollowerList/Jack/public`)
-
-// 		expect(res.body.message).toEqual("Follower list fetch successfully");
-// 		expect(res.body.error).toEqual(false);
-// 		expect(res.statusCode).toEqual(200);
-// 	})
-// })
-
 describe('GET /user/getFollowingList', () => {
 	it('should get following list', async () => {
 		const res = await request(api)
@@ -156,13 +145,40 @@ describe('GET /user/getFollowingList', () => {
 	})
 })
 
-// describe('GET /user/getFollowerList/{displayName}/public', () => {
-// 	it('should get following list', async () => {
-// 		const res = await request(api)
-// 			.get(`/user/getFollowerList/Jack/public`)
+describe('GET /user/activity', () => {
+	it(`should get user's activity`, async () => {
+		const res = await request(api)
+			.get(`/user/activity`)
+			.set('Authorization', 'Bearer ' + accessToken)
 
-// 		expect(res.body.message).toEqual("Following list fetch successfully");
-// 		expect(res.body.error).toEqual(false);
-// 		expect(res.statusCode).toEqual(200);
-// 	})
-// })
+		expect(res.body.message).toEqual("Get user's activity successfully");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+	it('should reject if the token is not provided', async () => {
+		const res = await request(api)
+			.get(`/user/activity`)
+
+		expect(res.body.error).toEqual(true);
+		expect(res.statusCode).toEqual(401);
+	})
+})
+
+describe('GET /user/activity/{displayName}', () => {
+	it(`should get activity based on display name`, async () => {
+		const res = await request(api)
+			.get(`/user/activity/Jamie`)
+
+		expect(res.body.message).toEqual("Get activity successfully");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+	it(`should return error if the user is private`, async () => {
+		const res = await request(api)
+			.get(`/user/activity/Patric`)
+
+		expect(res.body.message).toEqual("User Patric is set to private");
+		expect(res.body.error).toEqual(true);
+		expect(res.statusCode).toEqual(400);
+	})
+})

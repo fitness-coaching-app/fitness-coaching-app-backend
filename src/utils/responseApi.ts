@@ -29,4 +29,5 @@ export const ErrorCode = {
     requestError: "REQUEST_ERROR",
     invalidParameter: "INVALID_PARAMETER",
     otherError: "OTHER_ERROR",
+    userActivityPrivate: "USER_ACTIVITY_PRIVATE",
 }

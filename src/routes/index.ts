@@ -8,6 +8,7 @@ import search from './search'
 import achievement from './achievement'
 import leaderboard from './leaderboard'
 import news from './news'
+import activity from './activity'
 
 const router = Router()
 
@@ -20,6 +21,7 @@ router.use('/search', search);
 router.use('/achievement', achievement);
 router.use('/leaderboard', leaderboard);
 router.use('/news', news);
+router.use('/activity', activity);
 
 export default router;
 

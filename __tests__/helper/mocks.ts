@@ -1,6 +1,7 @@
 import models from '../../src/models'
 import { hashPassword } from '../../src/utils/passwordUtil'
 import { db } from '../../src/utils/mongoUtil'
+import { ObjectId } from 'mongodb'
 
 type UserInfo = {
 	status?: string;
@@ -16,7 +17,8 @@ type UserInfo = {
 	gender?: string;
 	exercisePreference?: [];
 	partToAvoid?: [];
-	achievement?: []
+	achievement?: [];
+	userPreference?: object;
 }
 
 export const mockUser = async (
@@ -37,7 +39,8 @@ export const mockUser = async (
 		partToAvoid: [],
 		achievement: [],
 		userPreference: {
-			publishScoreToLeaderboard: true
+			publishScoreToLeaderboard: true,
+			publishActivityToFollowers: true
 		},
 		...userInfoOverrides
 	})
@@ -107,8 +110,6 @@ export const mockAchievement = async (
 	})
 }
 
-
-
 export const mockNews = async (
 	news: {
 		title?: string,
@@ -123,5 +124,27 @@ export const mockNews = async (
 		data: "",
 		likes: [],
 		...news
+	})
+}
+
+export const mockActivity = async (
+	activity: {
+		userId: ObjectId,
+		activityType?: string,
+		data?: object,
+		isPublic?: boolean,
+		reactions?: [],
+		comments?: []
+	}
+) => {
+	return await db().collection('activities').insertOne({
+		activityType: "LEVEL_UP",
+		data: {
+			level: 50
+		},
+		isPublic: true,
+		reactions: [],
+		comments: [],
+		...activity
 	})
 }

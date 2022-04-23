@@ -1,0 +1,25 @@
+get:
+  tags:
+    - Activity
+  summary: Get personalized activity feed
+  description: Get personalized activity feed based on user's followings
+  security:
+    - BearerAccessToken: [ ]
+  responses:
+    200:
+      description: Get activity feed successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Get activity feed successfully
+            error: false
+            results:
+              - activity array...
+
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

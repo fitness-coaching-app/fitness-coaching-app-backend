@@ -6,6 +6,7 @@ const router = Router();
 
 
 router.get("/getUserInfo/:displayName", UserController.getUserInfo)
+router.get("/activity/:displayName", UserController.activityDisplayName)
 
 // Functions with authentication
 router.use(passportAuthenticate('accessTokenJwt'))
@@ -19,5 +20,6 @@ router.get("/addFollower", UserController.addFollower);
 router.get("/removeFollower", UserController.removeFollower);
 router.get("/getFollowerList", UserController.getFollowerList);
 router.get("/getFollowingList", UserController.getFollowingList);
+router.get("/activity", UserController.activity);
 
 export default router;
