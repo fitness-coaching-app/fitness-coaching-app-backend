@@ -11,6 +11,8 @@ beforeAll(async () => {
 	await mockUser({ displayName: "Jack", email: "jackie@email.com" });
 	await mockUser({ displayName: "Patric", email: "ppatricc@email.com" });
 
+	await mongoUtil.db().collection('userFollowings').createIndex({followerId: 1, followingId: 1}, {unique: true});
+
 	const res = await request(api)
 		.post(`/auth/signIn`)
 		.send({
@@ -22,7 +24,7 @@ beforeAll(async () => {
 }, 10000)
 
 
-describe('GET /user/addFollower', async () => {
+describe('GET /user/addFollower', () => {
 	it('should add follower to the list for specific user', async () => {
 		const res = await request(api)
 			.get(`/user/addFollower`)
@@ -35,9 +37,35 @@ describe('GET /user/addFollower', async () => {
 		expect(res.body.error).toEqual(false);
 		expect(res.statusCode).toEqual(200);
 	})
+
+	it('should not add duplicate follower and following to the list', async () => {
+		const res = await request(api)
+			.get(`/user/addFollower`)
+			.query({
+				displayName: "Jack"
+			})
+			.set('Authorization', 'Bearer ' + accessToken)
+
+		expect(res.body.message).toEqual("Follower already added");
+		expect(res.body.error).toEqual(false);
+		expect(res.statusCode).toEqual(200);
+	})
+
+	it('should return error when the display name is not found', async () => {
+		const res = await request(api)
+			.get(`/user/addFollower`)
+			.query({
+				displayName: "Jacasdasdak"
+			})
+			.set('Authorization', 'Bearer ' + accessToken)
+
+		expect(res.body.message).toEqual("User Jacasdasdak not found");
+		expect(res.body.error).toEqual(true);
+		expect(res.statusCode).toEqual(400);
+	})
 })
 
-describe('GET /user/removeFollower', async () => {
+describe.skip('GET /user/removeFollower', () => {
 	it('should remove follower to the list for specific user', async () => {
 		const res = await request(api)
 			.get(`/user/removeFollower`)
