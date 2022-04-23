@@ -49,6 +49,10 @@ paths:
     $ref: './paths/user/checkVerificationStatus.yaml'
   /user/setNewPassword:
     $ref: './paths/user/setNewPassword.yaml'
+  /user/addFollower:
+    $ref: './paths/user/addFollower.yaml'
+  /user/removeFollower:
+    $ref: './paths/user/removeFollower.yaml'
 
   /home/getSections:
     $ref: './paths/home/getSections.yaml'

@@ -1,0 +1,30 @@
+get:
+  tags:
+    - User
+  summary: Add follower
+  description: Add follower to the user's list.
+  security:
+    - BearerAccessToken: [ ]
+  parameters:
+    - in: query
+      name: displayName
+      required: false
+      schema:
+        type: string
+      description: Follower's display name
+  responses:
+    200:
+      description: Follower added successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Follower added successfully
+            error: false
+            results: ~
+    400:
+      $ref: '../../responses/400Error.yaml'
+    500:
+      $ref: '../../responses/500Error.yaml'
