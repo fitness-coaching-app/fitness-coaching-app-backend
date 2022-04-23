@@ -16,7 +16,8 @@ type UserInfo = {
 	gender?: string;
 	exercisePreference?: [];
 	partToAvoid?: [];
-	achievement?: []
+	achievement?: [];
+	userPreference?: object;
 }
 
 export const mockUser = async (
@@ -37,7 +38,8 @@ export const mockUser = async (
 		partToAvoid: [],
 		achievement: [],
 		userPreference: {
-			publishScoreToLeaderboard: true
+			publishScoreToLeaderboard: true,
+			publishActivityToFollowers: true
 		},
 		...userInfoOverrides
 	})

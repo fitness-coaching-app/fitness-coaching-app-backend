@@ -241,7 +241,7 @@ export const activityDisplayName = async (req: Request, res: Response, next: Nex
             res.status(400).send(error(res.statusCode, `User ${displayName} not found`, [ErrorCode.userNotFound]));
         }
         else if(!user.userPreference.publishActivityToFollowers){
-            res.status(400).send(error(res.statusCode, `User ${displayName} is set to private`, [ErrorCode.otherError]));
+            res.status(400).send(error(res.statusCode, `User ${displayName} is set to private`, [ErrorCode.userActivityPrivate]));
         }
         else{
             const result = await models.activities.find({userId: user._id});

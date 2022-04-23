@@ -9,7 +9,7 @@ beforeAll(async () => {
 	await mongoUtil.connect();
 	await mockUser({ displayName: "Jamie", email: "jamie2000@email.com" });
 	await mockUser({ displayName: "Jack", email: "jackie@email.com" });
-	await mockUser({ displayName: "Patric", email: "ppatricc@email.com" });
+	await mockUser({ displayName: "Patric", email: "ppatricc@email.com", userPreference:{publishActivityToFollowers: false} });
 
 	await mongoUtil.db().collection('userFollowings').createIndex({followerId: 1, followingId: 1}, {unique: true});
 
@@ -172,5 +172,13 @@ describe('GET /user/activity/{displayName}', () => {
 		expect(res.body.message).toEqual("Get activity successfully");
 		expect(res.body.error).toEqual(false);
 		expect(res.statusCode).toEqual(200);
+	})
+	it(`should return error if the user is private`, async () => {
+		const res = await request(api)
+			.get(`/user/activity/Patric`)
+
+		expect(res.body.message).toEqual("User Patric is set to private");
+		expect(res.body.error).toEqual(true);
+		expect(res.statusCode).toEqual(400);
 	})
 })
