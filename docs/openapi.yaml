@@ -93,9 +93,7 @@ paths:
   /news/unlike/{newsId}:
     $ref: './paths/news/unlike@{newsId}.yaml'
 
-  # /activity/{displayName}:
-  #   $ref: './paths/activity/{displayName}.yaml'
-  # /activity/followers:
-  #   $ref: './paths/activity/followers.yaml'
+  /activity/feed:
+    $ref: './paths/activity/feed.yaml'
 
 
