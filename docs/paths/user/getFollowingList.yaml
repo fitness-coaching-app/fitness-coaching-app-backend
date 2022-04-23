@@ -1,0 +1,26 @@
+get:
+  tags:
+    - User
+  summary: Get following list
+  description: Get user's following list
+  security:
+    - BearerAccessToken: [ ]
+  responses:
+    200:
+      description: Following list fetch successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Following list fetch successfully
+            error: false
+            results:
+              - id: following_id
+                displayName: following
+                coverPicture: URL
+    400:
+      $ref: '../../responses/400Error.yaml'
+    500:
+      $ref: '../../responses/500Error.yaml'

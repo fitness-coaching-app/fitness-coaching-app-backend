@@ -1,0 +1,31 @@
+get:
+  tags:
+    - User
+  summary: Get follower list (public without token)
+  description: Get user's follower list (public without token)
+  parameters:
+    - in: path
+      name: displayName
+      required: true
+      schema:
+        type: string
+      description: User's display name
+  responses:
+    200:
+      description: Follower list fetch successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Follower list fetch successfully
+            error: false
+            results:
+              - id: follower_id
+                displayName: follower
+                coverPicture: URL
+    400:
+      $ref: '../../responses/400Error.yaml'
+    500:
+      $ref: '../../responses/500Error.yaml'
