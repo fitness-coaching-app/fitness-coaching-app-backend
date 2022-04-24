@@ -4,6 +4,9 @@ import { passportAuthenticate } from '../utils/passport'
 
 const router = Router()
 
+
+router.get('/:activityId/get', ActivityController.getActivityById);
+
 router.use(passportAuthenticate('accessTokenJwt'));
 router.get('/feed', ActivityController.feed);
 

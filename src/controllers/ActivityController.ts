@@ -1,63 +1,27 @@
 import { NextFunction, Request, Response } from 'express'
+import { ObjectId } from 'mongodb';
 import models from '../models'
-import { success } from '../utils/responseApi'
+import { error, ErrorCode, success } from '../utils/responseApi'
 
 
 export const feed = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const user: any = req.user!;
-		const [{ followingIds }] = await models.userFollowings.aggregate([
+		const result = await models.userFollowings.getActivityFeed(user._id);
+
+		res.status(200).send(success(res.statusCode, "Get activity feed successfully", result))
+	} catch (e) {
+		next(e);
+	}
+}
+
+export const getActivityById = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const activityId = req.params.activityId as string;
+		const activity = await models.activities.aggregate([
 			{
-				$match: {
-					followerId: user._id
-				}
-			},
-			{
-				$lookup: {
-					from: "users",
-					localField: "followingId",
-					foreignField: "_id",
-					as: "followingData",
-					pipeline: [
-						{
-							$project: {
-								_id: true,
-								displayName: true,
-								profilePicture: true,
-								userPreference: {
-									publishActivityToFollowers: true
-								}
-							}
-						}
-					]
-				}
-			},
-			{
-				$project: {
-					followingId: true,
-					followingData: {
-						$arrayElemAt: ["$followingData", 0]
-					}
-				}
-			},
-			{
-				$match: {
-					"followingData.userPreference.publishActivityToFollowers": true,
-				}
-			},
-			{
-				"$group": { 
-					_id: null, 
-					followingIds: { "$addToSet": "$followingId" } 
-				}
-			}
-		]).toArray();
-		const result = await models.activities.aggregate([
-			{
-				$match: {
-					userId: {
-						$in: followingIds
-					},
+				$match: { 
+					_id: new ObjectId(activityId),
 					isPublic: true
 				}
 			},
@@ -70,39 +34,38 @@ export const feed = async (req: Request, res: Response, next: NextFunction) => {
 					pipeline: [
 						{
 							$project: {
+								_id: true,
 								displayName: true,
 								profilePicture: true,
+								userPreference: {
+                                    publishActivityToFollowers: true
+                                }
 							}
 						}
 					]
 				}
 			},
 			{
-				$project: {
-					userId: true,
-					activityType: true,
-					timestap: true,
-					isPublic: true,
-					data: true,
-					reactions: true,
-					comments: true,
-					userData: {
-						$arrayElemAt: ["$userData", 0]
-					}
-				}
-			},
-			{
-				$sort: {
-					timestamp: -1
-				}
-			},
-			{
-				$limit: 50
-			}
-		]).toArray()
+                $set: {
+                    userData: {
+                        $arrayElemAt: ["$userData", 0]
+                    }
+                }
+            },
+            {
+            	$match:{
+            		"userData.userPreference.publishActivityToFollowers": true
+            	}
+            }
+		]).toArray();
 
-		res.status(200).send(success(res.statusCode, "Get activity feed successfully", result))
+		if (activity === null) {
+			res.status(400).send(error(res.statusCode, "Activity not found", [ErrorCode.notFound]));
+		}
+		else {
+			res.status(200).send(success(res.statusCode,"Activity fetched successfully",activity));
+		}
 	} catch (e) {
 		next(e);
 	}
-}
+} 
