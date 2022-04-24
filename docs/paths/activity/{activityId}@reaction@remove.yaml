@@ -1,0 +1,31 @@
+get:
+  tags:
+    - Activity
+  summary: Remove Reaction from Activity
+  description: Remove reaction from specific activity
+  security:
+    - BearerAccessToken: [ ]
+  parameters:
+    - in: path
+      name: activityId
+      required: true
+      schema:
+        type: string
+      description: Activity ID
+  responses:
+    200:
+      description: Reaction removed successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Reaction removed successfully
+            error: false
+            results: activity data
+
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

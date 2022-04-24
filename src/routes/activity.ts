@@ -4,7 +4,13 @@ import { passportAuthenticate } from '../utils/passport'
 
 const router = Router()
 
+
+router.get('/:activityId/get', ActivityController.getActivityById);
+
 router.use(passportAuthenticate('accessTokenJwt'));
 router.get('/feed', ActivityController.feed);
+router.get('/:activityId/reaction/add', ActivityController.addReaction);
+router.get('/:activityId/reaction/remove', ActivityController.removeReaction);
+router.post('/:activityId/comment/add', ActivityController.addComment);
 
 export default router

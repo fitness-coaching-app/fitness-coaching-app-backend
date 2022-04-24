@@ -1,0 +1,40 @@
+post:
+  tags:
+    - Activity
+  summary: Add Comment to Activity
+  description: Add comment to specific activity
+  security:
+    - BearerAccessToken: [ ]
+  parameters:
+    - in: path
+      name: activityId
+      required: true
+      schema:
+        type: string
+      description: Activity ID
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            comment:
+              type: string
+  responses:
+    200:
+      description: Comment added successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Comment added successfully
+            error: false
+            results: activity data
+
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

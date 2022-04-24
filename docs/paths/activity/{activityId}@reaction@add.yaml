@@ -1,0 +1,37 @@
+get:
+  tags:
+    - Activity
+  summary: Add Reaction to Activity
+  description: Add reaction for specific activity
+  security:
+    - BearerAccessToken: [ ]
+  parameters:
+    - in: path
+      name: activityId
+      required: true
+      schema:
+        type: string
+      description: Activity ID
+    - in: query
+      name: reaction
+      required: true
+      schema:
+        type: string
+      description: Reaction to add
+  responses:
+    200:
+      description: Reaction added successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: Reaction added successfully
+            error: false
+            results: activity data
+
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

@@ -28,6 +28,7 @@ export const ErrorCode = {
     userStatusError: "USER_STATUS_ERROR",
     requestError: "REQUEST_ERROR",
     invalidParameter: "INVALID_PARAMETER",
+    notFound: "NOT_FOUND",
     otherError: "OTHER_ERROR",
     userActivityPrivate: "USER_ACTIVITY_PRIVATE",
 }
