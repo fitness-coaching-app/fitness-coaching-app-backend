@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { db } from '../utils/mongoUtil';
+import * as activities from './activities';
 
 export const find = async (query: object, project: object = {}) => {
     return (await db().collection('userFollowings').find(query).project(project)).toArray();
@@ -123,7 +124,8 @@ export const getActivityFeed = async (id: ObjectId, limit: number = 50) => {
                 }
             }
         ]).toArray();
-        const result = await aggregate([
+
+        const result = await activities.aggregate([
             {
                 $match: {
                     userId: {

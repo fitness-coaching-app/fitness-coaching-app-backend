@@ -20,7 +20,7 @@ export const getActivityById = async (req: Request, res: Response, next: NextFun
 		const activityId = req.params.activityId as string;
 		const activity = await models.activities.getPublicActivityById(new ObjectId(activityId));
 
-		if (activity === null) {
+		if (activity.length === 0) {
 			res.status(400).send(error(res.statusCode, "Activity not found", [ErrorCode.notFound]));
 		}
 		else {
