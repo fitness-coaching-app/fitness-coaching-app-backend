@@ -18,46 +18,7 @@ export const feed = async (req: Request, res: Response, next: NextFunction) => {
 export const getActivityById = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const activityId = req.params.activityId as string;
-		const activity = await models.activities.aggregate([
-			{
-				$match: { 
-					_id: new ObjectId(activityId),
-					isPublic: true
-				}
-			},
-			{
-				$lookup: {
-					from: "users",
-					localField: "userId",
-					foreignField: "_id",
-					as: "userData",
-					pipeline: [
-						{
-							$project: {
-								_id: true,
-								displayName: true,
-								profilePicture: true,
-								userPreference: {
-                                    publishActivityToFollowers: true
-                                }
-							}
-						}
-					]
-				}
-			},
-			{
-                $set: {
-                    userData: {
-                        $arrayElemAt: ["$userData", 0]
-                    }
-                }
-            },
-            {
-            	$match:{
-            		"userData.userPreference.publishActivityToFollowers": true
-            	}
-            }
-		]).toArray();
+		const activity = await models.activities.getPublicActivityById(new ObjectId(activityId));
 
 		if (activity === null) {
 			res.status(400).send(error(res.statusCode, "Activity not found", [ErrorCode.notFound]));
