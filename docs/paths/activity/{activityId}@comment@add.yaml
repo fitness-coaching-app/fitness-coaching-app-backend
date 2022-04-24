@@ -1,4 +1,4 @@
-get:
+post:
   tags:
     - Activity
   summary: Add Comment to Activity
@@ -12,6 +12,15 @@ get:
       schema:
         type: string
       description: Activity ID
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            comment:
+              type: string
   responses:
     200:
       description: Comment added successfully

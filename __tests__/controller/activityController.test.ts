@@ -111,10 +111,11 @@ describe('GET /activity/{activityId}/reaction/add', () => {
 	})
 })
 
-describe.skip('GET /activity/{activityId}/reaction/remove', () => {
+describe('GET /activity/{activityId}/reaction/remove', () => {
 	it('should remove reaction from activity', async () => {
 		const res = await request(api)
 		.get(`/activity/${activityId.toString()}/reaction/remove`)
+		.set('Authorization', 'Bearer ' + accessToken)
 
 		expect(res.body.message).toEqual("Reaction removed successfully");
 		expect(res.statusCode).toEqual(200);
@@ -124,26 +125,37 @@ describe.skip('GET /activity/{activityId}/reaction/remove', () => {
 	})
 })
 
-describe.skip('GET /activity/{activityId}/comment/add', () => {
+describe('POST /activity/{activityId}/comment/add', () => {
 	it('should add comment to activity', async () => {
 		const res = await request(api)
-		.get(`/activity/${activityId.toString()}/comment/add`)
+		.post(`/activity/${activityId.toString()}/comment/add`)
+		.set('Authorization', 'Bearer ' + accessToken)
+		.send({
+			comment: "test0"
+		})
 
 		expect(res.body.message).toEqual("Comment added successfully");
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.error).toEqual(false);
 		expect(res.body.results._id).toEqual(activityId.toString());
 		expect(res.body.results.comments.length).toEqual(1);
+		expect(res.body.results.comments[0].comment).toEqual("test0");
 	})
 	it('should add more comment to activity from the same person', async () => {
 		const res = await request(api)
-		.get(`/activity/${activityId.toString()}/comment/add`)
+		.post(`/activity/${activityId.toString()}/comment/add`)
+		.set('Authorization', 'Bearer ' + accessToken)
+		.send({
+			comment: "test1"
+		})
 
 		expect(res.body.message).toEqual("Comment added successfully");
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.error).toEqual(false);
 		expect(res.body.results._id).toEqual(activityId.toString());
 		expect(res.body.results.comments.length).toEqual(2);
+		expect(res.body.results.comments[0].comment).toEqual("test0");
+		expect(res.body.results.comments[1].comment).toEqual("test1");
 	})
 })
 

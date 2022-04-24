@@ -88,3 +88,24 @@ export const removeReaction = async (req: Request, res: Response, next: NextFunc
 		next(e);
 	}
 } 
+
+export const addComment = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const user = req.user! as any;
+		const activityId = req.params.activityId as string;
+		const comment = req.body.comment as string;
+		const result = await models.activities.updateOne({ _id: new ObjectId(activityId) }, {
+			$push:{
+				comments:{
+					userId: user._id,
+					comment: comment,
+					timestamp: new Date()
+				}
+			}
+		})
+
+		res.status(200).send(success(res.statusCode, "Comment added successfully", await models.activities.findOne({_id: new ObjectId(activityId)})));
+	} catch (e) {
+		next(e);
+	}
+} 
