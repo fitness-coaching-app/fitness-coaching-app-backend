@@ -95,5 +95,11 @@ paths:
 
   /activity/feed:
     $ref: './paths/activity/feed.yaml'
+  /activity/{activityId}/reaction/add:
+    $ref: './paths/activity/{activityId}@reaction@add.yaml'
+  /activity/{activityId}/reaction/remove:
+    $ref: './paths/activity/{activityId}@reaction@remove.yaml'
+  /activity/{activityId}/comment/add:
+    $ref: './paths/activity/{activityId}@comment@add.yaml'
 
 
