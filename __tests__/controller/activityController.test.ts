@@ -9,12 +9,15 @@ var accessToken = "";
 var activityId: ObjectId;
 var activityIdPrivateAct: ObjectId;
 var activityIdPrivateUser: ObjectId;
+var jamieId: ObjectId;
+var jackId: ObjectId;
+var patricId: ObjectId;
 
 beforeAll(async () => {
 	await mongoUtil.connect();
-	await mockUser({ displayName: "Jamie", email: "jamie2000@email.com" });
-	const jackId = (await mockUser({ displayName: "Jack", email: "jackie@email.com" })).insertedId;
-	const patricId = (await mockUser({ displayName: "Patric", email: "ppatricc@email.com", userPreference:{publishActivityToFollowers: false} })).insertedId;
+	jamieId = (await mockUser({ displayName: "Jamie", email: "jamie2000@email.com" })).insertedId;
+	jackId = (await mockUser({ displayName: "Jack", email: "jackie@email.com" })).insertedId;
+	patricId = (await mockUser({ displayName: "Patric", email: "ppatricc@email.com", userPreference:{publishActivityToFollowers: false} })).insertedId;
 	const res = await request(api)
 		.post(`/auth/signIn`)
 		.send({
@@ -76,57 +79,71 @@ describe('GET /activity/{activityId}/get', () => {
 	})
 })
 
-describe.skip('GET /activity/{activityId}/reaction/add', () => {
+describe('GET /activity/{activityId}/reaction/add', () => {
 	it('should add reaction to activity', async () => {
 		const res = await request(api)
 		.get(`/activity/${activityId.toString()}/reaction/add`)
+		.set('Authorization', 'Bearer ' + accessToken)
+		.query({
+			reaction: "SMILE"
+		})
 
 		expect(res.body.message).toEqual("Reaction added successfully");
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.error).toEqual(false);
 		expect(res.body.results._id).toEqual(activityId.toString());
+		expect(res.body.results.reactions[0].userId).toEqual(jamieId.toString());
+		expect(res.body.results.reactions[0].reaction).toEqual("SMILE");
 	})
-	it('should not duplicate the reaction from the same person', async () => {
+	it('should update the reaction from the same person', async () => {
 		const res = await request(api)
 		.get(`/activity/${activityId.toString()}/reaction/add`)
+		.set('Authorization', 'Bearer ' + accessToken)
+		.query({
+			reaction: "SAD"
+		})
 
-		expect(res.body.message).toEqual("Reaction already added");
+		expect(res.body.message).toEqual("Reaction added successfully");
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.error).toEqual(false);
-		expect(res.body.results._id).toEqual(activityId.toString());
+		expect(res.body.results.reactions[0].userId).toEqual(jamieId.toString());
+		expect(res.body.results.reactions[0].reaction).toEqual("SAD");
 	})
 })
 
 describe.skip('GET /activity/{activityId}/reaction/remove', () => {
 	it('should remove reaction from activity', async () => {
 		const res = await request(api)
-		.get(`/activity/${activityId.toString()}/reaction/add`)
+		.get(`/activity/${activityId.toString()}/reaction/remove`)
 
 		expect(res.body.message).toEqual("Reaction removed successfully");
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.error).toEqual(false);
 		expect(res.body.results._id).toEqual(activityId.toString());
-	})
-	it('should reject if the reaction is not found for the user', async () => {
-		const res = await request(api)
-		.get(`/activity/${activityId.toString()}/reaction/add`)
-
-		expect(res.body.message).toEqual("Reaction not found");
-		expect(res.statusCode).toEqual(200);
-		expect(res.body.error).toEqual(false);
-		expect(res.body.results._id).toEqual(activityId.toString());
+		expect(res.body.results.reactions.length).toEqual(0);
 	})
 })
 
 describe.skip('GET /activity/{activityId}/comment/add', () => {
 	it('should add comment to activity', async () => {
 		const res = await request(api)
-		.get(`/activity/${activityId.toString()}/reaction/add`)
+		.get(`/activity/${activityId.toString()}/comment/add`)
 
 		expect(res.body.message).toEqual("Comment added successfully");
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.error).toEqual(false);
 		expect(res.body.results._id).toEqual(activityId.toString());
+		expect(res.body.results.comments.length).toEqual(1);
+	})
+	it('should add more comment to activity from the same person', async () => {
+		const res = await request(api)
+		.get(`/activity/${activityId.toString()}/comment/add`)
+
+		expect(res.body.message).toEqual("Comment added successfully");
+		expect(res.statusCode).toEqual(200);
+		expect(res.body.error).toEqual(false);
+		expect(res.body.results._id).toEqual(activityId.toString());
+		expect(res.body.results.comments.length).toEqual(2);
 	})
 })
 

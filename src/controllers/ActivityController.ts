@@ -65,7 +65,25 @@ export const addReaction = async (req: Request, res: Response, next: NextFunctio
 				}
 			})
 		}
-		res.status(200).send(success(res.statusCode, "OK", await models.activities.findOne({_id: new ObjectId(activityId)})));
+		res.status(200).send(success(res.statusCode, "Reaction added successfully", await models.activities.findOne({_id: new ObjectId(activityId)})));
+	} catch (e) {
+		next(e);
+	}
+} 
+
+export const removeReaction = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const user = req.user! as any;
+		const activityId = req.params.activityId as string;
+		const result = await models.activities.updateOne({ _id: new ObjectId(activityId) }, {
+			$pull:{
+				reactions:{
+					userId: user._id
+				}
+			}
+		})
+		
+		res.status(200).send(success(res.statusCode, "Reaction removed successfully", await models.activities.findOne({_id: new ObjectId(activityId)})));
 	} catch (e) {
 		next(e);
 	}
