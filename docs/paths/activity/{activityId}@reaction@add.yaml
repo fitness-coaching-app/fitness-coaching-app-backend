@@ -12,6 +12,12 @@ get:
       schema:
         type: string
       description: Activity ID
+    - in: query
+      name: reaction
+      required: true
+      schema:
+        type: string
+      description: Reaction to add
   responses:
     200:
       description: Reaction added successfully

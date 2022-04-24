@@ -21,6 +21,10 @@ export const updateOne = async (query: object, update: object) => {
     return await db().collection('activities').updateOne(query, update);
 }
 
+export const fn = async () => {
+    return await db().collection('activities');
+}
+
 export const getPublicActivityById = async (id: ObjectId) => {
     return await aggregate([
         {
