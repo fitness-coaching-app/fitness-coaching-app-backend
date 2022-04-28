@@ -16,7 +16,7 @@ post:
               format: binary
         encoding:
           profilePicture:
-            contentType: image/jpeg
+            contentType: image/webp
   responses:
     200:
       description: Profile picture changed successfully

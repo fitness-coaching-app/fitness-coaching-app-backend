@@ -26,6 +26,7 @@ export const uploadSingle = async (req: Request, field: string, type: string, ow
         }
     })
     busboy.on('error', (err) => {
+        console.log(err);
         throw err
     })
     busboy.on('finish', () => {
