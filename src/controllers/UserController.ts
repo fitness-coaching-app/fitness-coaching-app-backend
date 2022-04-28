@@ -36,7 +36,7 @@ export const editProfilePicture = async (req: Request, res: Response, next: Next
             await deleteByURL(user.profilePicture).catch((err) => console.log(err));
         }
 
-        const gcsLink = await uploadSingle(req, 'profilePicture', 'image/jpeg', user.displayName)
+        const gcsLink = await uploadSingle(req, 'profilePicture', 'image/webp', user.displayName)
         await models.users.updateOne({ displayName: user.displayName }, { $set: { profilePicture: gcsLink } })
 
         res.status(200).send(success(res.statusCode, "Profile Picture Changed Successfully", { profilePicture: gcsLink }))
