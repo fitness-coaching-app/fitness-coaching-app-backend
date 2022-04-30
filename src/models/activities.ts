@@ -127,7 +127,6 @@ export const getPublicActivityById = async (id: ObjectId) => {
         {
             $match: { 
                 _id: id,
-                isPublic: true
             }
         },
         {
@@ -157,11 +156,6 @@ export const getPublicActivityById = async (id: ObjectId) => {
                 }
             }
         },
-        {
-            $match: {
-                "userData.userPreference.publishActivityToFollowers": true
-            }
-        }
     ]).toArray();
 }
 

@@ -3,6 +3,8 @@ get:
     - Activity
   summary: Get Specific Activity
   description: Get specific activity
+  security:
+    - BearerAccessToken: [ ]
   parameters:
     - in: path
       name: activityId

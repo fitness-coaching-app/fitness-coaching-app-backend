@@ -55,15 +55,17 @@ describe('GET /activity/{activityId}/get', () => {
 	it('should fetch activity feed according to the id', async () => {
 		const res = await request(api)
 		.get(`/activity/${activityId.toString()}/get`)
+		.set('Authorization', 'Bearer ' + accessToken)
 
 		expect(res.body.message).toEqual("Activity fetched successfully");
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.error).toEqual(false);
-		expect(res.body.results[0]._id).toEqual(activityId.toString());
+		expect(res.body.results._id).toEqual(activityId.toString());
 	})
 	it('should reject if the activity is private', async () => {
 		const res = await request(api)
 		.get(`/activity/${activityIdPrivateAct.toString()}/get`)
+		.set('Authorization', 'Bearer ' + accessToken)
 
 		expect(res.body.message).toEqual("Activity not found");
 		expect(res.statusCode).toEqual(400);
@@ -72,6 +74,7 @@ describe('GET /activity/{activityId}/get', () => {
 	it('should reject if the owner of the activity is private', async () => {
 		const res = await request(api)
 		.get(`/activity/${activityIdPrivateUser.toString()}/get`)
+		.set('Authorization', 'Bearer ' + accessToken)
 
 		expect(res.body.message).toEqual("Activity not found");
 		expect(res.statusCode).toEqual(400);
