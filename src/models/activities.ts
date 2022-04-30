@@ -52,6 +52,54 @@ export const getUserActivity = async (id: ObjectId) => {
                 }
             },
             {
+                $lookup: {
+                    from: "users",
+                    localField: "reactions.userId",
+                    foreignField: "_id",
+                    as: "userReactionsNameList",
+                    pipeline: [
+                        {
+                            $project: {
+                                _id: false,
+                                k: {
+                                    $toString: "$_id"
+                                },
+                                v: "$displayName"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "comments.userId",
+                    foreignField: "_id",
+                    as: "userCommentsNameList",
+                    pipeline: [
+                        {
+                            $project: {
+                                _id: false,
+                                k: {
+                                    $toString: "$_id"
+                                },
+                                v: "$displayName"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $set: {
+                    "userCommentsNameList": {
+                        "$arrayToObject": "$userCommentsNameList"
+                    },
+                    "userReactionsNameList": {
+                        "$arrayToObject": "$userReactionsNameList"
+                    }
+                }
+            },
+            {
                 $set: {
                     course: {
                         $arrayElemAt: ["$course", 0]

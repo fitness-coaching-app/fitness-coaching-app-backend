@@ -44,8 +44,8 @@ describe('POST /exercise/complete', () => {
 					"test": 1234
 				}
 			})
-		expect(res.statusCode).toEqual(200);
 		expect(res.body.message).toEqual("Exercise data is received successfully");
+		expect(res.statusCode).toEqual(200);
 		expect(res.body.error).toEqual(false);
 
 		activityId = res.body.results.activityId;
@@ -81,8 +81,8 @@ describe('POST /exercise/postExercise', () => {
 				"isPublic": false,
 				"courseRating": 3
 			})
-		expect(res.statusCode).toEqual(200);
 		expect(res.body.message).toEqual("Exercise data is received successfully");
+		expect(res.statusCode).toEqual(200);
 		expect(res.body.error).toEqual(false);
 	})
 	it('should reject because of failed request validation', async () => {
