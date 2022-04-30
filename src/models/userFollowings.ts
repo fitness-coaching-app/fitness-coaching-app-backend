@@ -157,60 +157,7 @@ export const getActivityFeed = async (id: ObjectId, limit: number = 50) => {
                 }
             }
         },
-        {
-            $lookup: {
-                from: "users",
-                localField: "reactions.userId",
-                foreignField: "_id",
-                as: "userReactionsList",
-                pipeline: [
-                    {
-                        $project: {
-                            _id: false,
-                            k: {
-                                $toString: "$_id"
-                            },
-                            v: {
-                                displayName: "$displayName",
-                                profilePicture: "$profilePicture"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            $lookup: {
-                from: "users",
-                localField: "comments.userId",
-                foreignField: "_id",
-                as: "userCommentsList",
-                pipeline: [
-                    {
-                        $project: {
-                            _id: false,
-                            k: {
-                                $toString: "$_id"
-                            },
-                            v: {
-                                displayName: "$displayName",
-                                profilePicture: "$profilePicture"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            $set: {
-                "userCommentsList": {
-                    "$arrayToObject": "$userCommentsList"
-                },
-                "userReactionsList": {
-                    "$arrayToObject": "$userReactionsList"
-                }
-            }
-        },
+        ...activities.getUserReactionsCommentsListArray,
         {
             $set: {
                 course: {

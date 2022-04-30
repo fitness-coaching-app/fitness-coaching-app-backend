@@ -25,6 +25,64 @@ export const fn = async () => {
     return await db().collection('activities');
 }
 
+export const getUserReactionsCommentsListArray = [
+    {
+        $lookup: {
+            from: "users",
+            localField: "reactions.userId",
+            foreignField: "_id",
+            as: "userReactionsList",
+            pipeline: [
+                {
+                    $project: {
+                        _id: false,
+                        k: {
+                            $toString: "$_id"
+                        },
+                        v: {
+                            displayName: "$displayName",
+                            profilePicture: "$profilePicture"
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    {
+        $lookup: {
+            from: "users",
+            localField: "comments.userId",
+            foreignField: "_id",
+            as: "userCommentsList",
+            pipeline: [
+                {
+                    $project: {
+                        _id: false,
+                        k: {
+                            $toString: "$_id"
+                        },
+                        v: {
+                            displayName: "$displayName",
+                            profilePicture: "$profilePicture"
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    {
+        $set: {
+            "userCommentsList": {
+                "$arrayToObject": "$userCommentsList"
+            },
+            "userReactionsList": {
+                "$arrayToObject": "$userReactionsList"
+            }
+        }
+    }
+]
+
+
 export const getUserActivity = async (id: ObjectId) => {
     return await aggregate(
         [
@@ -51,60 +109,7 @@ export const getUserActivity = async (id: ObjectId) => {
                     ]
                 }
             },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "reactions.userId",
-                    foreignField: "_id",
-                    as: "userReactionsList",
-                    pipeline: [
-                        {
-                            $project: {
-                                _id: false,
-                                k: {
-                                    $toString: "$_id"
-                                },
-                                v: {
-                                    displayName: "$displayName",
-                                    profilePicture: "$profilePicture"
-                                }
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "comments.userId",
-                    foreignField: "_id",
-                    as: "userCommentsList",
-                    pipeline: [
-                        {
-                            $project: {
-                                _id: false,
-                                k: {
-                                    $toString: "$_id"
-                                },
-                                v: {
-                                    displayName: "$displayName",
-                                    profilePicture: "$profilePicture"
-                                }
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                $set: {
-                    "userCommentsList": {
-                        "$arrayToObject": "$userCommentsList"
-                    },
-                    "userReactionsList": {
-                        "$arrayToObject": "$userReactionsList"
-                    }
-                }
-            },
+            ...getUserReactionsCommentsListArray,
             {
                 $set: {
                     course: {
@@ -149,6 +154,7 @@ export const getPublicActivityById = async (id: ObjectId) => {
                 ]
             }
         },
+        ...getUserReactionsCommentsListArray,
         {
             $set: {
                 userData: {
