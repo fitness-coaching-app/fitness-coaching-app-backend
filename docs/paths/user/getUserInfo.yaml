@@ -1,0 +1,24 @@
+get:
+  tags:
+    - User
+  summary: Get User Info With Token
+  description: Get user information with token
+  security:
+    - BearerAccessToken: [ ]
+  responses:
+    200:
+      description: User Info Fetched
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: User Info Fetched
+            error: false
+            results:
+              $ref: "../../examples/User.yaml"
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"
