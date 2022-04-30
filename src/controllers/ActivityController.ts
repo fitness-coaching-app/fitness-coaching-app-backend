@@ -17,14 +17,15 @@ export const feed = async (req: Request, res: Response, next: NextFunction) => {
 
 export const getActivityById = async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		const user: any = req.user!;
 		const activityId = req.params.activityId as string;
-		const activity = await models.activities.getPublicActivityById(new ObjectId(activityId));
-
-		if (activity.length === 0) {
-			res.status(400).send(error(res.statusCode, "Activity not found", [ErrorCode.notFound]));
-		}
-		else {
+		const [activity] = await models.activities.getPublicActivityById(new ObjectId(activityId));
+		const isActivityPublic = activity.isPublic && activity.userData.userPreference.publishActivityToFollowers;
+		if(activity != null && (activity.userId === user._id || isActivityPublic)){
 			res.status(200).send(success(res.statusCode, "Activity fetched successfully", activity));
+		}
+		else{
+			res.status(400).send(error(res.statusCode, "Activity not found", [ErrorCode.notFound]));
 		}
 	} catch (e) {
 		next(e);
