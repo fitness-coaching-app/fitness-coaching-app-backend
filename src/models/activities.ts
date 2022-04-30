@@ -80,18 +80,30 @@ export const getUserReactionsCommentsListArray = [
             }
         }
     }
-]
+];
 
+export const lookupUserData = {
+            $lookup: {
+                from: "users",
+                localField: "userId",
+                foreignField: "_id",
+                as: "userData",
+                pipeline: [
+                    {
+                        $project: {
+                            _id: true,
+                            displayName: true,
+                            profilePicture: true,
+                            userPreference: {
+                                publishActivityToFollowers: true
+                            }
+                        }
+                    }
+                ]
+            }
+        };
 
-export const getUserActivity = async (id: ObjectId) => {
-    return await aggregate(
-        [
-            {
-                $match: {
-                    userId: id
-                }
-            },
-            {
+export const lookupCourse = {
                 $lookup: {
                     from: "courses",
                     localField: "data.courseId",
@@ -108,7 +120,20 @@ export const getUserActivity = async (id: ObjectId) => {
                         }
                     ]
                 }
+            };
+
+
+
+export const getUserActivity = async (id: ObjectId) => {
+    return await aggregate(
+        [
+            {
+                $match: {
+                    userId: id
+                }
             },
+            lookupCourse,
+            lookupUserData,
             ...getUserReactionsCommentsListArray,
             {
                 $set: {
@@ -134,26 +159,8 @@ export const getPublicActivityById = async (id: ObjectId) => {
                 _id: id,
             }
         },
-        {
-            $lookup: {
-                from: "users",
-                localField: "userId",
-                foreignField: "_id",
-                as: "userData",
-                pipeline: [
-                    {
-                        $project: {
-                            _id: true,
-                            displayName: true,
-                            profilePicture: true,
-                            userPreference: {
-                                publishActivityToFollowers: true
-                            }
-                        }
-                    }
-                ]
-            }
-        },
+        lookupCourse,
+        lookupUserData,
         ...getUserReactionsCommentsListArray,
         {
             $set: {
