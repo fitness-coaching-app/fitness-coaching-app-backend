@@ -25,6 +25,24 @@ export const fn = async () => {
     return await db().collection('activities');
 }
 
+export const getUserActivity = async (id: ObjectId) => {
+    return await aggregate(
+            [
+                {
+                    $match: {
+                        userId: id
+                    }
+                },
+                {
+                    $sort:{
+                        timestamp: -1
+                    }
+                }
+            ]
+
+        ).toArray();
+}
+
 export const getPublicActivityById = async (id: ObjectId) => {
     return await aggregate([
         {

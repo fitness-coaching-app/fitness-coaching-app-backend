@@ -78,7 +78,7 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
             }]).toArray();
 
             var followerCount = 0;
-            if(followerResult.length > 0){
+            if (followerResult.length > 0) {
                 followerCount = followerResult[0].followerCount;
             }
 
@@ -94,7 +94,7 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
             ]).toArray();
 
             var followingCount = 0;
-            if(followingResult.length > 0){
+            if (followingResult.length > 0) {
                 followingCount = followingResult[0].followingCount;
             }
             result = {
@@ -126,7 +126,7 @@ export const getUserInfoById = async (req: Request, res: Response, next: NextFun
             }]).toArray();
 
             var followerCount = 0;
-            if(followerResult.length > 0){
+            if (followerResult.length > 0) {
                 followerCount = followerResult[0].followerCount;
             }
 
@@ -142,7 +142,7 @@ export const getUserInfoById = async (req: Request, res: Response, next: NextFun
             ]).toArray();
 
             var followingCount = 0;
-            if(followingResult.length > 0){
+            if (followingResult.length > 0) {
                 followingCount = followingResult[0].followingCount;
             }
             result = {
@@ -283,7 +283,7 @@ export const getFollowingList = async (req: Request, res: Response, next: NextFu
 export const activity = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: any = req.user!;
-        const result = await models.activities.find({userId: user._id});
+        const result = await models.activities.getUserActivity(user._id);
 
         res.status(200).send(success(res.statusCode, "Get user's activity successfully", result));
     } catch (e) {
@@ -295,15 +295,15 @@ export const activity = async (req: Request, res: Response, next: NextFunction) 
 export const activityDisplayName = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const displayName = req.params.displayName;
-        const user = await models.users.findOne({displayName: displayName});
-        if(user === null){
+        const user = await models.users.findOne({ displayName: displayName });
+        if (user === null) {
             res.status(400).send(error(res.statusCode, `User ${displayName} not found`, [ErrorCode.userNotFound]));
         }
-        else if(!user.userPreference.publishActivityToFollowers){
+        else if (!user.userPreference.publishActivityToFollowers) {
             res.status(400).send(error(res.statusCode, `User ${displayName} is set to private`, [ErrorCode.userActivityPrivate]));
         }
-        else{
-            const result = await models.activities.find({userId: user._id});
+        else {
+            const result = await models.activities.getUserActivity(user._id);
             res.status(200).send(success(res.statusCode, "Get activity successfully", result));
         }
         
