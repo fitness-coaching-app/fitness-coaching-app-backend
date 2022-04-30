@@ -56,7 +56,7 @@ export const getUserActivity = async (id: ObjectId) => {
                     from: "users",
                     localField: "reactions.userId",
                     foreignField: "_id",
-                    as: "userReactionsNameList",
+                    as: "userReactionsList",
                     pipeline: [
                         {
                             $project: {
@@ -64,7 +64,10 @@ export const getUserActivity = async (id: ObjectId) => {
                                 k: {
                                     $toString: "$_id"
                                 },
-                                v: "$displayName"
+                                v: {
+                                    displayName: "$displayName",
+                                    profilePicture: "$profilePicture"
+                                }
                             }
                         }
                     ]
@@ -75,7 +78,7 @@ export const getUserActivity = async (id: ObjectId) => {
                     from: "users",
                     localField: "comments.userId",
                     foreignField: "_id",
-                    as: "userCommentsNameList",
+                    as: "userCommentsList",
                     pipeline: [
                         {
                             $project: {
@@ -83,7 +86,10 @@ export const getUserActivity = async (id: ObjectId) => {
                                 k: {
                                     $toString: "$_id"
                                 },
-                                v: "$displayName"
+                                v: {
+                                    displayName: "$displayName",
+                                    profilePicture: "$profilePicture"
+                                }
                             }
                         }
                     ]
@@ -91,11 +97,11 @@ export const getUserActivity = async (id: ObjectId) => {
             },
             {
                 $set: {
-                    "userCommentsNameList": {
-                        "$arrayToObject": "$userCommentsNameList"
+                    "userCommentsList": {
+                        "$arrayToObject": "$userCommentsList"
                     },
-                    "userReactionsNameList": {
-                        "$arrayToObject": "$userReactionsNameList"
+                    "userReactionsList": {
+                        "$arrayToObject": "$userReactionsList"
                     }
                 }
             },
