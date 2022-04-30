@@ -68,16 +68,22 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
 
         let result: any | null = await models.users.findOne({ displayName });
         if (result !== null) {
-            const [{followerCount}] = await models.userFollowings.aggregate([{
+            const followerResult = await models.userFollowings.aggregate([{
                 $match: {
                     followingId: result._id
                 }
             },
             {
                 $count: "followerCount"
+            }]).toArray();
+
+            var followerCount = 0;
+            if(followerResult.length > 0){
+                followerCount = followerResult[0].followerCount;
             }
-            ]).toArray();
-            const [{followingCount}] = await models.userFollowings.aggregate([{
+
+
+            const followingResult = await models.userFollowings.aggregate([{
                 $match: {
                     followerId: result._id
                 }
@@ -86,6 +92,11 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
                 $count: "followingCount"
             }
             ]).toArray();
+
+            var followingCount = 0;
+            if(followingResult.length > 0){
+                followingCount = followingResult[0].followingCount;
+            }
             result = {
                 ...result,
                 followerCount,
