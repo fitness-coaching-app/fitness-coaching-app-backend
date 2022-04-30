@@ -134,37 +134,9 @@ export const getActivityFeed = async (id: ObjectId, limit: number = 50) => {
                 isPublic: true
             }
         },
-        {
-            $lookup: {
-                from: "users",
-                localField: "userId",
-                foreignField: "_id",
-                as: "userData",
-                pipeline: [
-                    {
-                        $project: {
-                            displayName: true,
-                            profilePicture: true,
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            $set: {
-                userData: {
-                    $arrayElemAt: ["$userData", 0]
-                }
-            }
-        },
+        ...activities.lookupCourse,
+        ...activities.lookupUserData,
         ...activities.getUserReactionsCommentsListArray,
-        {
-            $set: {
-                course: {
-                    $arrayElemAt: ["$course", 0]
-                }
-            }
-        },
         {
             $sort: {
                 timestamp: -1

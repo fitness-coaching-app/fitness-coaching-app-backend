@@ -82,45 +82,62 @@ export const getUserReactionsCommentsListArray = [
     }
 ];
 
-export const lookupUserData = {
-            $lookup: {
-                from: "users",
-                localField: "userId",
-                foreignField: "_id",
-                as: "userData",
-                pipeline: [
-                    {
-                        $project: {
-                            _id: true,
-                            displayName: true,
-                            profilePicture: true,
-                            userPreference: {
-                                publishActivityToFollowers: true
-                            }
-                        }
+export const lookupUserData = [{
+    $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "userData",
+        pipeline: [
+            {
+                $project: {
+                    _id: true,
+                    displayName: true,
+                    profilePicture: true,
+                    userPreference: {
+                        publishActivityToFollowers: true
                     }
-                ]
-            }
-        };
-
-export const lookupCourse = {
-                $lookup: {
-                    from: "courses",
-                    localField: "data.courseId",
-                    foreignField: "_id",
-                    as: "course",
-                    pipeline: [
-                        {
-                            $project: {
-                                _id: true,
-                                name: true,
-                                difficulty: true,
-                                coverPicture: true
-                            }
-                        }
-                    ]
                 }
-            };
+            }
+        ]
+    }
+},
+{
+    $set: {
+        userData: {
+            $arrayElemAt: ["$userData", 0]
+        }
+    }
+}
+
+]
+
+export const lookupCourse = [{
+    $lookup: {
+        from: "courses",
+        localField: "data.courseId",
+        foreignField: "_id",
+        as: "course",
+        pipeline: [
+            {
+                $project: {
+                    _id: true,
+                    name: true,
+                    difficulty: true,
+                    coverPicture: true
+                }
+            }
+        ]
+    }
+},
+{
+    $set: {
+        course: {
+            $arrayElemAt: ["$course", 0]
+        }
+    }
+},
+];
 
 
 
@@ -132,16 +149,9 @@ export const getUserActivity = async (id: ObjectId) => {
                     userId: id
                 }
             },
-            lookupCourse,
-            lookupUserData,
+            ...lookupCourse,
+            ...lookupUserData,
             ...getUserReactionsCommentsListArray,
-            {
-                $set: {
-                    course: {
-                        $arrayElemAt: ["$course", 0]
-                    }
-                }
-            },
             {
                 $sort: {
                     timestamp: -1
@@ -159,16 +169,9 @@ export const getPublicActivityById = async (id: ObjectId) => {
                 _id: id,
             }
         },
-        lookupCourse,
-        lookupUserData,
+        ...lookupCourse,
+        ...lookupUserData,
         ...getUserReactionsCommentsListArray,
-        {
-            $set: {
-                userData: {
-                    $arrayElemAt: ["$userData", 0]
-                }
-            }
-        },
     ]).toArray();
 }
 
