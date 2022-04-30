@@ -38,7 +38,7 @@ export const getUserActivity = async (id: ObjectId) => {
                     from: "courses",
                     localField: "data.courseId",
                     foreignField: "_id",
-                    as: "courses",
+                    as: "course",
                     pipeline: [
                         {
                             $project: {
@@ -49,6 +49,13 @@ export const getUserActivity = async (id: ObjectId) => {
                             }
                         }
                     ]
+                }
+            },
+            {
+                $set: {
+                    course: {
+                        $arrayElemAt: ["$course", 0]
+                    }
                 }
             },
             {
