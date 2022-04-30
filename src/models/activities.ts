@@ -27,20 +27,38 @@ export const fn = async () => {
 
 export const getUserActivity = async (id: ObjectId) => {
     return await aggregate(
-            [
-                {
-                    $match: {
-                        userId: id
-                    }
-                },
-                {
-                    $sort:{
-                        timestamp: -1
-                    }
+        [
+            {
+                $match: {
+                    userId: id
                 }
-            ]
+            },
+            {
+                $lookup: {
+                    from: "courses",
+                    localField: "data.courseId",
+                    foreignField: "_id",
+                    as: "courses",
+                    pipeline: [
+                        {
+                            $project: {
+                                _id: true,
+                                name: true,
+                                difficulty: true,
+                                coverPicture: true
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $sort: {
+                    timestamp: -1
+                }
+            }
+        ]
 
-        ).toArray();
+    ).toArray();
 }
 
 export const getPublicActivityById = async (id: ObjectId) => {
