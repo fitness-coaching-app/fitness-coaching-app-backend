@@ -46,7 +46,7 @@ export const followingUsers = async (req: Request, res: Response, next: NextFunc
 		const user: any = req.user!;
 		const { limit, start } = req.query as any;
 		const followingList = await models.userFollowings.find({ followerId: new ObjectId(user._id) });
-		const followingListObjectId: ObjectId[] = [];
+		const followingListObjectId: ObjectId[] = [user._id];
 		for (let i of followingList) {
 			followingListObjectId.push(i.followingId);
 		}
