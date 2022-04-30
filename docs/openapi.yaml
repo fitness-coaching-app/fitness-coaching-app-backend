@@ -37,6 +37,8 @@ paths:
   /auth/resendVerificationEmail:
     $ref: './paths/auth/resendVerificationEmail.yaml'
 
+  /user/getUserInfo:
+    $ref: './paths/user/getUserInfo.yaml'
   /user/getUserInfo/{displayName}:
     $ref: './paths/user/getUserInfo@{displayName}.yaml'
   /user/getUserInfo/id/{userId}:
