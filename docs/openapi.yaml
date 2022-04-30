@@ -39,6 +39,8 @@ paths:
 
   /user/getUserInfo/{displayName}:
     $ref: './paths/user/getUserInfo@{displayName}.yaml'
+  /user/getUserInfo/id/{userId}:
+    $ref: './paths/user/getUserInfoById.yaml'
   /user/editUserInfo:
     $ref: './paths/user/editUserInfo.yaml'
   /user/editProfilePicture:
