@@ -78,7 +78,7 @@ export const getFollowerList = async (id: ObjectId, additionalPipeline: object[]
 }
 
 export const getActivityFeed = async (id: ObjectId, limit: number = 50) => {
-    const [{ followingIds }] = await aggregate([
+    const [followingIdList] = await aggregate([
         {
             $match: {
                 followerId: id
@@ -124,6 +124,7 @@ export const getActivityFeed = async (id: ObjectId, limit: number = 50) => {
             }
         }
     ]).toArray();
+    const followingIds = followingIdList?.followingIds || []
 
     const result = await activities.aggregate([
         {
