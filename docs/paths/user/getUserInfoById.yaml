@@ -1,0 +1,29 @@
+get:
+  tags:
+    - User
+  summary: Get User Info By Id
+  description: Get user information
+  parameters:
+    - in: path
+      name: userId
+      required: true
+      schema:
+        type: string
+      description: User's Id
+  responses:
+    200:
+      description: User Info Fetched
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/Success.yaml'
+          example:
+            code: 200
+            message: User Info Fetched
+            error: false
+            results:
+              $ref: "../../examples/User.yaml"
+    400:
+      $ref: "../../responses/400Error.yaml"
+    500:
+      $ref: "../../responses/500Error.yaml"

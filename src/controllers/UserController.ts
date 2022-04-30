@@ -4,7 +4,7 @@ import { error, ErrorCode, success } from "../utils/responseApi";
 import models from '../models';
 import { userExists } from '../models/users';
 import { comparePassword, hashPassword } from "../utils/passwordUtil";
-import { MongoServerError } from 'mongodb';
+import { MongoServerError, ObjectId } from 'mongodb';
 
 
 export const editUserInfo = async (req: Request, res: Response, next: NextFunction) => {
@@ -67,6 +67,54 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
         const displayName = req.params.displayName;
 
         let result: any | null = await models.users.findOne({ displayName });
+        if (result !== null) {
+            const followerResult = await models.userFollowings.aggregate([{
+                $match: {
+                    followingId: result._id
+                }
+            },
+            {
+                $count: "followerCount"
+            }]).toArray();
+
+            var followerCount = 0;
+            if(followerResult.length > 0){
+                followerCount = followerResult[0].followerCount;
+            }
+
+
+            const followingResult = await models.userFollowings.aggregate([{
+                $match: {
+                    followerId: result._id
+                }
+            },
+            {
+                $count: "followingCount"
+            }
+            ]).toArray();
+
+            var followingCount = 0;
+            if(followingResult.length > 0){
+                followingCount = followingResult[0].followingCount;
+            }
+            result = {
+                ...result,
+                followerCount,
+                followingCount
+            }
+        }
+
+        res.status(200).send(success(res.statusCode, "User Info Fetched", result));
+    } catch (e) {
+        next(e)
+    }
+}
+
+export const getUserInfoById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.params.userId;
+
+        let result: any | null = await models.users.findOne({ _id: new ObjectId(userId) });
         if (result !== null) {
             const followerResult = await models.userFollowings.aggregate([{
                 $match: {
