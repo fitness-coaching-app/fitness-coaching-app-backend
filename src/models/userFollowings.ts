@@ -32,9 +32,9 @@ export const getFollowingList = async (id: ObjectId) => {
         {
             $lookup: {
                 from: "users",
-                localField: "followerId",
+                localField: "followingId",
                 foreignField: "_id",
-                as: "followerData",
+                as: "followingData",
                 pipeline: [
                     {
                         $project: {
@@ -59,9 +59,9 @@ export const getFollowerList = async (id: ObjectId, additionalPipeline: object[]
         {
             $lookup: {
                 from: "users",
-                localField: "followingId",
+                localField: "followerId",
                 foreignField: "_id",
-                as: "followingData",
+                as: "followerData",
                 pipeline: [
                     {
                         $project: {
