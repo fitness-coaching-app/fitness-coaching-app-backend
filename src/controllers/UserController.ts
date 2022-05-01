@@ -5,6 +5,7 @@ import models from '../models';
 import { userExists } from '../models/users';
 import { comparePassword, hashPassword } from "../utils/passwordUtil";
 import { MongoServerError, ObjectId } from 'mongodb';
+import { level } from '../utils/userScore';
 
 
 export const editUserInfo = async (req: Request, res: Response, next: NextFunction) => {
@@ -99,6 +100,7 @@ export const getUserInfoWithToken = async (req: Request, res: Response, next: Ne
             }
             result = {
                 ...result,
+                level: level(user.xp),
                 followerCount,
                 followingCount
             }
@@ -147,6 +149,7 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
             }
             result = {
                 ...result,
+                level: level(result.xp),
                 followerCount,
                 followingCount
             }
@@ -195,6 +198,7 @@ export const getUserInfoById = async (req: Request, res: Response, next: NextFun
             }
             result = {
                 ...result,
+                level: level(result.xp),
                 followerCount,
                 followingCount
             }
