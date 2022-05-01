@@ -51,6 +51,8 @@ beforeAll(async () => {
 		},
 	])).toArray();
 
+	userFollowingList.push(new ObjectId(user._id));
+
 	for (let i of followings) {
 		userFollowingList.push(i.followingId);
 	}

@@ -26,7 +26,7 @@ export const getFollowingList = async (id: ObjectId) => {
     return await aggregate([
         {
             $match: {
-                followingId: id
+                followerId: id
             }
         },
         {
@@ -53,15 +53,15 @@ export const getFollowerList = async (id: ObjectId, additionalPipeline: object[]
     return await aggregate([
         {
             $match: {
-                followerId: id
+                followingId: id
             }
         },
         {
             $lookup: {
                 from: "users",
-                localField: "followerId",
+                localField: "followingId",
                 foreignField: "_id",
-                as: "followerData",
+                as: "followingData",
                 pipeline: [
                     {
                         $project: {

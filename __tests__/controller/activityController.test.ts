@@ -62,14 +62,14 @@ describe('GET /activity/{activityId}/get', () => {
 		expect(res.body.error).toEqual(false);
 		expect(res.body.results._id).toEqual(activityId.toString());
 	})
-	it('should reject if the activity is private', async () => {
+	it('should accept if the activity is private but is the owner', async () => {
 		const res = await request(api)
 		.get(`/activity/${activityIdPrivateAct.toString()}/get`)
 		.set('Authorization', 'Bearer ' + accessToken)
 
-		expect(res.body.message).toEqual("Activity not found");
-		expect(res.statusCode).toEqual(400);
-		expect(res.body.error).toEqual(true);
+		expect(res.body.message).toEqual("Activity fetched successfully");
+		expect(res.statusCode).toEqual(200);
+		expect(res.body.error).toEqual(false);
 	})
 	it('should reject if the owner of the activity is private', async () => {
 		const res = await request(api)
