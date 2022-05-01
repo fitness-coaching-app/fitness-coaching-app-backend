@@ -110,8 +110,9 @@ export const postExercise = async (req: Request, res: Response, next: NextFuncti
         if (body.courseRating != null) {
             const userRating = {
                 userId: user._id,
-                rating: body.courseRating
+                rating: new Int32(body.courseRating)
             }
+            console.log(userRating);
             const pipeline = {
                 $set: {
                     ratings: {
