@@ -21,7 +21,7 @@ export const getActivityById = async (req: Request, res: Response, next: NextFun
 		const activityId = req.params.activityId as string;
 		const [activity] = await models.activities.getPublicActivityById(new ObjectId(activityId));
 		const isActivityPublic = activity.isPublic && activity.userData.userPreference.publishActivityToFollowers;
-		if(activity != null && (activity.userId === user._id || isActivityPublic)){
+		if(activity != null && (activity.userId.toString() === user._id.toString() || isActivityPublic)){
 			res.status(200).send(success(res.statusCode, "Activity fetched successfully", activity));
 		}
 		else{
